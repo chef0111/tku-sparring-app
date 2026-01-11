@@ -22,7 +22,7 @@ const Navbar = () => {
       <div className="flex w-full grow items-center justify-center">
         <h1 className="text-4xl font-bold">TKU Sparring System</h1>
       </div>
-      <div className="flex w-[13vw] shrink-0 items-center justify-end px-2">
+      <div className="flex w-[13vw] shrink-0 items-center justify-end gap-1 px-2">
         <Link to="/login">
           <Button variant="outline" size="lg" className="text-lg">
             <LogInIcon className="size-5" /> Login

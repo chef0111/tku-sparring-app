@@ -7,7 +7,12 @@ interface ManabarFrameProps {
 
 export const ManabarFrame = ({ children, className }: ManabarFrameProps) => {
   return (
-    <div className={cn("relative flex h-[30%] items-center", className)}>
+    <div
+      className={cn(
+        "relative flex h-[30%] items-center justify-between",
+        className
+      )}
+    >
       <div className="z-10 h-full w-1.5 rounded-xs border border-black bg-white" />
       <div className="relative h-[85%] w-full rounded-xs border border-white bg-transparent ring-2 ring-black">
         {children}

@@ -4,6 +4,7 @@ import { FloatingPaths } from "@/components/ui/floating-paths";
 
 export const Route = createFileRoute("/_auth")({
   component: AuthLayout,
+  pendingComponent: () => <div>Loading...</div>,
 });
 
 function AuthLayout() {

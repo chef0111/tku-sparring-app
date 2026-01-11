@@ -1,10 +1,11 @@
-import { MenuIcon } from "lucide-react";
+import { LogInIcon, MenuIcon } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
     <nav className="bg-backround flex h-20 w-full items-center justify-between">
-      <div className="mx-4 box-border flex w-[13vw] items-center justify-center gap-4">
+      <div className="flex w-[13vw] shrink-0 items-center justify-center gap-4">
         <img
           src="assets/uit.webp"
           loading="eager"
@@ -18,15 +19,21 @@ const Navbar = () => {
           className="h-14"
         />
       </div>
-      <div className="flex w-full items-center justify-center">
+      <div className="flex w-full grow items-center justify-center">
         <h1 className="text-4xl font-bold">TKU Sparring System</h1>
       </div>
-      <div className="mx-4 box-border flex w-[13vw] items-center justify-end">
+      <div className="flex w-[13vw] shrink-0 items-center justify-end px-2">
+        <Link to="/login">
+          <Button variant="outline" size="lg" className="text-lg">
+            <LogInIcon className="size-5" /> Login
+          </Button>
+        </Link>
         <Button
           variant="ghost"
-          className="size-20 cursor-pointer hover:bg-transparent! [&_svg:not([class*='size-'])]:size-10!"
-          render={<MenuIcon />}
-        />
+          className="cursor-pointer hover:bg-transparent! [&_svg:not([class*='size-'])]:size-10!"
+        >
+          <MenuIcon className="size-12" />
+        </Button>
       </div>
     </nav>
   );

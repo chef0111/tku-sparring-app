@@ -22,13 +22,13 @@ const RedPlayerHUD = () => {
           <img
             src="assets/CapybaraTKU1.webp"
             alt="Red Player"
-            className="relative z-1 rounded-sm object-contain"
+            className="relative z-1 size-full rounded-sm object-contain"
           />
         }
       />
       <div className="flex h-full w-full flex-col items-start">
-        <Healthbar className="h-[65%] w-full" />
-        <Manabar manaPoints={5} className="h-[35%] w-[73%]" />
+        <Healthbar className="h-[9vh] w-full" />
+        <Manabar manaPoints={5} className="h-[5vh] w-[27vw]" />
       </div>
     </div>
   );
@@ -38,8 +38,8 @@ const BluePlayerHUD = () => {
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
       <div className="flex h-full w-full flex-col items-end">
-        <Healthbar className="h-[65%] w-full" reversed />
-        <Manabar manaPoints={5} className="h-[35%] w-[73%]" reversed />
+        <Healthbar className="h-[9vh] w-full" reversed />
+        <Manabar manaPoints={5} className="h-[5vh] w-[27vw]" reversed />
       </div>
       <PlayerAvatar
         name="Blue Player"
@@ -49,7 +49,7 @@ const BluePlayerHUD = () => {
           <img
             src="assets/CapybaraTKU2.webp"
             alt="Blue Player"
-            className="relative z-1 rounded-sm object-contain"
+            className="relative z-1 size-full rounded-sm object-contain"
           />
         }
       />

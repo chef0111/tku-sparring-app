@@ -6,8 +6,6 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import Header from "../components/Header";
-
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import appCss from "../styles.css?url";
@@ -37,6 +35,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "preload",
+        href: "/fonts/ESBuild.otf",
+        as: "font",
+        type: "font/opentype",
+        crossorigin: "anonymous",
+      },
     ],
   }),
 
@@ -49,8 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <Header />
+      <body className="dark font-sans">
         {children}
         <TanStackDevtools
           config={{

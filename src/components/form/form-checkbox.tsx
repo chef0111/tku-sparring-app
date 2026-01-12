@@ -3,12 +3,17 @@ import { FormBase } from "./form-base";
 import type { FormControlProps } from "./form-base";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export function FormCheckbox(props: FormControlProps) {
+export function FormCheckbox({ descPosition, ...props }: FormControlProps) {
   const field = useFieldContext<boolean>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
   return (
-    <FormBase {...props} controlFirst orientation="horizontal">
+    <FormBase
+      {...props}
+      controlFirst
+      orientation="horizontal"
+      descPosition={descPosition}
+    >
       <Checkbox
         id={field.name}
         name={field.name}

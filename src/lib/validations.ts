@@ -4,14 +4,12 @@ export const UsernameSchema = z
   .string()
   .min(3, { message: "Username must be at least 3 characters long." })
   .max(30, { message: "Username cannot exceed 30 characters." })
-  .regex(/^[a-zA-Z0-9_]+$/, {
-    message: "Username can only contain letters, numbers, and underscores.",
+  .regex(/^[a-zA-Z0-9_.-]+$/, {
+    message:
+      "Username can only contain alphanumeric characters, underscores, dots, and hyphens.",
   })
   .regex(/[a-zA-Z]/, {
     message: "Username must contain at least one letter.",
-  })
-  .refine((val) => !["me", "admin", "user"].includes(val.toLowerCase()), {
-    message: "Usernames like 'admin', 'user' or 'me' are restricted.",
   });
 
 export const PasswordSchema = z
@@ -30,12 +28,13 @@ export const PasswordSchema = z
   });
 
 export const LoginSchema = z.object({
-  email: z
-    .email({ message: "Please provide a valid email address." })
-    .min(1, { message: "Email is required." }),
-
+  username: UsernameSchema,
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
-    .max(100, { message: "Password must not exceed 100 characters." }),
+    .max(100, { message: "Password must not exceed 100 characters." })
+    .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).*$/, {
+      message:
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+    }),
 });

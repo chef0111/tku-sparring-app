@@ -13,6 +13,7 @@ export function FormTextarea({
   label,
   description,
   fieldClassName,
+  descPosition,
   ...textareaProps
 }: FormTextareaProps) {
   const field = useFieldContext<string>();
@@ -22,6 +23,7 @@ export function FormTextarea({
     <FormBase
       label={label}
       description={description}
+      descPosition={descPosition}
       className={fieldClassName}
     >
       <Textarea

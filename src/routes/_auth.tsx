@@ -19,11 +19,11 @@ function AuthLayout() {
 
         <div className="z-10 mt-auto">
           <blockquote className="space-y-2">
-            <p className="text-xl">
+            <p className="text-xl italic">
               &ldquo;A modern, user-friendly web application for managing
               Taekwondo sparring matches of UIT Taekwondo Tournament.&rdquo;
             </p>
-            <footer className="font-mono text-sm font-semibold">
+            <footer className="font-esbuild text-sm font-semibold">
               - Taekwondo UIT
             </footer>
           </blockquote>

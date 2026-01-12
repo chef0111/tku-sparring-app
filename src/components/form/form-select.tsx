@@ -11,13 +11,14 @@ import {
 
 export function FormSelect({
   children,
+  descPosition,
   ...props
 }: FormControlProps & { children: ReactNode }) {
   const field = useFieldContext<string>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
   return (
-    <FormBase {...props}>
+    <FormBase {...props} descPosition={descPosition}>
       <Select
         onValueChange={(e) => field.handleChange(e ?? "")}
         value={field.state.value}

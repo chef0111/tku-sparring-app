@@ -6,6 +6,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 
+import { Toaster } from "sonner";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import appCss from "../styles.css?url";
@@ -56,6 +57,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="dark font-sans">
         {children}
+        <Toaster richColors />
         <TanStackDevtools
           config={{
             position: "bottom-right",

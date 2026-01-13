@@ -31,6 +31,7 @@ const LoginForm = () => {
       const response = await authClient.signIn.username({
         username: value.username,
         password: value.password,
+        callbackURL: "/",
       });
 
       if (response?.data?.user) {
@@ -45,8 +46,6 @@ const LoginForm = () => {
     },
   });
 
-  const isLoading = form.state.isSubmitting || form.state.isValidating;
-
   return (
     <form
       onSubmit={(e) => {
@@ -60,7 +59,7 @@ const LoginForm = () => {
             <field.Input
               label="Username"
               description="At least 3 characters"
-              descPosition="block-end"
+              descPosition="after-field"
               placeholder="tku.ss"
             />
           )}
@@ -70,7 +69,7 @@ const LoginForm = () => {
             <field.PasswordInput
               label="Password"
               description="At least 8 characters"
-              descPosition="block-end"
+              descPosition="after-field"
               placeholder="********"
             />
           )}
@@ -90,16 +89,25 @@ const LoginForm = () => {
           </Alert>
         )}
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Spinner />
-              Signing in...
-            </>
-          ) : (
-            "Continue"
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={!canSubmit || isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Spinner />
+                  Signing in...
+                </>
+              ) : (
+                "Continue"
+              )}
+            </Button>
           )}
-        </Button>
+        />
       </FieldGroup>
     </form>
   );

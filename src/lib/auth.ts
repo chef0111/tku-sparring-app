@@ -34,6 +34,17 @@ export const auth = betterAuth({
         }
       }
     }),
+    after: createAuthMiddleware(async (ctx) => {
+      const response = (await ctx.context.returned) as Record<string, unknown>;
+      const user = response?.user as Record<string, unknown> | undefined;
+
+      if (user) {
+        delete user.email;
+        delete user.emailVerified;
+        delete user.createdAt;
+        delete user.updatedAt;
+      }
+    }),
   },
   trustedOrigins: process.env.BETTER_AUTH_URL
     ? process.env.BETTER_AUTH_URL.split(",").map((origin) => origin.trim())

@@ -4,11 +4,6 @@ import { FormBase } from "./form-base";
 import { useFieldContext } from "./hooks";
 import type { FormControlProps } from "./form-base";
 import { Button } from "@/components/ui/button";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { Input } from "@/components/ui/input";
 
 export type FormInputProps = FormControlProps &
@@ -65,33 +60,31 @@ export function FormPasswordInput({
       descPosition={descPosition}
       className={fieldClassName}
     >
-      <InputGroup>
-        <InputGroupInput
+      <div className="relative">
+        <Input
           id={field.name}
           name={field.name}
           value={field.state.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           aria-invalid={isInvalid}
-          className="[&::-ms-reveal]:hidden"
+          className="pr-10 [&::-ms-reveal]:hidden"
           type={showPassword ? "text" : "password"}
           {...inputProps}
         />
-        <InputGroupAddon align="inline-end">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="hover:bg-transparent!"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <IconEyeOff className="size-5 shrink-0 opacity-50" />
-            ) : (
-              <IconEye className="size-5 shrink-0 opacity-50" />
-            )}
-          </Button>
-        </InputGroupAddon>
-      </InputGroup>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="absolute top-1/2 right-1.5 -translate-y-1/2 hover:bg-transparent!"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <IconEyeOff className="size-5 shrink-0 opacity-50" />
+          ) : (
+            <IconEye className="size-5 shrink-0 opacity-50" />
+          )}
+        </Button>
+      </div>
     </FormBase>
   );
 }

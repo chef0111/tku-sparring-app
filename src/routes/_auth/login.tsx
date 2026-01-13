@@ -22,9 +22,9 @@ function LoginPage() {
         aria-hidden
         className="absolute inset-0 isolate -z-10 opacity-60 contain-strict"
       >
-        <div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.1)_0,hsla(0,0%,55%,.04)_50%,--theme(--color-foreground/.02)_80%)] absolute top-0 right-0 h-320 w-140 -translate-y-87.5 rounded-full" />
-        <div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.06)_0,--theme(--color-foreground/.02)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 [translate:5%_-50%] rounded-full" />
-        <div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.02)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 -translate-y-87.5 rounded-full" />
+        <div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.06)_0,hsla(0,0%,55%,.04)_50%,--theme(--color-foreground/.01)_80%)] absolute top-0 right-0 h-320 w-140 -translate-y-87.5 rounded-full" />
+        <div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 [translate:5%_-50%] rounded-full" />
+        <div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 -translate-y-87.5 rounded-full" />
       </div>
       <Button
         className="absolute top-7 left-5"
@@ -62,22 +62,15 @@ function LoginPage() {
           </FieldGroup>
         </FieldSet>
 
-        <p className="text-muted-foreground mt-8 text-justify text-sm">
-          By clicking continue, you agree to our{" "}
+        <p className="text-muted-foreground mt-8 text-center text-sm">
+          Taekwondo sparring system from{" "}
           <a
             className="hover:text-primary underline underline-offset-4"
-            href="#"
+            href="https://www.facebook.com/uittaekwondo"
+            target="_blank"
           >
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a
-            className="hover:text-primary underline underline-offset-4"
-            href="#"
-          >
-            Privacy Policy
+            Taekwondo UIT
           </a>
-          .
         </p>
       </div>
     </div>

@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id              String    @id @map("_id")
+  id              String    @id @map("_id") @db.String
   name            String
   email           String
   emailVerified   Boolean   @default(false)
@@ -26,15 +26,15 @@ model User {
 }
 
 model Session {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  expiresAt   DateTime
-  token       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  ipAddress   String?
-  userAgent   String?
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @map("_id") @db.String
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String   @db.String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@index([userId])
@@ -42,10 +42,10 @@ model Session {
 }
 
 model Account {
-  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String    @id @map("_id") @db.String
   accountId             String
   providerId            String
-  userId                String
+  userId                String    @db.String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -62,12 +62,12 @@ model Account {
 }
 
 model Verification {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  identifier  String
-  value       String
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @map("_id") @db.String
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([identifier])
   @@map("verification")

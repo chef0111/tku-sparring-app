@@ -13,7 +13,7 @@ export type FormControlProps = {
   label: string;
   description?: string;
   fieldClassName?: string;
-  descPosition?: "block-start" | "block-end";
+  descPosition?: "after-label" | "after-field";
 };
 
 type FormBaseProps = FormControlProps & {
@@ -30,7 +30,7 @@ export function FormBase({
   className,
   controlFirst,
   orientation,
-  descPosition = "block-start",
+  descPosition = "after-label",
 }: FormBaseProps) {
   const field = useFieldContext();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
@@ -56,7 +56,7 @@ export function FormBase({
           {children}
           <FieldContent>
             {labelElement}
-            {descPosition === "block-start" && descElement}
+            {descPosition === "after-label" && descElement}
             {errorElem}
           </FieldContent>
         </>
@@ -64,10 +64,10 @@ export function FormBase({
         <>
           <FieldContent>
             {labelElement}
-            {descPosition === "block-start" && descElement}
+            {descPosition === "after-label" && descElement}
           </FieldContent>
           {children}
-          {descPosition === "block-end" && descElement}
+          {descPosition === "after-field" && descElement}
           {errorElem}
         </>
       )}

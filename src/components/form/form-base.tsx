@@ -41,7 +41,7 @@ export function FormBase({
   const errorElem = isInvalid && (
     <FieldError
       errors={[field.state.meta.errors[0]]}
-      className="w-full text-left"
+      className="-mt-1 w-full text-left"
     />
   );
 

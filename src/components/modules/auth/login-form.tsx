@@ -53,7 +53,7 @@ const LoginForm = () => {
         form.handleSubmit();
       }}
     >
-      <FieldGroup>
+      <FieldGroup className="gap-4">
         <form.AppField name="username">
           {(field) => (
             <field.Input
@@ -94,7 +94,7 @@ const LoginForm = () => {
           children={([canSubmit, isSubmitting]) => (
             <Button
               type="submit"
-              className="w-full"
+              className="mt-2 w-full"
               disabled={!canSubmit || isSubmitting}
             >
               {isSubmitting ? (

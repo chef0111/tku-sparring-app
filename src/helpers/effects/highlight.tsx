@@ -113,10 +113,13 @@ function Highlight({ ref, ...props }: HighlightProps) {
 
   const safeSetActiveValue = useCallback(
     (id: HighlightValue) => {
-      setActiveValue((prev) => (prev === id ? prev : id));
-      if (id !== activeValue) onValueChange?.(id);
+      setActiveValue((prev) => {
+        if (prev === id) return prev;
+        onValueChange?.(id);
+        return id;
+      });
     },
-    [activeValue, onValueChange]
+    [onValueChange]
   );
 
   const safeSetBounds = useCallback(

@@ -12,8 +12,6 @@ import { getStrictContext } from "@/lib/context/get-strict-context";
 import { useControlledState } from "@/hooks/use-controlled-state";
 import { cn } from "@/lib/utils";
 
-// --- Types ---
-
 type TabsValue = string | number | null;
 
 interface TabsContextValue {
@@ -137,11 +135,11 @@ function PrimitiveTabsPanel({
   );
 }
 
-const defaultTransition: Transition = {
+const DEFAULT_TRANSITION = {
   type: "spring",
   stiffness: 200,
   damping: 30,
-};
+} as const;
 
 type TabsPanelsMode = "auto-height" | "layout";
 
@@ -165,7 +163,7 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
   if (isAutoMode(props)) {
     const {
       children = null,
-      transition = defaultTransition,
+      transition = DEFAULT_TRANSITION,
       mode: _mode,
       ...autoProps
     } = props;
@@ -185,7 +183,7 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
   const {
     children = null,
     style = {},
-    transition = defaultTransition,
+    transition = DEFAULT_TRANSITION,
     mode: _mode,
     ...layoutProps
   } = props;
@@ -205,6 +203,32 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
 }
 
 // --- User-Facing Components ---
+
+const highlightStyles: Record<TabsVariant, string> = {
+  default:
+    "absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm",
+  outline:
+    "absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30",
+  underline: "absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground",
+} as const;
+
+const listStyles: Record<TabsVariant, string> = {
+  default:
+    "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+  outline:
+    "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+  underline:
+    "inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border",
+} as const;
+
+const triggerStyles: Record<TabsVariant, string> = {
+  default:
+    "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  outline:
+    "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  underline:
+    "data-[selected]:text-foreground text-muted-foreground inline-flex h-full flex-1 items-center justify-center gap-1.5 w-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+} as const;
 
 interface TabsProps extends PrimitiveTabsProps {
   className?: string;
@@ -229,23 +253,6 @@ function TabsList({
   variant = "default",
   ...props
 }: TabsListProps = {}) {
-  const highlightStyles: Record<TabsVariant, string> = {
-    default:
-      "absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm",
-    outline:
-      "absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30",
-    underline: "absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground",
-  };
-
-  const listStyles: Record<TabsVariant, string> = {
-    default:
-      "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
-    outline:
-      "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
-    underline:
-      "inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border",
-  };
-
   return (
     <TabsVariantProvider value={{ variant }}>
       <PrimitiveTabsHighlight className={highlightStyles[variant]}>
@@ -265,15 +272,6 @@ interface TabsTabProps extends Omit<PrimitiveTabsTabProps, "value"> {
 
 function TabsTab({ className = "", value = "", ...props }: TabsTabProps = {}) {
   const { variant } = useTabsVariant();
-
-  const triggerStyles: Record<TabsVariant, string> = {
-    default:
-      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-    outline:
-      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-    underline:
-      "data-[selected]:text-foreground text-muted-foreground inline-flex h-full flex-1 items-center justify-center gap-1.5 w-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  };
 
   return (
     <PrimitiveTabsHighlightItem value={value} className="flex-1">

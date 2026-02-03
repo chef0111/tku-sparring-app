@@ -1,13 +1,13 @@
-import React from "react";
-import { motion } from "motion/react";
-import type { HTMLMotionProps, Transition } from "motion/react";
+import React from 'react';
+import { motion } from 'motion/react';
+import type { HTMLMotionProps, Transition } from 'motion/react';
 
-import { useAutoHeight } from "@/hooks/use-auto-height";
-import { Slot } from "@/helpers/animate/slot";
+import { useAutoHeight } from '@/hooks/use-auto-height';
+import { Slot } from '@/helpers/animate/slot';
 
 export interface AutoHeightProps extends Omit<
-  HTMLMotionProps<"div">,
-  "animate" | "transition"
+  HTMLMotionProps<'div'>,
+  'animate' | 'transition'
 > {
   children?: React.ReactNode;
   deps?: React.DependencyList;
@@ -21,7 +21,7 @@ function AutoHeight({
   deps = [],
 
   transition = {
-    type: "spring",
+    type: 'spring',
     stiffness: 300,
     damping: 30,
     bounce: 0,
@@ -36,7 +36,7 @@ function AutoHeight({
   const { ref, height } = useAutoHeight(deps);
 
   const motionProps = {
-    style: { overflow: "hidden" as const, ...style },
+    style: { overflow: 'hidden' as const, ...style },
     animate: { height, ...animate },
     transition,
   };

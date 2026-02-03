@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { LogOutIcon } from "lucide-react";
-import { toast } from "sonner";
-import { useRouter } from "@tanstack/react-router";
-import UserAvatar from "./user-avatar";
-import type { User } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
+import { LogOutIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { useRouter } from '@tanstack/react-router';
+import UserAvatar from './user-avatar';
+import type { User } from '@/lib/auth';
+import { authClient } from '@/lib/auth-client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 interface UserDropdownProps {
   user: User;
@@ -62,9 +62,9 @@ function SignOutItem() {
   async function handleSignOut() {
     const { error } = await authClient.signOut();
     if (error) {
-      toast.error(error.message || "Something went wrong");
+      toast.error(error.message || 'Something went wrong');
     } else {
-      toast.success("Signed out successfully");
+      toast.success('Signed out successfully');
       router.invalidate();
     }
   }

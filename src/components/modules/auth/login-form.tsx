@@ -1,15 +1,15 @@
-import { toast } from "sonner";
-import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { IconAlertCircle } from "@tabler/icons-react";
-import type z from "zod";
-import { LoginSchema } from "@/lib/validations";
-import { useAppForm } from "@/components/form/hooks";
-import { authClient } from "@/lib/auth-client";
-import { FieldGroup } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Spinner } from "@/components/ui/spinner";
+import { toast } from 'sonner';
+import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
+import { IconAlertCircle } from '@tabler/icons-react';
+import type z from 'zod';
+import { LoginSchema } from '@/lib/validations';
+import { useAppForm } from '@/components/form/hooks';
+import { authClient } from '@/lib/auth-client';
+import { FieldGroup } from '@/components/ui/field';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Spinner } from '@/components/ui/spinner';
 
 type FormData = z.infer<typeof LoginSchema>;
 
@@ -19,8 +19,8 @@ const LoginForm = () => {
 
   const form = useAppForm({
     defaultValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     } as FormData,
     validators: {
       onSubmit: LoginSchema,
@@ -31,17 +31,17 @@ const LoginForm = () => {
       const response = await authClient.signIn.username({
         username: value.username,
         password: value.password,
-        callbackURL: "/",
+        callbackURL: '/',
       });
 
       if (response?.data?.user) {
-        toast.success("Success", {
-          description: "You are now logged in",
+        toast.success('Success', {
+          description: 'You are now logged in',
         });
 
-        navigate({ to: "/" });
+        navigate({ to: '/' });
       } else {
-        setError(response?.error?.message || "Something went wrong");
+        setError(response?.error?.message || 'Something went wrong');
       }
     },
   });
@@ -84,7 +84,7 @@ const LoginForm = () => {
             <AlertTitle>Error</AlertTitle>
             <AlertDescription className="text-wrap">
               {error}
-              {error === "Invalid email or password" && ". Please try again."}
+              {error === 'Invalid email or password' && '. Please try again.'}
             </AlertDescription>
           </Alert>
         )}
@@ -103,7 +103,7 @@ const LoginForm = () => {
                   Signing in...
                 </>
               ) : (
-                "Continue"
+                'Continue'
               )}
             </Button>
           )}

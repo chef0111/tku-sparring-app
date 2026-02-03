@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useControllableState } from "@radix-ui/react-use-controllable-state";
-import { ChevronsUpDownIcon, PlusIcon } from "lucide-react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import type { ComponentProps, ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { useControllableState } from '@radix-ui/react-use-controllable-state';
+import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -13,13 +13,13 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 type ComboboxData = {
   label: string;
@@ -41,14 +41,14 @@ type ComboboxContextType = {
 
 const ComboboxContext = createContext<ComboboxContextType>({
   data: [],
-  type: "item",
-  value: "",
+  type: 'item',
+  value: '',
   onValueChange: () => {},
   open: false,
   onOpenChange: () => {},
   width: 200,
   setWidth: () => {},
-  inputValue: "",
+  inputValue: '',
   setInputValue: () => {},
 });
 
@@ -74,7 +74,7 @@ export const Combobox = ({
   ...props
 }: ComboboxProps) => {
   const [value, onValueChange] = useControllableState({
-    defaultProp: defaultValue ?? "",
+    defaultProp: defaultValue ?? '',
     prop: controlledValue,
     onChange: controlledOnValueChange,
   });
@@ -84,7 +84,7 @@ export const Combobox = ({
     onChange: controlledOnOpenChange,
   });
   const [width, setWidth] = useState(200);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <ComboboxContext.Provider
@@ -128,7 +128,7 @@ export const ComboboxTrigger = ({
 
     if (containerRef.current) {
       // Observe the button element inside the container
-      const buttonElement = containerRef.current.querySelector("button");
+      const buttonElement = containerRef.current.querySelector('button');
       if (buttonElement) {
         resizeObserver.observe(buttonElement);
       }
@@ -141,7 +141,7 @@ export const ComboboxTrigger = ({
   }, [setWidth]);
 
   return (
-    <div ref={containerRef} style={{ display: "contents" }}>
+    <div ref={containerRef} style={{ display: 'contents' }}>
       <PopoverTrigger render={<Button variant="outline" {...props} />}>
         {children ?? (
           <span className="flex w-full items-center justify-between gap-2">
@@ -172,7 +172,7 @@ export const ComboboxContent = ({
 
   return (
     <PopoverContent
-      className={cn("p-0", className)}
+      className={cn('p-0', className)}
       style={{ width }}
       {...popoverOptions}
     >
@@ -287,7 +287,7 @@ export const ComboboxCreateNew = ({
   return (
     <button
       className={cn(
-        "aria-selected:bg-accent aria-selected:text-accent-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50",
+        'aria-selected:bg-accent aria-selected:text-accent-foreground relative flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50',
         className
       )}
       onClick={handleCreateNew}

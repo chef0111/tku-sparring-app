@@ -1,15 +1,15 @@
-import * as React from "react";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
-import { FormBase } from "./form-base";
-import { useFieldContext } from "./hooks";
-import type { FormControlProps } from "./form-base";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import * as React from 'react';
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { FormBase } from './form-base';
+import { useFieldContext } from './hooks';
+import type { FormControlProps } from './form-base';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export type FormInputProps = FormControlProps &
   Omit<
-    React.ComponentProps<"input">,
-    "id" | "name" | "value" | "onChange" | "onBlur"
+    React.ComponentProps<'input'>,
+    'id' | 'name' | 'value' | 'onChange' | 'onBlur'
   >;
 
 export function FormInput({
@@ -69,7 +69,7 @@ export function FormPasswordInput({
           onChange={(e) => field.handleChange(e.target.value)}
           aria-invalid={isInvalid}
           className="pr-10 [&::-ms-reveal]:hidden"
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           {...inputProps}
         />
         <Button

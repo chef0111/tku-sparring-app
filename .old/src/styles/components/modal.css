@@ -173,7 +173,7 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 700;
@@ -207,7 +207,7 @@
 
 /* Button glow effect */
 .modal-button::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -50%;
   left: -50%;

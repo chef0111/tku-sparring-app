@@ -4,22 +4,22 @@ import {
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "../ui/field";
-import { useFieldContext } from "./hooks";
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+} from '../ui/field';
+import { useFieldContext } from './hooks';
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 export type FormControlProps = {
   label: string;
   description?: string;
   fieldClassName?: string;
-  descPosition?: "after-label" | "after-field";
+  descPosition?: 'after-label' | 'after-field';
 };
 
 type FormBaseProps = FormControlProps & {
   children: ReactNode;
   className?: string;
-  orientation?: "vertical" | "horizontal" | "responsive" | null;
+  orientation?: 'vertical' | 'horizontal' | 'responsive' | null;
   controlFirst?: boolean;
 };
 
@@ -30,7 +30,7 @@ export function FormBase({
   className,
   controlFirst,
   orientation,
-  descPosition = "after-label",
+  descPosition = 'after-label',
 }: FormBaseProps) {
   const field = useFieldContext();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
@@ -49,14 +49,14 @@ export function FormBase({
     <Field
       data-invalid={isInvalid}
       orientation={orientation}
-      className={cn("gap-1.5", className)}
+      className={cn('gap-1.5', className)}
     >
       {controlFirst ? (
         <>
           {children}
           <FieldContent>
             {labelElement}
-            {descPosition === "after-label" && descElement}
+            {descPosition === 'after-label' && descElement}
             {errorElem}
           </FieldContent>
         </>
@@ -64,10 +64,10 @@ export function FormBase({
         <>
           <FieldContent>
             {labelElement}
-            {descPosition === "after-label" && descElement}
+            {descPosition === 'after-label' && descElement}
           </FieldContent>
           {children}
-          {descPosition === "after-field" && descElement}
+          {descPosition === 'after-field' && descElement}
           {errorElem}
         </>
       )}

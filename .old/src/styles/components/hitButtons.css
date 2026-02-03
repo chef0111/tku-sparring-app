@@ -13,7 +13,7 @@
 }
 
 .redScoreButtons .scoreButton::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -32,7 +32,7 @@
 }
 
 .redScoreButtons .scoreButton::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -75,7 +75,7 @@
 }
 
 .blueScoreButtons .scoreButton::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -94,7 +94,7 @@
 }
 
 .blueScoreButtons .scoreButton::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -176,7 +176,7 @@
 .buttonNote {
   position: absolute;
   bottom: -30px;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 18px;
   color: #a6a6a6;
   text-align: center;

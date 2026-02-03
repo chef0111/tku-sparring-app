@@ -31,7 +31,7 @@
 }
 
 .config-title {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-weight: 700;
   font-size: 3rem;
   color: #fff;
@@ -156,7 +156,7 @@
 }
 
 .config-section h3 {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-weight: 500;
   font-size: 18px;
   color: #fff;
@@ -196,7 +196,7 @@
 }
 
 .avatar-input label {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.4rem;
   color: #fff;
   text-transform: uppercase;
@@ -223,7 +223,7 @@
   transform: translateX(0);
 }
 
-.file-input-wrapper input[type="file"] {
+.file-input-wrapper input[type='file'] {
   position: absolute;
   left: 0;
   top: 0;
@@ -234,14 +234,14 @@
   z-index: 2;
 }
 
-.file-input-wrapper input[type="file"]:focus + .file-input-button {
+.file-input-wrapper input[type='file']:focus + .file-input-button {
   outline: 2px solid #4caf50;
   outline-offset: 2px;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
 }
 
 .file-input-wrapper
-  input[type="file"]:focus:not(:focus-visible)
+  input[type='file']:focus:not(:focus-visible)
   + .file-input-button {
   outline: none;
   box-shadow: none;
@@ -261,7 +261,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: #fff;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -272,7 +272,7 @@
 }
 
 .file-input-button::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: -100%;
@@ -336,7 +336,7 @@
   margin-top: 8px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.7);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   text-transform: none;
   letter-spacing: 0;
   overflow: hidden;
@@ -357,7 +357,7 @@
 }
 
 /* Modern number input styling */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
   position: relative;
@@ -365,8 +365,8 @@ input[type="number"] {
 }
 
 /* Custom spinner controls */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
@@ -381,7 +381,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Custom spinner container */
-.duration-inputs input[type="number"],
+.duration-inputs input[type='number'],
 #maxHealth,
 #advancedMaxHealth {
   position: relative;
@@ -395,10 +395,10 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Create container for custom spinners */
-.duration-inputs input[type="number"]::after,
+.duration-inputs input[type='number']::after,
 #maxHealth::after,
 #advancedMaxHealth::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   top: 0;
@@ -416,7 +416,7 @@ input[type="number"]::-webkit-outer-spin-button {
   position: relative;
 }
 
-.spinner-container input[type="number"] {
+.spinner-container input[type='number'] {
   width: 100%;
 }
 
@@ -462,7 +462,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .spinner-up::before,
 .spinner-down::before {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -478,7 +478,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Focus state for inputs */
-.duration-inputs input[type="number"]:focus,
+.duration-inputs input[type='number']:focus,
 #maxHealth:focus {
   outline: none;
   border-color: #f8b71d;
@@ -486,7 +486,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Make sure inputs have proper width */
-.duration-inputs input[type="number"],
+.duration-inputs input[type='number'],
 #maxHealth {
   width: 90px;
   text-align: center;
@@ -507,7 +507,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .duration-input label {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   text-transform: uppercase;
@@ -515,12 +515,12 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: all 0.3s ease;
 }
 
-.duration-input input[type="number"] {
+.duration-input input[type='number'] {
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   width: 100%;
@@ -528,12 +528,12 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: all 0.3s ease;
 }
 
-.duration-input input[type="number"]:hover {
+.duration-input input[type='number']:hover {
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.08);
 }
 
-.duration-input input[type="number"]:focus {
+.duration-input input[type='number']:focus {
   border-color: white;
   outline: none;
   box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
@@ -546,7 +546,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   width: 100%;
@@ -582,7 +582,7 @@ input[type="number"]::-webkit-outer-spin-button {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 700;
@@ -627,7 +627,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Button glow effect */
 .config-button::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -50%;
   left: -50%;
@@ -718,7 +718,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .player-input label {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   text-transform: uppercase;
@@ -726,12 +726,12 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: all 0.3s ease;
 }
 
-.player-input input[type="text"] {
+.player-input input[type='text'] {
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   width: 100%;
@@ -739,18 +739,18 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: all 0.3s ease;
 }
 
-.player-input input[type="text"]:hover {
+.player-input input[type='text']:hover {
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.08);
 }
 
-.player-input input[type="text"]:focus {
+.player-input input[type='text']:focus {
   border-color: white;
   outline: none;
   box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
-.player-input input[type="text"]::placeholder {
+.player-input input[type='text']::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -774,7 +774,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .avatar-preview-frame::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -789,7 +789,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .avatar-preview-frame::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -871,7 +871,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.7);
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 16px;
   text-align: left;
   cursor: pointer;
@@ -890,7 +890,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .config-tab.active::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -954,7 +954,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .dropdown-group label {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: #fff;
   text-transform: uppercase;
@@ -973,7 +973,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   color: #fff;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   appearance: none;
   cursor: pointer;
@@ -1048,7 +1048,7 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #fff;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transform: translateX(0);
@@ -1187,7 +1187,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .player-details label {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
@@ -1200,7 +1200,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   color: #fff;
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
@@ -1226,8 +1226,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Ensure consistent width across all input types */
-.player-input input[type="text"],
-.duration-input input[type="number"] {
+.player-input input[type='text'],
+.duration-input input[type='number'] {
   width: 100%;
   box-sizing: border-box;
 }

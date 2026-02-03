@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface ManabarFrameProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ export const ManabarFrame = ({ children, className }: ManabarFrameProps) => {
   return (
     <div
       className={cn(
-        "relative flex h-[30%] items-center justify-between",
+        'relative flex h-[30%] items-center justify-between',
         className
       )}
     >
@@ -34,7 +34,7 @@ export const ManabarMeter = ({
   reversed,
 }: ManabarMeterProps) => {
   return (
-    <div className={cn("relative h-full w-full", className)}>
+    <div className={cn('relative h-full w-full', className)}>
       {reversed ? (
         <div className="flex h-full w-full justify-start">
           {Array.from({ length: manaPoints }).map((_, index) => (
@@ -59,17 +59,17 @@ interface ManaBlockProps {
 
 export const ManaBlock = ({ manaLevel, className }: ManaBlockProps) => {
   const manaColorMap: Record<number, string> = {
-    1: "#fcf652",
-    2: "#fae624",
-    3: "#fbcf08",
-    4: "#f6b00a",
-    5: "#fc9406",
+    1: '#fcf652',
+    2: '#fae624',
+    3: '#fbcf08',
+    4: '#f6b00a',
+    5: '#fc9406',
   };
 
   return (
     <div
-      className={cn("relative h-full w-[20%] border-2 border-white", className)}
-      style={{ backgroundColor: manaColorMap[manaLevel] ?? "#09090b" }}
+      className={cn('relative h-full w-[20%] border-2 border-white', className)}
+      style={{ backgroundColor: manaColorMap[manaLevel] ?? '#09090b' }}
     />
   );
 };

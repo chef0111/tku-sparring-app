@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 interface UserAvatarProps extends React.ComponentProps<typeof Avatar> {
   name: string | undefined;
@@ -16,18 +16,18 @@ const UserAvatar = ({
   ...props
 }: UserAvatarProps) => {
   const initials = name
-    ?.split(" ")
+    ?.split(' ')
     .map((word) => word[0])
-    .join("")
+    .join('')
     .toUpperCase()
     .slice(0, 2);
 
   return (
-    <Avatar className={cn("relative", className)} {...props}>
-      <AvatarImage src={image ?? ""} alt={name} className="object-cover" />
+    <Avatar className={cn('relative', className)} {...props}>
+      <AvatarImage src={image ?? ''} alt={name} className="object-cover" />
       <AvatarFallback
         className={cn(
-          "bg-foreground font-esbuild no-copy text-background font-bold tracking-wider",
+          'bg-foreground font-esbuild no-copy text-background font-bold tracking-wider',
           fallbackClassName
         )}
       >

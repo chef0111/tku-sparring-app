@@ -1,6 +1,6 @@
-import { Healthbar } from "./healthbar";
-import { Manabar } from "./manabar";
-import { PlayerAvatar } from "./player-avatar";
+import { Healthbar } from './healthbar';
+import { Manabar } from './manabar';
+import { PlayerAvatar } from './player-avatar';
 
 const AppHUD = () => {
   return (

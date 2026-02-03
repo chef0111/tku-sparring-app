@@ -22,6 +22,21 @@ const config = defineConfig({
       },
     }),
   ],
+  ssr: {
+    // Prevent SSR-specific packages from being bundled into the client
+    noExternal: [],
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        // Externalize Node.js built-ins to prevent them from being bundled
+        'node:stream',
+        'node:stream/web',
+        'node:async_hooks',
+        'node:buffer',
+      ],
+    },
+  },
 });
 
 export default config;

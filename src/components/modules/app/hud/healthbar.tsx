@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface HealthbarFrameProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ export const HealthbarFrame = ({
   className,
 }: HealthbarFrameProps) => {
   return (
-    <div className={cn("relative flex items-center", className)}>
+    <div className={cn('relative flex items-center', className)}>
       <div className="z-10 h-full w-2.5 rounded-[3px] border-2 border-black bg-white" />
       <div className="relative h-[85%] w-full rounded-[3px] border-[0.2rem] border-white bg-transparent ring-2 ring-black">
         {children}
@@ -30,7 +30,7 @@ export const HealthbarMeter = ({
   reversed,
 }: HealthbarMeterProps) => {
   return (
-    <div className={cn("relative h-full w-full", className)}>
+    <div className={cn('relative h-full w-full', className)}>
       {reversed ? (
         <>
           <div className="health-meter justify-start" />

@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { Tabs as BaseTabs } from "@base-ui/react/tabs";
-import { AnimatePresence, motion } from "motion/react";
-import type { Transition } from "motion/react";
+import { Tabs as BaseTabs } from '@base-ui/react/tabs';
+import { AnimatePresence, motion } from 'motion/react';
+import type { Transition } from 'motion/react';
 
-import type { AutoHeightProps } from "@/helpers/effects/auto-height";
-import type { HighlightProps } from "@/helpers/effects/highlight";
-import { AutoHeight } from "@/helpers/effects/auto-height";
-import { Highlight, HighlightItem } from "@/helpers/effects/highlight";
-import { getStrictContext } from "@/lib/context/get-strict-context";
-import { useControlledState } from "@/hooks/use-controlled-state";
-import { cn } from "@/lib/utils";
+import type { AutoHeightProps } from '@/helpers/effects/auto-height';
+import type { HighlightProps } from '@/helpers/effects/highlight';
+import { AutoHeight } from '@/helpers/effects/auto-height';
+import { Highlight, HighlightItem } from '@/helpers/effects/highlight';
+import { getStrictContext } from '@/lib/context/get-strict-context';
+import { useControlledState } from '@/hooks/use-controlled-state';
+import { cn } from '@/lib/utils';
 
 type TabsValue = string | number | null;
 
@@ -19,7 +19,7 @@ interface TabsContextValue {
   setValue: (value: TabsValue, ...args: Array<unknown>) => void;
 }
 
-type TabsVariant = "default" | "outline" | "underline";
+type TabsVariant = 'default' | 'outline' | 'underline';
 
 interface TabsVariantContextValue {
   variant: TabsVariant;
@@ -28,14 +28,14 @@ interface TabsVariantContextValue {
 // --- Internal Primitive Logic ---
 
 const [TabsProvider, useTabs] =
-  getStrictContext<TabsContextValue>("TabsContext");
+  getStrictContext<TabsContextValue>('TabsContext');
 
 const [TabsVariantProvider, useTabsVariant] =
-  getStrictContext<TabsVariantContextValue>("TabsVariantContext");
+  getStrictContext<TabsVariantContextValue>('TabsVariantContext');
 
 interface PrimitiveTabsProps extends Omit<
   React.ComponentProps<typeof BaseTabs.Root>,
-  "onValueChange"
+  'onValueChange'
 > {
   value?: TabsValue;
   defaultValue?: TabsValue;
@@ -56,12 +56,12 @@ function PrimitiveTabs(props: PrimitiveTabsProps) {
   );
 }
 
-interface PrimitiveTabsHighlightProps extends Omit<HighlightProps, "value"> {
+interface PrimitiveTabsHighlightProps extends Omit<HighlightProps, 'value'> {
   transition?: Transition;
 }
 
 function PrimitiveTabsHighlight({
-  transition = { type: "spring", stiffness: 200, damping: 25 },
+  transition = { type: 'spring', stiffness: 200, damping: 25 },
   ...props
 }: PrimitiveTabsHighlightProps = {}) {
   const { value } = useTabs();
@@ -100,7 +100,7 @@ function PrimitiveTabsTab(props: PrimitiveTabsTabProps) {
 
 interface PrimitiveTabsPanelProps extends Omit<
   React.ComponentProps<typeof motion.div>,
-  "value"
+  'value'
 > {
   value?: TabsValue;
   keepMounted?: boolean;
@@ -108,9 +108,9 @@ interface PrimitiveTabsPanelProps extends Omit<
 }
 
 function PrimitiveTabsPanel({
-  value = "",
+  value = '',
   keepMounted = false,
-  transition = { duration: 0.5, ease: "easeInOut" },
+  transition = { duration: 0.5, ease: 'easeInOut' },
   ...props
 }: PrimitiveTabsPanelProps = {}) {
   return (
@@ -121,9 +121,9 @@ function PrimitiveTabsPanel({
             data-slot="tabs-panel"
             layout
             layoutDependency={value}
-            initial={{ opacity: 0, filter: "blur(4px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, filter: "blur(4px)" }}
+            initial={{ opacity: 0, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, filter: 'blur(4px)' }}
             transition={transition}
             {...props}
           />
@@ -136,16 +136,16 @@ function PrimitiveTabsPanel({
 }
 
 const DEFAULT_TRANSITION = {
-  type: "spring",
+  type: 'spring',
   stiffness: 200,
   damping: 30,
 } as const;
 
-type TabsPanelsMode = "auto-height" | "layout";
+type TabsPanelsMode = 'auto-height' | 'layout';
 
 interface PrimitiveTabsPanelsProps extends Omit<
   AutoHeightProps,
-  "deps" | "mode"
+  'deps' | 'mode'
 > {
   mode?: TabsPanelsMode;
   children?: React.ReactNode;
@@ -154,7 +154,7 @@ interface PrimitiveTabsPanelsProps extends Omit<
 }
 
 function isAutoMode(props: PrimitiveTabsPanelsProps): boolean {
-  return !props.mode || props.mode === "auto-height";
+  return !props.mode || props.mode === 'auto-height';
 }
 
 function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
@@ -194,7 +194,7 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
       layout="size"
       layoutDependency={value}
       transition={{ layout: transition }}
-      style={{ overflow: "hidden", ...style }}
+      style={{ overflow: 'hidden', ...style }}
       {...layoutProps}
     >
       <React.Fragment key={value as React.Key}>{children}</React.Fragment>
@@ -206,19 +206,19 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
 
 const highlightStyles: Record<TabsVariant, string> = {
   default:
-    "absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm",
+    'absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm',
   outline:
-    "absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30",
-  underline: "absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground",
+    'absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30',
+  underline: 'absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground',
 } as const;
 
 const listStyles: Record<TabsVariant, string> = {
   default:
-    "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+    'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
   outline:
-    "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+    'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
   underline:
-    "inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border",
+    'inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border',
 } as const;
 
 const triggerStyles: Record<TabsVariant, string> = {
@@ -234,10 +234,10 @@ interface TabsProps extends PrimitiveTabsProps {
   className?: string;
 }
 
-function Tabs({ className = "", ...props }: TabsProps = {}) {
+function Tabs({ className = '', ...props }: TabsProps = {}) {
   return (
     <PrimitiveTabs
-      className={cn("flex flex-col gap-2", className)}
+      className={cn('flex flex-col gap-2', className)}
       {...props}
     />
   );
@@ -249,8 +249,8 @@ interface TabsListProps extends PrimitiveTabsListProps {
 }
 
 function TabsList({
-  className = "",
-  variant = "default",
+  className = '',
+  variant = 'default',
   ...props
 }: TabsListProps = {}) {
   return (
@@ -265,12 +265,12 @@ function TabsList({
   );
 }
 
-interface TabsTabProps extends Omit<PrimitiveTabsTabProps, "value"> {
+interface TabsTabProps extends Omit<PrimitiveTabsTabProps, 'value'> {
   className?: string;
   value?: TabsValue;
 }
 
-function TabsTab({ className = "", value = "", ...props }: TabsTabProps = {}) {
+function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
   const { variant } = useTabsVariant();
 
   return (
@@ -293,20 +293,20 @@ interface TabsPanelProps extends PrimitiveTabsPanelProps {
   className?: string;
 }
 
-const TabsPanel = ({ className = "", ...props }: TabsPanelProps = {}) => (
+const TabsPanel = ({ className = '', ...props }: TabsPanelProps = {}) => (
   <PrimitiveTabsPanel
-    className={cn("flex-1 outline-none", className)}
+    className={cn('flex-1 outline-none', className)}
     {...props}
   />
 );
 const TabsContent = TabsPanel;
 
-Tabs.displayName = "Tabs";
-TabsList.displayName = "TabsList";
-TabsTab.displayName = "TabsTab";
-TabsTrigger.displayName = "TabsTrigger";
-TabsPanel.displayName = "TabsPanel";
-TabsContent.displayName = "TabsContent";
+Tabs.displayName = 'Tabs';
+TabsList.displayName = 'TabsList';
+TabsTab.displayName = 'TabsTab';
+TabsTrigger.displayName = 'TabsTrigger';
+TabsPanel.displayName = 'TabsPanel';
+TabsContent.displayName = 'TabsContent';
 
 export {
   Tabs,

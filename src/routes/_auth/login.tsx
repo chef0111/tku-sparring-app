@@ -1,14 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
 import {
   FieldDescription,
   FieldGroup,
   FieldLegend,
   FieldSet,
-} from "@/components/ui/field";
-import { LoginForm } from "@/components/modules/auth/login-form";
-import { Highlighter } from "@/components/ui/highlighter";
+} from '@/components/ui/field';
+import { LoginForm } from '@/components/modules/auth/login-form';
+import { Highlighter } from '@/components/ui/highlighter';
 
-export const Route = createFileRoute("/_auth/login")({
+export const Route = createFileRoute('/_auth/login')({
   component: LoginPage,
 });
 
@@ -16,7 +16,7 @@ function LoginPage() {
   return (
     <FieldSet className="flex flex-col space-y-4 text-center">
       <FieldLegend className="text-2xl! font-bold tracking-wide">
-        Sign In to{" "}
+        Sign In to{' '}
         <Highlighter
           action="underline"
           color="#1685f5"

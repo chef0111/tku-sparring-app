@@ -1,13 +1,13 @@
-import { useFieldContext } from "./hooks";
-import { FormBase } from "./form-base";
-import type { FormControlProps } from "./form-base";
-import type { ReactNode } from "react";
+import { useFieldContext } from './hooks';
+import { FormBase } from './form-base';
+import type { FormControlProps } from './form-base';
+import type { ReactNode } from 'react';
 import {
   Select,
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 export function FormSelect({
   children,
@@ -20,7 +20,7 @@ export function FormSelect({
   return (
     <FormBase {...props} descPosition={descPosition}>
       <Select
-        onValueChange={(e) => field.handleChange(e ?? "")}
+        onValueChange={(e) => field.handleChange(e ?? '')}
         value={field.state.value}
       >
         <SelectTrigger

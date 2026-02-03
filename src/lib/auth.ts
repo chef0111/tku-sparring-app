@@ -1,16 +1,16 @@
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
-import { username } from "better-auth/plugins";
-import { APIError, createAuthMiddleware } from "better-auth/api";
-import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { PasswordSchema } from "./validations";
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { PrismaClient } from '@prisma/client';
+import { username } from 'better-auth/plugins';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
+import { tanstackStartCookies } from 'better-auth/tanstack-start';
+import { PasswordSchema } from './validations';
 
 const prisma = new PrismaClient();
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "mongodb",
+    provider: 'mongodb',
   }),
   emailAndPassword: {
     enabled: true,
@@ -18,9 +18,9 @@ export const auth = betterAuth({
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
       if (
-        ctx.path === "/sign-up/email" ||
-        ctx.path === "/reset-password" ||
-        ctx.path === "/change-password"
+        ctx.path === '/sign-up/email' ||
+        ctx.path === '/reset-password' ||
+        ctx.path === '/change-password'
       ) {
         const body = await ctx.body;
         const password = body.password || body.newPassword;
@@ -28,8 +28,8 @@ export const auth = betterAuth({
         const { error } = PasswordSchema.safeParse(password);
 
         if (error) {
-          throw new APIError("BAD_REQUEST", {
-            message: "Password not strong enough.",
+          throw new APIError('BAD_REQUEST', {
+            message: 'Password not strong enough.',
           });
         }
       }
@@ -47,8 +47,8 @@ export const auth = betterAuth({
     }),
   },
   trustedOrigins: process.env.BETTER_AUTH_URL
-    ? process.env.BETTER_AUTH_URL.split(",").map((origin) => origin.trim())
-    : ["http://localhost:3000"],
+    ? process.env.BETTER_AUTH_URL.split(',').map((origin) => origin.trim())
+    : ['http://localhost:3000'],
   plugins: [
     username({
       minUsernameLength: 3,
@@ -56,8 +56,8 @@ export const auth = betterAuth({
         return /^[a-zA-Z0-9_.-]+$/.test(displayUsername);
       },
       validationOrder: {
-        username: "post-normalization",
-        displayUsername: "post-normalization",
+        username: 'post-normalization',
+        displayUsername: 'post-normalization',
       },
     }),
     tanstackStartCookies(),

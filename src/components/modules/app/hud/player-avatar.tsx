@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
 interface PlayerAvatarProps {
   name?: string;
@@ -19,16 +19,16 @@ const PlayerAvatar = ({
   return (
     <div className="relative">
       <Avatar
-        className={cn("avatar relative z-0 after:border-none", className)}
+        className={cn('avatar relative z-0 after:border-none', className)}
       >
         <AvatarImage
-          src={image ?? ""}
+          src={image ?? ''}
           alt={name}
           className="relative z-1 rounded-sm object-contain"
         />
         <AvatarFallback
           className={cn(
-            "font-esbuild text-foreground bg-transparent font-bold tracking-wider",
+            'font-esbuild text-foreground bg-transparent font-bold tracking-wider',
             fallbackClassName
           )}
         >

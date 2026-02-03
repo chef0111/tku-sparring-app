@@ -38,7 +38,7 @@
 }
 
 .healthFrameHead::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -68,7 +68,7 @@
 }
 
 .healthFrame::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -123,7 +123,7 @@
 }
 
 .manaFrameHead::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -152,7 +152,7 @@
 }
 
 .manaFrame::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -174,7 +174,7 @@
 }
 
 .manaMeter::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -245,7 +245,7 @@
 }
 
 .avatar::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -260,7 +260,7 @@
 }
 
 .avatar::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;

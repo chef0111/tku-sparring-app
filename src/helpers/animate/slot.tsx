@@ -1,18 +1,15 @@
-import React from "react";
-import {  isMotionComponent, motion } from "motion/react";
-import type {MotionProps} from "motion/react";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { isMotionComponent, motion } from 'motion/react';
+import type { MotionProps } from 'motion/react';
+import { cn } from '@/lib/utils';
 
-type ReactRef<T> =
-	| React.RefCallback<T>
-	| React.RefObject<T | null>
-	| null;
+type ReactRef<T> = React.RefCallback<T> | React.RefObject<T | null> | null;
 
 function mergeRefs<T>(...refs: Array<ReactRef<T>>): React.RefCallback<T> {
   return (node: T) => {
     refs.forEach((ref) => {
       if (!ref) return;
-      if (typeof ref === "function") {
+      if (typeof ref === 'function') {
         ref(node);
       } else {
         ref.current = node;
@@ -60,7 +57,9 @@ function Slot({ children, ref, ...props }: SlotProps) {
 
   const childType = children.type as React.ElementType;
   const isAlreadyMotion =
-    typeof childType === "object" && childType !== null && isMotionComponent(childType);
+    typeof childType === 'object' &&
+    childType !== null &&
+    isMotionComponent(childType);
 
   const Base = React.useMemo(
     () => (isAlreadyMotion ? childType : motion.create(childType)),
@@ -72,9 +71,14 @@ function Slot({ children, ref, ...props }: SlotProps) {
     [key: string]: unknown;
   };
 
-  const mergedProps = mergeProps(childProps as MergeableProps, props as MergeableProps);
+  const mergedProps = mergeProps(
+    childProps as MergeableProps,
+    props as MergeableProps
+  );
 
-  return <Base {...mergedProps} ref={mergeRefs(childRef ?? null, ref ?? null)} />;
+  return (
+    <Base {...mergedProps} ref={mergeRefs(childRef ?? null, ref ?? null)} />
+  );
 }
 
 export { Slot };

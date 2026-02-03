@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface StrictContextProviderProps<T> {
   value: T;
@@ -21,7 +21,7 @@ function getStrictContext<T>(
   const useSafeContext: StrictContextHook<T> = () => {
     const ctx = React.useContext(Context);
     if (ctx === undefined) {
-      throw new Error(`useContext must be used within ${name ?? "a Provider"}`);
+      throw new Error(`useContext must be used within ${name ?? 'a Provider'}`);
     }
     return ctx;
   };

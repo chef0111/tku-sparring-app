@@ -1,12 +1,12 @@
-import { FormBase } from "./form-base";
-import { useFieldContext } from "./hooks";
-import type { FormControlProps } from "./form-base";
-import { Textarea } from "@/components/ui/textarea";
+import { FormBase } from './form-base';
+import { useFieldContext } from './hooks';
+import type { FormControlProps } from './form-base';
+import { Textarea } from '@/components/ui/textarea';
 
 export type FormTextareaProps = FormControlProps &
   Omit<
-    React.ComponentProps<"textarea">,
-    "id" | "name" | "value" | "onChange" | "onBlur"
+    React.ComponentProps<'textarea'>,
+    'id' | 'name' | 'value' | 'onChange' | 'onBlur'
   >;
 
 export function FormTextarea({

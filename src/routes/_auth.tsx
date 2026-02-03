@@ -3,15 +3,15 @@ import {
   Outlet,
   createFileRoute,
   useNavigate,
-} from "@tanstack/react-router";
-import { useEffect } from "react";
-import { ChevronLeftIcon } from "lucide-react";
-import { LogoIcon } from "@/components/ui/logo";
-import { FloatingPaths } from "@/components/ui/floating-paths";
-import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
+} from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { ChevronLeftIcon } from 'lucide-react';
+import { LogoIcon } from '@/components/ui/logo';
+import { FloatingPaths } from '@/components/ui/floating-paths';
+import { authClient } from '@/lib/auth-client';
+import { Button } from '@/components/ui/button';
 
-export const Route = createFileRoute("/_auth")({
+export const Route = createFileRoute('/_auth')({
   component: AuthLayout,
   pendingComponent: () => (
     <section className="flex h-screen w-screen items-center justify-center">
@@ -37,7 +37,7 @@ function AuthLayout() {
 
   useEffect(() => {
     if (!isPending && session) {
-      navigate({ to: "/" });
+      navigate({ to: '/' });
     }
   }, [session, isPending, navigate]);
 
@@ -96,7 +96,7 @@ function AuthLayout() {
           </div>
           <Outlet />
           <p className="text-muted-foreground mt-8 text-center text-sm">
-            Taekwondo sparring system from{" "}
+            Taekwondo sparring system from{' '}
             <a
               className="hover:text-primary underline underline-offset-4"
               href="https://www.facebook.com/uittaekwondo"

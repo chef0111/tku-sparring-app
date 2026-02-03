@@ -1,8 +1,8 @@
-import { LogInIcon, MenuIcon } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { UserDropdown } from "../user/user-dropdown";
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { LogInIcon, MenuIcon } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { UserDropdown } from '../user/user-dropdown';
+import { Button } from '@/components/ui/button';
+import { authClient } from '@/lib/auth-client';
 
 const Navbar = () => {
   const { data, isPending } = authClient.useSession();

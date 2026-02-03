@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const TodoSchema = z.object({
   id: z.number().int().min(1),

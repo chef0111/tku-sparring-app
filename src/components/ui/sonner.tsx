@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { Toaster as Sonner } from "sonner";
+import { useTheme } from 'next-themes';
+import { Toaster as Sonner } from 'sonner';
 import {
   IconAlertOctagon,
   IconAlertTriangle,
   IconCircleCheck,
   IconInfoCircle,
   IconLoader,
-} from "@tabler/icons-react";
-import type { ToasterProps } from "sonner";
+} from '@tabler/icons-react';
+import type { ToasterProps } from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
+  const { theme = 'system' } = useTheme();
 
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
+      theme={theme as ToasterProps['theme']}
       className="toaster group"
       icons={{
         success: <IconCircleCheck className="size-4" />,
@@ -27,15 +27,15 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          '--normal-bg': 'var(--popover)',
+          '--normal-text': 'var(--popover-foreground)',
+          '--normal-border': 'var(--border)',
+          '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: 'cn-toast',
         },
       }}
       {...props}

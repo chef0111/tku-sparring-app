@@ -22,7 +22,7 @@ export const RedPlayerHUD = () => {
           <img
             src="assets/CapybaraTKU1.webp"
             alt="Red Player"
-            className="relative z-1 size-full rounded-sm object-contain"
+            className="relative size-full rounded-sm object-contain"
           />
         }
       />
@@ -49,7 +49,7 @@ export const BluePlayerHUD = () => {
           <img
             src="assets/CapybaraTKU2.webp"
             alt="Blue Player"
-            className="relative z-1 size-full rounded-sm object-contain"
+            className="relative size-full rounded-sm object-contain"
           />
         }
       />

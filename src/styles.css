@@ -169,5 +169,5 @@
 }
 
 @utility image-border {
-  @apply pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-black/10 ring-inset dark:ring-white/10;
+  @apply pointer-events-none absolute inset-0 z-10! rounded-md ring-1 ring-black/10 ring-inset dark:ring-white/10;
 }

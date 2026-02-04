@@ -18,13 +18,11 @@ const PlayerAvatar = ({
 }: PlayerAvatarProps) => {
   return (
     <div className="relative">
-      <Avatar
-        className={cn('avatar relative z-0 after:border-none', className)}
-      >
+      <Avatar className={cn('avatar relative after:border-none', className)}>
         <AvatarImage
           src={image ?? ''}
           alt={name}
-          className="relative z-1 rounded-sm object-contain"
+          className="relative rounded-sm object-contain"
         />
         <AvatarFallback
           className={cn(
@@ -35,8 +33,7 @@ const PlayerAvatar = ({
           {fallback}
         </AvatarFallback>
       </Avatar>
-
-      <div className="image-border rounded-xl ring-2" />
+      <div className="image-border rounded-xl ring-3" />
     </div>
   );
 };

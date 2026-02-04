@@ -11,7 +11,7 @@ const AppHUD = () => {
   );
 };
 
-const RedPlayerHUD = () => {
+export const RedPlayerHUD = () => {
   return (
     <div className="flex h-full w-[50%] items-center justify-start">
       <PlayerAvatar
@@ -27,19 +27,19 @@ const RedPlayerHUD = () => {
         }
       />
       <div className="flex h-full w-full flex-col items-start">
-        <Healthbar className="h-[9vh] w-full" />
-        <Manabar manaPoints={5} className="h-[5vh] w-[27vw]" />
+        <Healthbar health={50} className="healthbar-primitive" />
+        <Manabar mana={3} className="manabar-primitive" />
       </div>
     </div>
   );
 };
 
-const BluePlayerHUD = () => {
+export const BluePlayerHUD = () => {
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
       <div className="flex h-full w-full flex-col items-end">
-        <Healthbar className="h-[9vh] w-full" reversed />
-        <Manabar manaPoints={5} className="h-[5vh] w-[27vw]" reversed />
+        <Healthbar health={30} className="healthbar-primitive" reversed />
+        <Manabar mana={4} className="manabar-primitive" reversed />
       </div>
       <PlayerAvatar
         name="Blue Player"

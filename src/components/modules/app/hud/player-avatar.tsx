@@ -36,7 +36,7 @@ const PlayerAvatar = ({
         </AvatarFallback>
       </Avatar>
 
-      <div className="pointer-events-none absolute inset-0 z-10 rounded-xl ring-2 ring-black/10 ring-inset dark:ring-white/10" />
+      <div className="image-border rounded-xl ring-2" />
     </div>
   );
 };

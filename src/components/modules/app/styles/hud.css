@@ -1,0 +1,50 @@
+@utility avatar {
+  @apply relative overflow-hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    content: '';
+    @apply pointer-events-none absolute top-0 right-0 bottom-0 left-0 rounded-xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  &::after {
+    content: '';
+    @apply pointer-events-none absolute top-0 right-0 bottom-0 left-0 rounded-xl;
+  }
+}
+
+@utility healthbar-head {
+  @apply z-10 h-full w-2.5 rounded-[3px] border-2 border-black bg-white;
+}
+
+@utility manabar-head {
+  @apply z-10 h-full w-1.5 rounded-xs border border-black bg-white;
+}
+
+@utility health-meter {
+  @apply relative z-20 flex h-full w-full transition-all duration-1000 ease-out;
+  background-image: linear-gradient(
+    180deg,
+    rgba(50, 244, 219, 1) 0%,
+    rgba(21, 233, 164, 1) 100%
+  );
+}
+
+@utility health-meter-delay {
+  @apply absolute top-0 z-10 flex h-full w-full transition-all duration-1000 ease-out;
+  background-image: linear-gradient(#d80405 0%, #9b0002 100%);
+  transition-delay: 0.5s;
+}
+
+@utility healthbar-primitive {
+  @apply h-[9vh]! w-full!;
+}
+
+@utility manabar-primitive {
+  @apply h-[5vh]! w-[27vw]!;
+}

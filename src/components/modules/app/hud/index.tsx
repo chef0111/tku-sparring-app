@@ -27,7 +27,7 @@ export const RedPlayerHUD = () => {
         }
       />
       <div className="flex h-full w-full flex-col items-start">
-        <Healthbar health={50} className="healthbar-primitive" />
+        <Healthbar health={80} className="healthbar-primitive" />
         <Manabar mana={3} className="manabar-primitive" />
       </div>
     </div>
@@ -38,7 +38,7 @@ export const BluePlayerHUD = () => {
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
       <div className="flex h-full w-full flex-col items-end">
-        <Healthbar health={30} className="healthbar-primitive" reversed />
+        <Healthbar health={50} className="healthbar-primitive" reversed />
         <Manabar mana={4} className="manabar-primitive" reversed />
       </div>
       <PlayerAvatar

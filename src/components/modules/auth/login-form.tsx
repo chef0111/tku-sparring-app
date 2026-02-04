@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
 import { IconAlertCircle } from '@tabler/icons-react';
 import type z from 'zod';
 import { LoginSchema } from '@/lib/validations';

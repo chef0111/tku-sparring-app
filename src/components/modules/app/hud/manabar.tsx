@@ -1,5 +1,29 @@
 import { cn } from '@/lib/utils';
 
+interface ManabarProps {
+  mana: number;
+  className?: string;
+  meterClassName?: string;
+  reversed?: boolean;
+}
+
+export const Manabar = ({
+  mana,
+  className,
+  meterClassName,
+  reversed,
+}: ManabarProps) => {
+  return (
+    <ManabarFrame className={className}>
+      <ManabarMeter
+        mana={mana}
+        className={meterClassName}
+        reversed={reversed}
+      />
+    </ManabarFrame>
+  );
+};
+
 interface ManabarFrameProps {
   children: React.ReactNode;
   className?: string;
@@ -13,38 +37,46 @@ export const ManabarFrame = ({ children, className }: ManabarFrameProps) => {
         className
       )}
     >
-      <div className="z-10 h-full w-1.5 rounded-xs border border-black bg-white" />
+      <div className="manabar-head" />
       <div className="relative h-[85%] w-full rounded-xs border border-white bg-transparent ring-2 ring-black">
         {children}
       </div>
-      <div className="z-10 h-full w-1.5 rounded-xs border border-black bg-white" />
+      <div className="manabar-head" />
     </div>
   );
 };
 
 interface ManabarMeterProps {
-  manaPoints: number;
+  mana: number;
   className?: string;
   reversed?: boolean;
 }
 
 export const ManabarMeter = ({
-  manaPoints,
+  mana,
   className,
   reversed,
 }: ManabarMeterProps) => {
+  const maxMana = 5;
+
   return (
-    <div className={cn('relative h-full w-full', className)}>
+    <div
+      className={cn(
+        'relative flex h-full w-full',
+        reversed ? 'rotate-180' : '',
+        className
+      )}
+    >
       {reversed ? (
-        <div className="flex h-full w-full justify-start">
-          {Array.from({ length: manaPoints }).map((_, index) => (
-            <ManaBlock key={index} manaLevel={index + 1} />
+        <div className="flex h-full w-full">
+          {Array.from({ length: mana }).map((_, index) => (
+            <ManaBlock key={index} manaLevel={maxMana - index} />
           ))}
         </div>
       ) : (
-        <div className="flex h-full w-full justify-end">
-          {Array.from({ length: manaPoints }).map((_, index) => (
-            <ManaBlock key={index} manaLevel={manaPoints - index} />
+        <div className="flex h-full w-full">
+          {Array.from({ length: mana }).map((_, index) => (
+            <ManaBlock key={index} manaLevel={maxMana - index} />
           ))}
         </div>
       )}
@@ -71,29 +103,5 @@ export const ManaBlock = ({ manaLevel, className }: ManaBlockProps) => {
       className={cn('relative h-full w-[20%] border-2 border-white', className)}
       style={{ backgroundColor: manaColorMap[manaLevel] ?? '#09090b' }}
     />
-  );
-};
-
-interface ManabarProps {
-  manaPoints: number;
-  className?: string;
-  meterClassName?: string;
-  reversed?: boolean;
-}
-
-export const Manabar = ({
-  manaPoints,
-  className,
-  meterClassName,
-  reversed,
-}: ManabarProps) => {
-  return (
-    <ManabarFrame className={className}>
-      <ManabarMeter
-        manaPoints={manaPoints}
-        className={meterClassName}
-        reversed={reversed}
-      />
-    </ManabarFrame>
   );
 };

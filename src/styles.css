@@ -5,6 +5,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@reference '@/components/modules/app/styles/index.css';
+
 @font-face {
   font-family: 'ESBuild';
   src: url('/fonts/ESBuild.otf') format('opentype');
@@ -166,54 +168,6 @@
   scrollbar-color: oklch(0.274 0.006 286.033) transparent;
 }
 
-.avatar {
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.avatar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  pointer-events: none;
-}
-
-.avatar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  pointer-events: none;
-}
-
-@utility bg-health-meter {
-  background-image: linear-gradient(
-    180deg,
-    rgba(50, 244, 219, 1) 0%,
-    rgba(21, 233, 164, 1) 100%
-  ) !important;
-}
-
-@utility bg-health-meter-delay {
-  background-image: linear-gradient(#d80405 0%, #9b0002 100%) !important;
-}
-
-@utility health-meter {
-  @apply bg-health-meter relative z-10 flex h-full w-full transition-all duration-1000 ease-out;
-}
-
-@utility health-meter-delay {
-  @apply bg-health-meter-delay absolute top-0 z-0 flex h-full w-full transition-all duration-1000 ease-out;
+@utility image-border {
+  @apply pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-black/10 ring-inset dark:ring-white/10;
 }

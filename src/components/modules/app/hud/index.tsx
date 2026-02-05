@@ -1,6 +1,8 @@
+import { useShallow } from 'zustand/react/shallow';
 import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
+import { usePlayerStore } from '@/lib/stores/player-store';
 
 const AppHUD = () => {
   return (
@@ -12,6 +14,15 @@ const AppHUD = () => {
 };
 
 export const RedPlayerHUD = () => {
+  // Use useShallow for player state
+  const { health, mana } = usePlayerStore(
+    useShallow((s) => ({
+      health: s.red.health,
+      mana: s.red.mana,
+    }))
+  );
+  const maxHealth = usePlayerStore((s) => s.maxHealth);
+
   return (
     <div className="flex h-full w-[50%] items-center justify-start">
       <PlayerAvatar
@@ -27,19 +38,36 @@ export const RedPlayerHUD = () => {
         }
       />
       <div className="flex h-full w-full flex-col items-start">
-        <Healthbar health={80} className="healthbar-primitive" />
-        <Manabar mana={3} className="manabar-primitive" />
+        <Healthbar
+          health={health}
+          maxHealth={maxHealth}
+          className="healthbar-primitive"
+        />
+        <Manabar mana={mana} className="manabar-primitive" />
       </div>
     </div>
   );
 };
 
 export const BluePlayerHUD = () => {
+  const { health, mana } = usePlayerStore(
+    useShallow((s) => ({
+      health: s.blue.health,
+      mana: s.blue.mana,
+    }))
+  );
+  const maxHealth = usePlayerStore((s) => s.maxHealth);
+
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
       <div className="flex h-full w-full flex-col items-end">
-        <Healthbar health={50} className="healthbar-primitive" reversed />
-        <Manabar mana={4} className="manabar-primitive" reversed />
+        <Healthbar
+          health={health}
+          maxHealth={maxHealth}
+          className="healthbar-primitive"
+          reversed
+        />
+        <Manabar mana={mana} className="manabar-primitive" reversed />
       </div>
       <PlayerAvatar
         name="Blue Player"

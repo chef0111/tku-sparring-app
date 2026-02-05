@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 export const Route = createFileRoute('/_auth')({
   component: AuthLayout,
   pendingComponent: () => (
-    <section className="flex h-screen w-screen items-center justify-center">
+    <section className="flex h-dvh w-screen items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <div className="flex items-center justify-center gap-2">
           <LogoIcon className="h-32" />
@@ -46,7 +46,7 @@ function AuthLayout() {
   if (session) return null;
 
   return (
-    <main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
+    <main className="relative md:h-dvh md:overflow-hidden lg:grid lg:grid-cols-2">
       <div className="bg-secondary dark:bg-secondary/20 relative hidden h-full flex-col border-r p-10 lg:flex">
         <div className="to-background absolute inset-0 bg-linear-to-b from-transparent via-transparent" />
         <div className="flex size-fit items-center justify-center gap-1">
@@ -70,7 +70,7 @@ function AuthLayout() {
           <FloatingPaths position={-1} />
         </div>
       </div>
-      <div className="relative flex min-h-screen flex-col justify-center p-4">
+      <div className="relative flex min-h-dvh flex-col justify-center p-4">
         <div
           aria-hidden
           className="absolute inset-0 isolate -z-10 opacity-60 contain-strict"

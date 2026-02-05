@@ -1,0 +1,65 @@
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+interface PenaltyBoxProps {
+  fouls: number;
+  reversed?: boolean;
+  onClick?: () => void;
+  onContextMenu?: (e: React.MouseEvent) => void;
+  className?: string;
+}
+
+export const PenaltyBox = ({
+  fouls,
+  reversed,
+  onClick,
+  onContextMenu,
+  className,
+}: PenaltyBoxProps) => {
+  return (
+    <Card
+      className={cn(
+        'py relative flex h-[15.5vh] w-full flex-col items-center justify-center gap-2.5 overflow-hidden rounded-none px-4',
+        'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
+        reversed
+          ? 'rounded-br-[10px] bg-[#125a9f]'
+          : 'rounded-bl-[10px] bg-[#c10002]',
+        className
+      )}
+    >
+      <Penalty fouls={fouls} onClick={onClick} onContextMenu={onContextMenu} />
+    </Card>
+  );
+};
+
+interface PenaltyProps {
+  fouls: number;
+  onClick?: () => void;
+  onContextMenu?: (e: React.MouseEvent) => void;
+  className?: string;
+}
+
+export const Penalty = ({
+  fouls,
+  onClick,
+  onContextMenu,
+  className,
+}: PenaltyProps) => {
+  return (
+    <div
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      className={cn(
+        'relative flex w-39 cursor-pointer flex-col items-center justify-center gap-1.5 transition-all duration-300',
+        className
+      )}
+    >
+      <p className="m-0 text-center text-2xl leading-none font-semibold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]">
+        GAM-JEOM
+      </p>
+      <p className="m-0 text-center text-6xl leading-none font-semibold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]">
+        {fouls}
+      </p>
+    </div>
+  );
+};

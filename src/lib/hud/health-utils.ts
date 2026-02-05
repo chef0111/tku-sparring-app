@@ -23,13 +23,13 @@ interface ColorStop {
 // Define color stops for smooth interpolation
 export const colorStops: Array<ColorStop> = [
   {
-    threshold: 75,
+    threshold: 100,
     from: { r: 50, g: 244, b: 219 }, // Cyan-green
     to: { r: 21, g: 233, b: 164 }, // Green
   },
   {
-    threshold: 100,
-    from: { r: 35, g: 222, b: 128 }, // Prominent Green
+    threshold: 75,
+    from: { r: 35, g: 224, b: 128 }, // Prominent Green
     to: { r: 34, g: 205, b: 100 }, // Darker green
   },
   {

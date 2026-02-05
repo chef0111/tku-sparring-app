@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Ring } from '@/components/ui/ring';
 import { cn } from '@/lib/utils';
 
 interface PlayerAvatarProps {
@@ -33,7 +34,7 @@ const PlayerAvatar = ({
           {fallback}
         </AvatarFallback>
       </Avatar>
-      <div className="image-border rounded-xl ring-3" />
+      <Ring className="rounded-xl ring-3" />
     </div>
   );
 };

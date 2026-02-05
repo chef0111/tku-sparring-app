@@ -16,7 +16,6 @@ interface HitIconProps {
   className?: string;
 }
 
-// Animation variants for different hit types - instant appearance
 const hitAnimations = {
   normal: {
     initial: { scale: 1, opacity: 1 },
@@ -78,7 +77,6 @@ export const HitIcon = ({
 }: HitIconProps) => {
   const [key, setKey] = useState(0);
 
-  // Update key when timestamp changes to trigger re-animation
   useEffect(() => {
     if (timestamp > 0) {
       setKey((prev) => prev + 1);

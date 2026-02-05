@@ -3,7 +3,7 @@
     color: #fff;
   }
   50% {
-    color: #ff0;
+    color: var(--color-yellow-400);
   }
   100% {
     color: #fff;
@@ -158,8 +158,8 @@
     1px 1px 0 #0070c0;
 }
 
-/* Mana meter fade animation */
-@keyframes mana-fade-glow {
+/* Mana flash animation */
+@keyframes mana-flash {
   0% {
     opacity: 1;
     box-shadow: 0 0 10px 5px #fbcf08;
@@ -182,35 +182,8 @@
   }
 }
 
-@keyframes mana-appear-glow {
-  0% {
-    opacity: 0;
-    box-shadow: 0 0 0 0 #fbcf08;
-  }
-  25% {
-    opacity: 0.25;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 20px 10px #fbcf08;
-  }
-  75% {
-    opacity: 0.75;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-}
-
-@utility animate-mana-disappear {
-  animation: mana-fade-glow 0.8s forwards;
-}
-
-@utility animate-mana-appear {
-  animation: mana-appear-glow 0.8s forwards;
+@utility animate-mana-flash {
+  animation: mana-flash 0.8s forwards;
 }
 
 /* Avatar critical hit animation */

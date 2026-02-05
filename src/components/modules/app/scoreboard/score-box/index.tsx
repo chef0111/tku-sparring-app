@@ -45,7 +45,10 @@ export const ScoreBox = ({ reversed = false, className }: ScoreBoxProps) => {
 
   return (
     <ScoreBoxColumn className={className}>
-      <ScoreBoxFrame reversed={reversed}>
+      <ScoreBoxFrame
+        reversed={reversed}
+        className={cn(isBreakTime ? 'justify-between' : 'justify-center')}
+      >
         <Activity mode={isBreakTime ? 'visible' : 'hidden'}>
           <RecordSection
             roundScores={roundScores}
@@ -109,7 +112,7 @@ export const ScoreBoxFrame = ({
   return (
     <Card
       className={cn(
-        'relative flex h-full w-full grow flex-col items-center justify-between overflow-hidden rounded-none p-5',
+        'relative flex h-full w-full grow flex-col items-center overflow-hidden rounded-none p-5',
         'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
         'after:pointer-events-none after:absolute after:top-[-50%] after:left-[-50%] after:h-[200%] after:w-[200%] after:rotate-30 after:bg-white/10',
         reversed
@@ -139,7 +142,7 @@ export const DamageScore = ({
   return (
     <div
       className={cn(
-        'relative flex h-full w-full -translate-y-30 items-center justify-center rounded-full border-none',
+        'relative flex h-full w-full items-center justify-center rounded-full border-none',
         className
       )}
     >

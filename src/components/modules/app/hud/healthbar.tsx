@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useAnimate } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { computeHealthKeyframes } from '@/lib/hud/health-utils';
 
 interface HealthbarProps {
   health: number;
@@ -14,22 +16,60 @@ export const Healthbar = ({
   className,
   reversed,
 }: HealthbarProps) => {
-  const healthPercentage = (health / maxHealth) * 100;
-  const [delayedHealth, setDelayedHealth] = useState(healthPercentage);
+  const healthPct = (health / maxHealth) * 100;
+
+  // Track previous health for keyframe generation
+  const prevHealthPct = useRef(healthPct);
+  const [delayedHealthPct, setDelayedHealthPct] = useState(() => healthPct);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [animationDuration, setAnimationDuration] = useState(0);
+
+  // Animation scope for the health meter
+  const [scope, animate] = useAnimate();
 
   useEffect(() => {
+    // Skip the initial render to avoid flash
+    if (!isInitialized) {
+      setIsInitialized(true);
+      setDelayedHealthPct(healthPct);
+      prevHealthPct.current = healthPct;
+      return;
+    }
+
+    const keyframes = computeHealthKeyframes(prevHealthPct.current, healthPct);
+    const duration = keyframes.widths.length * 0.3;
+    setAnimationDuration(duration);
+
+    if (scope.current) {
+      animate(
+        scope.current,
+        {
+          width: keyframes.widths,
+          backgroundImage: keyframes.gradients,
+        },
+        {
+          duration,
+          ease: 'easeOut',
+        }
+      );
+    }
+
     const timeout = setTimeout(() => {
-      setDelayedHealth(healthPercentage);
+      setDelayedHealthPct(healthPct);
     }, 100);
 
+    prevHealthPct.current = healthPct;
+
     return () => clearTimeout(timeout);
-  }, [healthPercentage]);
+  }, [healthPct, isInitialized, animate, scope]);
 
   return (
     <HealthbarFrame className={className}>
       <HealthbarMeter
-        currentHealthStyle={{ width: `${healthPercentage}%` }}
-        delayedHealthStyle={{ width: `${delayedHealth}%` }}
+        ref={scope}
+        healthPct={healthPct}
+        delayedHealthPct={delayedHealthPct}
+        animationDuration={animationDuration}
         reversed={reversed}
       />
     </HealthbarFrame>
@@ -58,21 +98,21 @@ export const HealthbarFrame = ({
 
 interface HealthbarMeterProps {
   className?: string;
-  currentHealthStyle?: React.CSSProperties;
-  delayedHealthStyle?: React.CSSProperties;
+  healthPct: number;
+  delayedHealthPct: number;
+  animationDuration: number;
   reversed?: boolean;
 }
 
 export const HealthbarMeter = ({
   className,
-  currentHealthStyle,
-  delayedHealthStyle,
+  healthPct,
+  delayedHealthPct,
+  animationDuration,
   reversed,
-}: HealthbarMeterProps) => {
-  // Add positioning based on reversed prop
-  const delayedPositionStyle = reversed
-    ? { ...delayedHealthStyle, right: 0 }
-    : { ...delayedHealthStyle, left: 0 };
+  ref,
+}: HealthbarMeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const initialKeyframes = computeHealthKeyframes(healthPct, healthPct);
 
   return (
     <div
@@ -82,8 +122,22 @@ export const HealthbarMeter = ({
         className
       )}
     >
-      <div className="health-meter" style={currentHealthStyle} />
-      <div className="health-meter-delay" style={delayedPositionStyle} />
+      <motion.div
+        ref={ref}
+        className="health-meter"
+        initial={{
+          width: `${healthPct}%`,
+          backgroundImage: initialKeyframes.gradients[0],
+        }}
+      />
+      <div
+        className="health-meter-delay"
+        style={{
+          width: `${delayedHealthPct}%`,
+          transition: `width ${animationDuration}s ease-out 0.5s`,
+          ...(reversed ? { right: 0 } : { left: 0 }),
+        }}
+      />
     </div>
   );
 };

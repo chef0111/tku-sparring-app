@@ -168,6 +168,6 @@
   scrollbar-color: oklch(0.274 0.006 286.033) transparent;
 }
 
-@utility image-border {
-  @apply pointer-events-none absolute inset-0 z-10! rounded-md ring-1 ring-black/10 ring-inset dark:ring-white/10;
+@utility no-focus {
+  @apply focus-visible:border-none! focus-visible:ring-0! focus-visible:ring-transparent! focus-visible:ring-offset-0! focus-visible:outline-none!;
 }

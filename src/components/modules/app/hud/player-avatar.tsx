@@ -31,7 +31,9 @@ const PlayerAvatar = ({
         }
       }}
     >
-      <Avatar className={cn('avatar relative after:border-none', className)}>
+      <Avatar
+        className={cn('avatar no-focus relative after:border-none', className)}
+      >
         <AvatarImage
           src={image ?? ''}
           alt={name}

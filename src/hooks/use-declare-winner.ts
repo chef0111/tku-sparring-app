@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import type { Player } from '@/lib/stores/player-store';
-import { usePlayerStore } from '@/lib/stores/player-store';
-import { useMatchStore } from '@/lib/stores/match-store';
-import { useTimerStore } from '@/lib/stores/timer-store';
+import type { Player } from '@/stores/player-store';
+import { usePlayerStore } from '@/stores/player-store';
+import { useMatchStore } from '@/stores/match-store';
+import { useTimerStore } from '@/stores/timer-store';
 
 export const useDeclareWinner = (player: Player) => {
   const isBreakTime = useTimerStore((s) => s.isBreakTime);

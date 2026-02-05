@@ -5,8 +5,8 @@ import { PenaltyBox } from './penalty-section';
 import type { HitType, Player } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
 import { KEYBOARD_MAPPINGS } from '@/lib/scoreboard/hit-types';
-import { useTimerStore } from '@/lib/stores/timer-store';
-import { usePlayerStore } from '@/lib/stores/player-store';
+import { useTimerStore } from '@/stores/timer-store';
+import { usePlayerStore } from '@/stores/player-store';
 
 interface ScoreControlsProps {
   reversed?: boolean;

@@ -1,14 +1,14 @@
-import { useShallow } from 'zustand/react/shallow';
 import { Activity } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { HitIcon } from './hit-icon';
 import { RecordSection, TotalWins } from './record-section';
 import { StatsSection } from './stats-section';
-import type { Player } from '@/lib/stores/player-store';
+import type { Player } from '@/stores/player-store';
 import type { HitType } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
-import { usePlayerStore } from '@/lib/stores/player-store';
-import { useMatchStore } from '@/lib/stores/match-store';
-import { useTimerStore } from '@/lib/stores/timer-store';
+import { usePlayerStore } from '@/stores/player-store';
+import { useMatchStore } from '@/stores/match-store';
+import { useTimerStore } from '@/stores/timer-store';
 import { Card } from '@/components/ui/card';
 
 interface ScoreBoxProps {

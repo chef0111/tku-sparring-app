@@ -3,8 +3,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { ClockSection } from './clock-section';
 import { MatchInfo, RoundInfo } from './match-info';
 import { cn } from '@/lib/utils';
-import { useTimerStore } from '@/lib/stores/timer-store';
-import { useMatchStore } from '@/lib/stores/match-store';
+import { useTimerStore } from '@/stores/timer-store';
+import { useMatchStore } from '@/stores/match-store';
 import { useTimerTick } from '@/hooks/use-timer-tick';
 import { useRoundTransition } from '@/hooks/use-round-transition';
 

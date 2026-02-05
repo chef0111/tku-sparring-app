@@ -20,9 +20,9 @@ export const useTimerTick = () => {
   }, [isRunning, isBreakTime]);
 
   useEffect(() => {
-    if (isBreakTime) {
+    if (isBreakTime && isRunning) {
       const id = setInterval(() => tickBreakRef.current(1000), 1000);
       return () => clearInterval(id);
     }
-  }, [isBreakTime]);
+  }, [isBreakTime, isRunning]);
 };

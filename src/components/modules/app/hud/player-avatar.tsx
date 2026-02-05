@@ -6,6 +6,7 @@ interface PlayerAvatarProps {
   name?: string;
   image?: string | null;
   className?: string;
+  imageClassName?: string;
   fallback?: React.ReactNode;
   fallbackClassName?: string;
   onDoubleClick?: () => void;
@@ -15,6 +16,7 @@ const PlayerAvatar = ({
   name,
   image,
   className,
+  imageClassName,
   fallback,
   fallbackClassName,
   onDoubleClick,
@@ -37,7 +39,7 @@ const PlayerAvatar = ({
         <AvatarImage
           src={image ?? ''}
           alt={name}
-          className="relative rounded-sm object-contain"
+          className={cn('relative rounded-sm object-contain', imageClassName)}
         />
         <AvatarFallback
           className={cn(

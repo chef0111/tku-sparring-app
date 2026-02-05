@@ -1,4 +1,5 @@
 import { useShallow } from 'zustand/react/shallow';
+import { Activity } from 'react';
 import { HitIcon } from './hit-icon';
 import { RecordSection, TotalWins } from './record-section';
 import { StatsSection } from './stats-section';
@@ -7,6 +8,7 @@ import type { HitType } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
 import { usePlayerStore } from '@/lib/stores/player-store';
 import { useMatchStore } from '@/lib/stores/match-store';
+import { useTimerStore } from '@/lib/stores/timer-store';
 import { Card } from '@/components/ui/card';
 
 interface ScoreBoxProps {
@@ -37,24 +39,35 @@ export const ScoreBox = ({ reversed = false, className }: ScoreBoxProps) => {
     }))
   );
 
+  const isBreakTime = useTimerStore((s) => s.isBreakTime);
+
   const wins = reversed ? blueWon : redWon;
 
   return (
     <ScoreBoxColumn className={className}>
       <ScoreBoxFrame reversed={reversed}>
-        <RecordSection
-          roundScores={roundScores}
-          roundWinners={roundWinners}
-          player={player}
-          reversed={reversed}
-          currentRound={currentRound}
-        />
-        <DamageScore
-          player={player}
-          hitType={lastHit?.hitType ?? null}
-          timestamp={lastHit?.timestamp ?? 0}
-        />
-        <TotalWins wins={wins} />
+        <Activity mode={isBreakTime ? 'visible' : 'hidden'}>
+          <RecordSection
+            roundScores={roundScores}
+            roundWinners={roundWinners}
+            player={player}
+            reversed={reversed}
+            currentRound={currentRound}
+            isBreakTime={isBreakTime}
+          />
+        </Activity>
+
+        {!isBreakTime && (
+          <DamageScore
+            player={player}
+            hitType={lastHit?.hitType ?? null}
+            timestamp={lastHit?.timestamp ?? 0}
+          />
+        )}
+
+        <Activity mode={isBreakTime ? 'visible' : 'hidden'}>
+          <TotalWins wins={wins} />
+        </Activity>
       </ScoreBoxFrame>
       <StatsSection hits={hits} wins={wins} reversed={reversed} />
     </ScoreBoxColumn>

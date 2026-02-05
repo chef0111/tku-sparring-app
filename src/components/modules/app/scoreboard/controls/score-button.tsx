@@ -12,6 +12,7 @@ interface ButtonColumnProps {
   player: Player;
   onHit: (hitType: HitType) => void;
   disabled?: boolean;
+  activeHitType?: HitType | null;
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export const CriticalButtonsColumn = ({
   player,
   onHit,
   disabled,
+  activeHitType,
   className,
 }: ButtonColumnProps) => {
   const keyMap = KEYBOARD_MAPPINGS[player];
@@ -42,6 +44,7 @@ export const CriticalButtonsColumn = ({
             keyLabel={key?.toUpperCase()}
             onClick={() => onHit(hitType)}
             disabled={disabled}
+            isActive={activeHitType === hitType}
           />
         );
       })}
@@ -53,6 +56,7 @@ export const NormalButtonsColumn = ({
   player,
   onHit,
   disabled,
+  activeHitType,
   className,
 }: ButtonColumnProps) => {
   const keyMap = KEYBOARD_MAPPINGS[player];
@@ -76,6 +80,7 @@ export const NormalButtonsColumn = ({
             keyLabel={key?.toUpperCase()}
             onClick={() => onHit(hitType)}
             disabled={disabled}
+            isActive={activeHitType === hitType}
           />
         );
       })}
@@ -89,6 +94,7 @@ interface ScoreButtonProps {
   keyLabel?: string;
   onClick: () => void;
   disabled?: boolean;
+  isActive?: boolean;
   className?: string;
 }
 
@@ -98,6 +104,7 @@ export const ScoreButton = ({
   keyLabel,
   onClick,
   disabled,
+  isActive,
   className,
 }: ScoreButtonProps) => {
   const iconPath = getButtonIconPath(player, hitType);
@@ -105,6 +112,15 @@ export const ScoreButton = ({
     player === 'red' ? 'rgba(255, 255, 0, 0.5)' : 'rgba(0, 255, 0, 0.5)';
   const hoverBgColor =
     player === 'red' ? 'rgba(255, 255, 0, 0.2)' : 'rgba(153, 255, 102, 0.2)';
+
+  const activeAnimation =
+    isActive && !disabled
+      ? {
+          scale: 0.95,
+          boxShadow: `0 0 10px ${glowColor}, 0 0 20px ${glowColor}`,
+          backgroundColor: hoverBgColor,
+        }
+      : {};
 
   return (
     <motion.button
@@ -116,6 +132,7 @@ export const ScoreButton = ({
         disabled && 'cursor-not-allowed opacity-50',
         className
       )}
+      animate={activeAnimation}
       whileHover={
         disabled
           ? {}

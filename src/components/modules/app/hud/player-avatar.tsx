@@ -8,6 +8,7 @@ interface PlayerAvatarProps {
   className?: string;
   fallback?: React.ReactNode;
   fallbackClassName?: string;
+  onDoubleClick?: () => void;
 }
 
 const PlayerAvatar = ({
@@ -16,9 +17,20 @@ const PlayerAvatar = ({
   className,
   fallback,
   fallbackClassName,
+  onDoubleClick,
 }: PlayerAvatarProps) => {
   return (
-    <div className="relative">
+    <div
+      className="relative cursor-pointer"
+      onDoubleClick={onDoubleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && onDoubleClick) {
+          onDoubleClick();
+        }
+      }}
+    >
       <Avatar className={cn('avatar relative after:border-none', className)}>
         <AvatarImage
           src={image ?? ''}

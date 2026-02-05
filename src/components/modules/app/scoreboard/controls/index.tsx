@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { CriticalButtonsColumn, NormalButtonsColumn } from './score-button';
 import { PenaltyBox } from './penalty-section';
@@ -39,7 +39,7 @@ export const ScoreControls = ({
   const recordHit = usePlayerStore((s) => s.recordHit);
   const addPenalty = usePlayerStore((s) => s.addPenalty);
   const removePenalty = usePlayerStore((s) => s.removePenalty);
-  const pause = useTimerStore((s) => s.pause);
+  const setRoundEnded = useTimerStore((s) => s.setRoundEnded);
 
   // Check if either player is knocked out or disqualified
   const anyPlayerKO = redHealth <= 0 || blueHealth <= 0;
@@ -48,30 +48,33 @@ export const ScoreControls = ({
 
   const canScore = isRunning && !isBreakTime && !roundEnded;
 
+  // Track active hit type for keyboard visual feedback
+  const [activeHitType, setActiveHitType] = useState<HitType | null>(null);
+
   const handleHit = useCallback(
     (hitType: HitType) => {
       if (canScore) {
         const koOccurred = recordHit(player, hitType, isRunning, isBreakTime);
 
-        // Stop timer if KO occurred
+        // Stop timer and lock round if KO occurred
         if (koOccurred) {
-          pause();
+          setRoundEnded(true);
         }
       }
     },
-    [canScore, player, recordHit, isRunning, isBreakTime, pause]
+    [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]
   );
 
   const handlePenaltyClick = useCallback(() => {
     if (!isBreakTime && !roundEnded) {
       const disqualified = addPenalty(player);
 
-      // Stop timer if player was disqualified
+      // Stop timer and lock round if player was disqualified
       if (disqualified) {
-        pause();
+        setRoundEnded(true);
       }
     }
-  }, [isBreakTime, roundEnded, player, addPenalty, pause]);
+  }, [isBreakTime, roundEnded, player, addPenalty, setRoundEnded]);
 
   const handlePenaltyRightClick = useCallback(
     (e: React.MouseEvent) => {
@@ -83,7 +86,7 @@ export const ScoreControls = ({
     [isBreakTime, roundEnded, player, removePenalty]
   );
 
-  // Keyboard controls
+  // Keyboard controls with visual feedback
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!canScore) return;
@@ -93,18 +96,25 @@ export const ScoreControls = ({
 
       if (hitType) {
         e.preventDefault();
+
+        // Set active hit type for visual feedback
+        setActiveHitType(hitType);
+
         const koOccurred = recordHit(player, hitType, isRunning, isBreakTime);
 
-        // Stop timer if KO occurred
+        // Stop timer and lock round if KO occurred
         if (koOccurred) {
-          pause();
+          setRoundEnded(true);
         }
+
+        // Clear active state after animation duration
+        setTimeout(() => setActiveHitType(null), 100);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [canScore, player, recordHit, isRunning, isBreakTime, pause]);
+  }, [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]);
 
   return (
     <ScoreControlsColumn className={className}>
@@ -115,11 +125,13 @@ export const ScoreControls = ({
             player={player}
             onHit={handleHit}
             disabled={!canScore}
+            activeHitType={activeHitType}
           />
           <NormalButtonsColumn
             player={player}
             onHit={handleHit}
             disabled={!canScore}
+            activeHitType={activeHitType}
           />
         </ScoreButtonsContainer>
       </ScoreControlsSection>

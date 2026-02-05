@@ -5,7 +5,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@reference '@/components/modules/app/styles/index.css';
+@import '@/components/modules/app/styles/index.css';
 
 @font-face {
   font-family: 'ESBuild';

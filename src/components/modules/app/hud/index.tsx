@@ -3,6 +3,7 @@ import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
 import { usePlayerStore } from '@/lib/stores/player-store';
+import { useDeclareWinner } from '@/hooks/use-declare-winner';
 
 const AppHUD = () => {
   return (
@@ -14,7 +15,6 @@ const AppHUD = () => {
 };
 
 export const RedPlayerHUD = () => {
-  // Use useShallow for player state
   const { health, mana } = usePlayerStore(
     useShallow((s) => ({
       health: s.red.health,
@@ -22,6 +22,8 @@ export const RedPlayerHUD = () => {
     }))
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
+
+  const handleDeclareWinner = useDeclareWinner('red');
 
   return (
     <div className="flex h-full w-[50%] items-center justify-start">
@@ -36,6 +38,7 @@ export const RedPlayerHUD = () => {
             className="relative size-full rounded-sm object-contain"
           />
         }
+        onDoubleClick={handleDeclareWinner}
       />
       <div className="flex h-full w-full flex-col items-start">
         <Healthbar
@@ -57,6 +60,8 @@ export const BluePlayerHUD = () => {
     }))
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
+
+  const handleDeclareWinner = useDeclareWinner('blue');
 
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
@@ -80,6 +85,7 @@ export const BluePlayerHUD = () => {
             className="relative size-full rounded-sm object-contain"
           />
         }
+        onDoubleClick={handleDeclareWinner}
       />
     </div>
   );

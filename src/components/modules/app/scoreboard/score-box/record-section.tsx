@@ -8,6 +8,7 @@ interface RecordSectionProps {
   player: Player;
   reversed?: boolean;
   currentRound: number;
+  isBreakTime?: boolean;
   className?: string;
 }
 
@@ -17,10 +18,16 @@ export const RecordSection = ({
   player,
   reversed,
   currentRound,
+  isBreakTime = false,
   className,
 }: RecordSectionProps) => {
-  const completedRounds = currentRound > 1 ? currentRound - 1 : 0;
-  if (completedRounds === 0) {
+  const roundsToShow = isBreakTime
+    ? currentRound
+    : currentRound > 1
+      ? currentRound - 1
+      : 0;
+
+  if (roundsToShow === 0) {
     return <div className={cn('h-45 w-full', className)} />;
   }
 
@@ -31,7 +38,7 @@ export const RecordSection = ({
         className
       )}
     >
-      {Array.from({ length: completedRounds }, (_, i) => i + 1).map((round) => (
+      {Array.from({ length: roundsToShow }, (_, i) => i + 1).map((round) => (
         <RoundRecord
           key={round}
           round={round}
@@ -106,8 +113,7 @@ export const TotalWins = ({ wins, className }: TotalWinsProps) => {
   return (
     <div
       className={cn(
-        'absolute top-[90%] left-1/2 m-auto h-20 -translate-x-1/2 -translate-y-1/2 text-center text-5xl font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]',
-        'invisible',
+        'absolute top-[90%] left-1/2 m-auto h-20 -translate-x-1/2 -translate-y-1/2 text-center text-7xl font-semibold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]',
         className
       )}
     >

@@ -1,36 +1,26 @@
 import { create } from 'zustand';
 
 interface TimerState {
-  // Timer values
   timeLeft: number;
   breakTimeLeft: number;
-
-  // Timer status
   isRunning: boolean;
   isBreakTime: boolean;
   roundStarted: boolean;
-
-  // Configuration
+  roundEnded: boolean;
   roundDuration: number;
   breakDuration: number;
 }
 
 interface TimerActions {
-  // Timer controls
   start: () => void;
   pause: () => void;
   toggle: () => void;
   tick: (deltaMs: number) => void;
-
-  // Break timer
   startBreak: () => void;
   tickBreak: (deltaMs: number) => void;
-
-  // Reset
+  setRoundEnded: (ended: boolean) => void;
   reset: () => void;
   resetForNextRound: (roundDuration: number) => void;
-
-  // Configuration
   setRoundDuration: (duration: number) => void;
   setBreakDuration: (duration: number) => void;
 }
@@ -41,19 +31,18 @@ const DEFAULT_ROUND_DURATION = 60 * 1000; // 60 seconds
 const DEFAULT_BREAK_DURATION = 30 * 1000; // 30 seconds
 
 export const useTimerStore = create<TimerStore>()((set, get) => ({
-  // Initial state
   timeLeft: DEFAULT_ROUND_DURATION,
   breakTimeLeft: DEFAULT_BREAK_DURATION,
   isRunning: false,
   isBreakTime: false,
   roundStarted: false,
+  roundEnded: false,
   roundDuration: DEFAULT_ROUND_DURATION,
   breakDuration: DEFAULT_BREAK_DURATION,
 
-  // Actions
   start: () => {
     const state = get();
-    if (state.isBreakTime) return;
+    if (state.isBreakTime || state.roundEnded) return;
 
     set({
       isRunning: true,
@@ -67,7 +56,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
 
   toggle: () => {
     const state = get();
-    if (state.isBreakTime) return;
+    if (state.isBreakTime || state.roundEnded) return;
 
     if (state.isRunning) {
       set({ isRunning: false });
@@ -101,7 +90,12 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
       isBreakTime: true,
       isRunning: false,
       breakTimeLeft: state.breakDuration,
+      roundEnded: false,
     });
+  },
+
+  setRoundEnded: (ended) => {
+    set({ roundEnded: ended, isRunning: false });
   },
 
   tickBreak: (deltaMs) => {
@@ -128,6 +122,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
       isRunning: false,
       isBreakTime: false,
       roundStarted: false,
+      roundEnded: false,
     });
   },
 
@@ -137,6 +132,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
       isRunning: false,
       isBreakTime: false,
       roundStarted: false,
+      roundEnded: false,
     });
   },
 

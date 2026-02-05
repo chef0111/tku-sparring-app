@@ -1,23 +1,32 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ClockSection } from './clock-section';
 import { MatchInfo, RoundInfo } from './match-info';
 import { cn } from '@/lib/utils';
 import { useTimerStore } from '@/lib/stores/timer-store';
 import { useMatchStore } from '@/lib/stores/match-store';
+import { useTimerTick } from '@/hooks/use-timer-tick';
+import { useRoundTransition } from '@/hooks/use-round-transition';
 
 export const Timer = () => {
-  const { timeLeft, isRunning, isBreakTime, breakTimeLeft } = useTimerStore(
+  const {
+    timeLeft,
+    isRunning,
+    isBreakTime,
+    breakTimeLeft,
+    roundEnded,
+    roundStarted,
+  } = useTimerStore(
     useShallow((s) => ({
       timeLeft: s.timeLeft,
       isRunning: s.isRunning,
       isBreakTime: s.isBreakTime,
       breakTimeLeft: s.breakTimeLeft,
+      roundEnded: s.roundEnded,
+      roundStarted: s.roundStarted,
     }))
   );
 
-  const tick = useTimerStore((s) => s.tick);
-  const tickBreak = useTimerStore((s) => s.tickBreak);
   const toggle = useTimerStore((s) => s.toggle);
 
   const { matchId, currentRound } = useMatchStore(
@@ -27,33 +36,12 @@ export const Timer = () => {
     }))
   );
 
-  const tickRef = useRef(tick);
-  const tickBreakRef = useRef(tickBreak);
-  tickRef.current = tick;
-  tickBreakRef.current = tickBreak;
-
-  useEffect(() => {
-    if (isRunning && !isBreakTime) {
-      const id = setInterval(() => {
-        tickRef.current(10);
-      }, 10);
-      return () => clearInterval(id);
-    }
-  }, [isRunning, isBreakTime]);
-
-  // Break timer tick effect
-  useEffect(() => {
-    if (isBreakTime) {
-      const id = setInterval(() => {
-        tickBreakRef.current(1000);
-      }, 1000);
-      return () => clearInterval(id);
-    }
-  }, [isBreakTime]);
+  useTimerTick();
+  useRoundTransition();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && !isBreakTime) {
+      if (e.code === 'Space' && !isBreakTime && !roundEnded) {
         e.preventDefault();
         toggle();
       }
@@ -61,18 +49,18 @@ export const Timer = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isBreakTime, toggle]);
+  }, [isBreakTime, roundEnded, toggle]);
 
   const handleTimeBoxClick = useCallback(() => {
-    if (!isBreakTime) {
+    if (!isBreakTime && !roundEnded) {
       toggle();
     }
-  }, [isBreakTime, toggle]);
+  }, [isBreakTime, roundEnded, toggle]);
 
   const displayTime = isBreakTime ? breakTimeLeft : timeLeft;
   const showMilliseconds = !isBreakTime && timeLeft < 10000 && timeLeft > 0;
   const shouldBlink = !isBreakTime && timeLeft < 10000 && timeLeft > 0;
-  const isPaused = !isRunning && !isBreakTime && timeLeft > 0;
+  const isPaused = !isRunning && !isBreakTime && timeLeft > 0 && roundStarted;
 
   return (
     <TimerFrame>

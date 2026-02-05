@@ -2,7 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
-import { usePlayerStore } from '@/lib/stores/player-store';
+import { usePlayerStore } from '@/stores/player-store';
 import { useDeclareWinner } from '@/hooks/use-declare-winner';
 
 const AppHUD = () => {

@@ -1,2 +1,3 @@
-@reference './hud.css';
-@reference './scoreboard.css';
+@import './hud.css';
+@import './scoreboard.css';
+@import './match-result.css';

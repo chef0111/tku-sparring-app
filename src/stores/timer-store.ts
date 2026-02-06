@@ -22,7 +22,7 @@ interface TimerActions {
   tickBreak: (deltaMs: number) => void;
   setRoundEnded: (ended: boolean) => void;
   reset: () => void;
-  resetForNextRound: (roundDuration: number) => void;
+  resetRoundStats: (roundDuration: number) => void;
   setRoundDuration: (duration: number) => void;
   setBreakDuration: (duration: number) => void;
 }
@@ -149,7 +149,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
     });
   },
 
-  resetForNextRound: (roundDuration) => {
+  resetRoundStats: (roundDuration) => {
     set({
       timeLeft: roundDuration,
       isRunning: false,

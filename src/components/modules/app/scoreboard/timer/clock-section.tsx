@@ -71,7 +71,7 @@ export const TimeBox = ({
     >
       <h1
         className={cn(
-          'm-0 text-center text-8xl leading-none font-bold text-white',
+          'm-0 text-center text-8xl leading-none font-bold text-white select-none',
           shouldBlink && 'animate-timer-blink',
           isPaused && !isBreakTime && 'text-yellow-500'
         )}
@@ -102,7 +102,7 @@ export const TimeoutIndicator = ({
         className
       )}
     >
-      <h2 className="text-background m-0 text-center text-6xl leading-none font-bold whitespace-nowrap">
+      <h2 className="text-background m-0 text-center text-6xl leading-none font-bold whitespace-nowrap select-none">
         Time out
       </h2>
     </div>

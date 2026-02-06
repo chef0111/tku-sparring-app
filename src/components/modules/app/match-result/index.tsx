@@ -45,13 +45,13 @@ export const ResultDialog = ({
 
       {/* Result */}
       <div className="flex h-44 w-full max-w-7xl items-stretch gap-4">
-        <Card className="winner-label tex-foreground w-[64%] border-yellow-300 bg-[#5d583a] text-7xl ring-yellow-600">
+        <Card className="winner-label tex-foreground winner-label-indicator w-[64%] text-7xl">
           WINNER
         </Card>
-        <Card className="winner-label w-[18%] border-blue-500 bg-[#233448] text-8xl text-blue-500 ring-indigo-900">
+        <Card className="winner-label winner-label-blue w-[18%] text-8xl">
           {blueWon}
         </Card>
-        <Card className="winner-label border-destructive text-destructive w-[18%] bg-[#46282a] text-8xl ring-red-900">
+        <Card className="winner-label winner-label-red w-[18%] text-8xl">
           {redWon}
         </Card>
       </div>
@@ -78,9 +78,7 @@ export const ResultDialog = ({
         <Card
           className={cn(
             'winner-label w-[74%] text-7xl text-white',
-            winner === 'red'
-              ? 'border-destructive bg-[#46282a] ring-red-900'
-              : 'border-blue-600 bg-[#233448] ring-indigo-900'
+            winner === 'red' ? 'winner-label-red' : 'winner-label-blue'
           )}
         >
           {winnerName}

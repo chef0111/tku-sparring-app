@@ -10,6 +10,7 @@ interface PlayerAvatarProps {
   fallback?: React.ReactNode;
   fallbackClassName?: string;
   onDoubleClick?: () => void;
+  isCriticalHit?: boolean;
 }
 
 const PlayerAvatar = ({
@@ -20,6 +21,7 @@ const PlayerAvatar = ({
   fallback,
   fallbackClassName,
   onDoubleClick,
+  isCriticalHit,
 }: PlayerAvatarProps) => {
   return (
     <div
@@ -39,7 +41,11 @@ const PlayerAvatar = ({
         <AvatarImage
           src={image ?? ''}
           alt={name}
-          className={cn('relative rounded-sm object-contain', imageClassName)}
+          className={cn(
+            'relative rounded-sm object-contain',
+            isCriticalHit && 'animate-avatar-critical',
+            imageClassName
+          )}
         />
         <AvatarFallback
           className={cn(

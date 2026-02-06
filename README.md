@@ -1,4 +1,4 @@
-# TKU Sparring System
+# TKU Sparring System - tss@1.0.0
 
 A modern, user-friendly web application for managing Taekwondo sparring matches of UIT Taekwondo Tournament 2025.
 

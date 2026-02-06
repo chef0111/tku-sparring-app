@@ -1,0 +1,7 @@
+@utility winner-label {
+  @apply flex items-center justify-center truncate rounded-xs font-bold select-none;
+}
+
+@utility action-btn {
+  @apply text-foreground! h-16! rounded-lg! px-8! text-2xl! font-bold! tracking-wider! opacity-100!;
+}

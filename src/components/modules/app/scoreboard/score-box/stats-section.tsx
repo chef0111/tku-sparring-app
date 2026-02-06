@@ -62,7 +62,7 @@ export const StatItem = ({
     >
       <p
         className={cn(
-          'm-0 text-center text-3xl leading-none font-semibold drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]',
+          'm-0 text-center text-3xl leading-none font-semibold drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)] select-none',
           textColor
         )}
       >
@@ -70,7 +70,7 @@ export const StatItem = ({
       </p>
       <p
         className={cn(
-          'm-0 text-center text-5xl leading-none font-semibold tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]',
+          'm-0 text-center text-5xl leading-none font-semibold tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)] select-none',
           textColor
         )}
       >

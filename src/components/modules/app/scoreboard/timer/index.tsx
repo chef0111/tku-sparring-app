@@ -107,7 +107,7 @@ export const Timer = () => {
           <Button
             variant="ghost"
             size="lg"
-            className="absolute bottom-10"
+            className="absolute bottom-10 rounded-xs"
             onClick={handleSkipBreak}
           >
             <SkipForward />

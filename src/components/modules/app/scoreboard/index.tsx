@@ -1,6 +1,6 @@
 import { Timer } from './timer';
 import { ScoreBox } from './score-box';
-import { ScoreControls } from './controls';
+import { Controls } from './controls';
 import { cn } from '@/lib/utils';
 
 interface ScoreboardProps {
@@ -16,15 +16,14 @@ export const Scoreboard = ({ className }: ScoreboardProps) => {
       )}
     >
       {/* Red player side */}
-      <ScoreControls reversed={false} />
+      <Controls reversed={false} />
       <ScoreBox reversed={false} />
 
-      {/* Timer in the center */}
       <Timer />
 
       {/* Blue player side */}
       <ScoreBox reversed={true} />
-      <ScoreControls reversed={true} />
+      <Controls reversed={true} />
     </section>
   );
 };
@@ -32,4 +31,4 @@ export const Scoreboard = ({ className }: ScoreboardProps) => {
 // Re-export sub-components for flexibility
 export { Timer } from './timer';
 export { ScoreBox } from './score-box';
-export { ScoreControls } from './controls';
+export { Controls } from './controls';

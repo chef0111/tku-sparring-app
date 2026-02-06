@@ -27,7 +27,7 @@
 }
 
 @utility health-meter {
-  @apply relative z-20 flex h-full w-full transition-all duration-1000 ease-out;
+  @apply relative z-20 flex h-full w-full transition-all duration-500 ease-out;
 }
 
 @utility health-meter-delay {

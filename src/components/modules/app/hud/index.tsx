@@ -1,9 +1,10 @@
+import { useCallback } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
 import { usePlayerStore } from '@/stores/player-store';
-import { useDeclareWinner } from '@/hooks/use-declare-winner';
+import { useDeclareWinner } from '@/hooks/use-winner';
 
 const AppHUD = () => {
   return (
@@ -23,7 +24,8 @@ export const RedPlayerHUD = () => {
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
 
-  const handleDeclareWinner = useDeclareWinner('red');
+  const { forceWinner } = useDeclareWinner();
+  const handleForceWin = useCallback(() => forceWinner('red'), [forceWinner]);
 
   return (
     <div className="flex h-full w-[50%] items-center justify-start">
@@ -38,7 +40,7 @@ export const RedPlayerHUD = () => {
             className="relative size-full rounded-sm object-contain"
           />
         }
-        onDoubleClick={handleDeclareWinner}
+        onDoubleClick={handleForceWin}
       />
       <div className="flex h-full w-full flex-col items-start">
         <Healthbar
@@ -61,7 +63,8 @@ export const BluePlayerHUD = () => {
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
 
-  const handleDeclareWinner = useDeclareWinner('blue');
+  const { forceWinner } = useDeclareWinner();
+  const handleForceWin = useCallback(() => forceWinner('blue'), [forceWinner]);
 
   return (
     <div className="flex h-full w-[50%] items-center justify-end">
@@ -85,7 +88,7 @@ export const BluePlayerHUD = () => {
             className="relative size-full rounded-sm object-contain"
           />
         }
-        onDoubleClick={handleDeclareWinner}
+        onDoubleClick={handleForceWin}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import { useTimerStore } from '@/stores/timer-store';
 import { useMatchStore } from '@/stores/match-store';
 import { useTimerTick } from '@/hooks/use-timer-tick';
 import { useRoundTransition } from '@/hooks/use-round-transition';
+import { useDeclareWinner } from '@/hooks/use-winner';
 import { Button } from '@/components/ui/button';
 
 export const Timer = () => {
@@ -18,6 +19,10 @@ export const Timer = () => {
     breakTimeLeft,
     roundEnded,
     roundStarted,
+    toggle,
+    toggleBreak,
+    skipBreak,
+    pause,
   } = useTimerStore(
     useShallow((s) => ({
       timeLeft: s.timeLeft,
@@ -26,11 +31,6 @@ export const Timer = () => {
       breakTimeLeft: s.breakTimeLeft,
       roundEnded: s.roundEnded,
       roundStarted: s.roundStarted,
-    }))
-  );
-
-  const { toggle, toggleBreak, skipBreak, pause } = useTimerStore(
-    useShallow((s) => ({
       toggle: s.toggle,
       toggleBreak: s.toggleBreak,
       skipBreak: s.skipBreak,
@@ -49,6 +49,8 @@ export const Timer = () => {
   useTimerTick();
   useRoundTransition();
 
+  const { declareWinner } = useDeclareWinner();
+
   useEffect(() => {
     if (isMatchOver && isBreakTime && isRunning) {
       pause();
@@ -61,6 +63,8 @@ export const Timer = () => {
         e.preventDefault();
         if (isBreakTime && !isMatchOver) {
           toggleBreak();
+        } else if (roundEnded && !isMatchOver) {
+          declareWinner();
         } else if (!roundEnded && !isMatchOver) {
           toggle();
         }
@@ -69,7 +73,14 @@ export const Timer = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isBreakTime, roundEnded, isMatchOver, toggle, toggleBreak]);
+  }, [
+    isBreakTime,
+    roundEnded,
+    isMatchOver,
+    toggle,
+    toggleBreak,
+    declareWinner,
+  ]);
 
   const handleTimeBoxClick = useCallback(() => {
     if (isMatchOver) return;
@@ -107,7 +118,7 @@ export const Timer = () => {
           <Button
             variant="ghost"
             size="lg"
-            className="absolute bottom-10 rounded-xs"
+            className="absolute bottom-10 rounded-sm select-none"
             onClick={handleSkipBreak}
           >
             <SkipForward />

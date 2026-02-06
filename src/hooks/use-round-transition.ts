@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useTimerStore } from '@/stores/timer-store';
-import { usePlayerStore } from '@/stores/player-store';
 import { useMatchStore } from '@/stores/match-store';
 
 export const useRoundTransition = () => {
@@ -20,8 +19,7 @@ export const useRoundTransition = () => {
     }))
   );
 
-  const resetTimerForNextRound = useTimerStore((s) => s.resetForNextRound);
-  const resetPlayerForNextRound = usePlayerStore((s) => s.resetForNextRound);
+  const resetRoundStats = useTimerStore((s) => s.resetRoundStats);
   const nextRound = useMatchStore((s) => s.nextRound);
 
   const prevIsBreakTime = useRef(isBreakTime);
@@ -35,8 +33,7 @@ export const useRoundTransition = () => {
       breakTimeLeft === 0 &&
       !isMatchOver
     ) {
-      resetTimerForNextRound(roundDuration);
-      resetPlayerForNextRound();
+      resetRoundStats(roundDuration);
       nextRound();
     }
     prevIsBreakTime.current = isBreakTime;
@@ -46,8 +43,7 @@ export const useRoundTransition = () => {
     roundDuration,
     redWon,
     blueWon,
-    resetTimerForNextRound,
-    resetPlayerForNextRound,
+    resetRoundStats,
     nextRound,
   ]);
 };

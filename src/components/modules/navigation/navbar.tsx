@@ -15,17 +15,17 @@ const Navbar = () => {
           src="assets/uit.webp"
           loading="eager"
           alt="UIT Logo"
-          className="h-12"
+          className="h-12 select-none"
         />
         <img
           src="assets/tku.webp"
           loading="eager"
           alt="TKU Logo"
-          className="h-14"
+          className="h-14 select-none"
         />
       </div>
       <div className="flex w-full grow items-center justify-center">
-        <h1 className="text-4xl font-bold">TKU Sparring System</h1>
+        <h1 className="text-4xl font-bold select-none">TKU Sparring System</h1>
       </div>
       <div className="flex w-[13vw] shrink-0 items-center justify-end px-2">
         {isPending ? null : user ? (

@@ -45,7 +45,7 @@ export const ResultDialog = ({
 
       {/* Result */}
       <div className="flex h-44 w-full max-w-7xl items-stretch gap-4">
-        <Card className="winner-label tex-foreground w-[64%] border-yellow-300 bg-yellow-200/30 text-7xl ring-yellow-600">
+        <Card className="winner-label tex-foreground w-[64%] border-yellow-300 bg-[#5d583a] text-7xl ring-yellow-600">
           WINNER
         </Card>
         <Card className="winner-label w-[18%] border-blue-500 bg-[#233448] text-8xl text-blue-500 ring-indigo-900">

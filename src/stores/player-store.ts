@@ -52,7 +52,7 @@ interface PlayerActions {
   // Reset
   resetScores: () => void;
   resetHealth: () => void;
-  resetForNextRound: () => void;
+  resetRoundStats: () => void;
   resetAll: () => void;
 
   // Round scores
@@ -191,7 +191,7 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
     });
   },
 
-  resetForNextRound: () => {
+  resetRoundStats: () => {
     const state = get();
     set({
       red: {

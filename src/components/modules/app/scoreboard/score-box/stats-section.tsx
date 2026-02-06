@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 interface StatsSectionProps {
@@ -60,22 +61,8 @@ export const StatItem = ({
         className
       )}
     >
-      <p
-        className={cn(
-          'm-0 text-center text-3xl leading-none font-semibold drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)] select-none',
-          textColor
-        )}
-      >
-        {label}
-      </p>
-      <p
-        className={cn(
-          'm-0 text-center text-5xl leading-none font-semibold tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)] select-none',
-          textColor
-        )}
-      >
-        {value}
-      </p>
+      <Label className={cn('metrics text-3xl', textColor)}>{label}</Label>
+      <p className={cn('metrics text-5xl', textColor)}>{value}</p>
     </div>
   );
 };

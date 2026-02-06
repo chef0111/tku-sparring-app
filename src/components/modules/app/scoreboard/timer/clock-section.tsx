@@ -62,10 +62,10 @@ export const TimeBox = ({
     <div
       onClick={onClick}
       className={cn(
-        'bg-background relative flex h-[14vh] w-full cursor-pointer items-center justify-center gap-2.5 px-13 py-1.75 transition-all duration-100',
+        'bg-background relative flex w-full cursor-pointer items-center justify-center px-13 py-1.75 transition-all duration-100',
         isBreakTime
-          ? 'border-foreground border-[7px]'
-          : 'border-[7px] border-yellow-500',
+          ? 'border-foreground border-7'
+          : 'border-7 border-yellow-500',
         className
       )}
     >

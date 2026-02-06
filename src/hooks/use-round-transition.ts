@@ -12,6 +12,14 @@ export const useRoundTransition = () => {
       roundDuration: s.roundDuration,
     }))
   );
+
+  const { redWon, blueWon } = useMatchStore(
+    useShallow((s) => ({
+      redWon: s.redWon,
+      blueWon: s.blueWon,
+    }))
+  );
+
   const resetTimerForNextRound = useTimerStore((s) => s.resetForNextRound);
   const resetPlayerForNextRound = usePlayerStore((s) => s.resetForNextRound);
   const nextRound = useMatchStore((s) => s.nextRound);
@@ -19,7 +27,14 @@ export const useRoundTransition = () => {
   const prevIsBreakTime = useRef(isBreakTime);
 
   useEffect(() => {
-    if (prevIsBreakTime.current && !isBreakTime && breakTimeLeft === 0) {
+    const isMatchOver = redWon >= 2 || blueWon >= 2;
+
+    if (
+      prevIsBreakTime.current &&
+      !isBreakTime &&
+      breakTimeLeft === 0 &&
+      !isMatchOver
+    ) {
       resetTimerForNextRound(roundDuration);
       resetPlayerForNextRound();
       nextRound();
@@ -29,6 +44,8 @@ export const useRoundTransition = () => {
     isBreakTime,
     breakTimeLeft,
     roundDuration,
+    redWon,
+    blueWon,
     resetTimerForNextRound,
     resetPlayerForNextRound,
     nextRound,

@@ -2,50 +2,40 @@ import { create } from 'zustand';
 import type { Player, PlayerData } from './player-store';
 
 interface MatchState {
-  // Match identification
   matchId: string;
-
-  // Round tracking
   currentRound: number;
   maxRounds: number;
   roundWinners: Array<Player | null>;
-
-  // Win tracking
   redWon: number;
   blueWon: number;
+  matchWinner: Player | null;
+  isMatchOver: boolean;
 }
 
 interface MatchActions {
-  // Match controls
   setMatchId: (id: string) => void;
-
-  // Round management
   nextRound: () => void;
   recordRoundWinner: (winner: Player) => void;
-
-  // Winner determination
   declareWinner: (red: PlayerData, blue: PlayerData) => Player | 'tie';
-
-  // Reset
   resetMatch: () => void;
   resetRound: () => void;
-
-  // Configuration
+  setMatchOver: (winner: Player) => void;
+  closeMatchResult: () => void;
   setMaxRounds: (rounds: number) => void;
 }
 
 type MatchStore = MatchState & MatchActions;
 
 export const useMatchStore = create<MatchStore>()((set, get) => ({
-  // Initial state
   matchId: '001',
   currentRound: 1,
   maxRounds: 3,
   roundWinners: [],
   redWon: 0,
   blueWon: 0,
+  matchWinner: null,
+  isMatchOver: false,
 
-  // Actions
   setMatchId: (id) => {
     set({ matchId: id });
   },
@@ -77,8 +67,6 @@ export const useMatchStore = create<MatchStore>()((set, get) => ({
   },
 
   declareWinner: (red, blue): Player | 'tie' => {
-    const state = get();
-
     // Check for mana depletion (penalties)
     if (red.mana <= 0 && blue.health > 0 && red.health > 0) return 'blue';
     if (blue.mana <= 0 && red.health > 0 && blue.health > 0) return 'red';
@@ -112,11 +100,27 @@ export const useMatchStore = create<MatchStore>()((set, get) => ({
       roundWinners: [],
       redWon: 0,
       blueWon: 0,
+      matchWinner: null,
+      isMatchOver: false,
     });
   },
 
   resetRound: () => {
     // Round state is managed through currentRound, nothing else to reset here
+  },
+
+  setMatchOver: (winner) => {
+    set({
+      matchWinner: winner,
+      isMatchOver: true,
+    });
+  },
+
+  closeMatchResult: () => {
+    set({
+      matchWinner: null,
+      isMatchOver: false,
+    });
   },
 
   setMaxRounds: (rounds) => {

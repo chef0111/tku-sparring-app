@@ -1,22 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { CriticalButtonsColumn, NormalButtonsColumn } from './score-button';
+import { Controller, ControllerContent, ScoreButtons } from './controller';
+import { CriticalButtons, NormalButtons } from './score-button';
 import { PenaltyBox } from './penalty-section';
+import { PlayerLabel } from './player-label';
 import type { HitType, Player } from '@/lib/scoreboard/hit-types';
-import { cn } from '@/lib/utils';
 import { KEYBOARD_MAPPINGS } from '@/lib/scoreboard/hit-types';
 import { useTimerStore } from '@/stores/timer-store';
 import { usePlayerStore } from '@/stores/player-store';
 
-interface ScoreControlsProps {
+interface ControlsProps {
   reversed?: boolean;
   className?: string;
 }
 
-export const ScoreControls = ({
-  reversed = false,
-  className,
-}: ScoreControlsProps) => {
+export const Controls = ({ reversed = false, className }: ControlsProps) => {
   const player: Player = reversed ? 'blue' : 'red';
 
   const { isRunning, isBreakTime } = useTimerStore(
@@ -41,7 +39,6 @@ export const ScoreControls = ({
   const removePenalty = usePlayerStore((s) => s.removePenalty);
   const setRoundEnded = useTimerStore((s) => s.setRoundEnded);
 
-  // Check if either player is knocked out or disqualified
   const anyPlayerKO = redHealth <= 0 || blueHealth <= 0;
   const anyPlayerDisqualified = redMana <= 0 || blueMana <= 0;
   const roundEnded = anyPlayerKO || anyPlayerDisqualified;
@@ -56,7 +53,6 @@ export const ScoreControls = ({
       if (canScore) {
         const koOccurred = recordHit(player, hitType, isRunning, isBreakTime);
 
-        // Stop timer and lock round if KO occurred
         if (koOccurred) {
           setRoundEnded(true);
         }
@@ -69,7 +65,6 @@ export const ScoreControls = ({
     if (!isBreakTime && !roundEnded) {
       const disqualified = addPenalty(player);
 
-      // Stop timer and lock round if player was disqualified
       if (disqualified) {
         setRoundEnded(true);
       }
@@ -86,7 +81,6 @@ export const ScoreControls = ({
     [isBreakTime, roundEnded, player, removePenalty]
   );
 
-  // Keyboard controls with visual feedback
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!canScore) return;
@@ -96,18 +90,13 @@ export const ScoreControls = ({
 
       if (hitType) {
         e.preventDefault();
-
-        // Set active hit type for visual feedback
         setActiveHitType(hitType);
-
         const koOccurred = recordHit(player, hitType, isRunning, isBreakTime);
 
-        // Stop timer and lock round if KO occurred
         if (koOccurred) {
           setRoundEnded(true);
         }
 
-        // Clear active state after animation duration
         setTimeout(() => setActiveHitType(null), 100);
       }
     };
@@ -117,128 +106,35 @@ export const ScoreControls = ({
   }, [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]);
 
   return (
-    <ScoreControlsColumn className={className}>
-      <ScoreControlsSection reversed={reversed}>
+    <Controller className={className}>
+      <ControllerContent reversed={reversed}>
         <PlayerLabel>{reversed ? 'PLAYER B' : 'PLAYER A'}</PlayerLabel>
-        <ScoreButtonsContainer reversed={reversed}>
-          <CriticalButtonsColumn
+        <ScoreButtons reversed={reversed}>
+          <CriticalButtons
             player={player}
             onHit={handleHit}
             disabled={!canScore}
             activeHitType={activeHitType}
           />
-          <NormalButtonsColumn
+          <NormalButtons
             player={player}
             onHit={handleHit}
             disabled={!canScore}
             activeHitType={activeHitType}
           />
-        </ScoreButtonsContainer>
-      </ScoreControlsSection>
+        </ScoreButtons>
+      </ControllerContent>
       <PenaltyBox
         fouls={fouls}
         reversed={reversed}
         onClick={handlePenaltyClick}
         onContextMenu={handlePenaltyRightClick}
       />
-    </ScoreControlsColumn>
+    </Controller>
   );
 };
 
-interface ScoreControlsColumnProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const ScoreControlsColumn = ({
-  children,
-  className,
-}: ScoreControlsColumnProps) => {
-  return (
-    <div
-      className={cn(
-        'relative flex h-[76.5vh] w-[13vw] flex-col items-center justify-between',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface ScoreControlsSectionProps {
-  children: React.ReactNode;
-  reversed?: boolean;
-  className?: string;
-}
-
-export const ScoreControlsSection = ({
-  children,
-  reversed,
-  className,
-}: ScoreControlsSectionProps) => {
-  return (
-    <div
-      className={cn(
-        'relative flex h-full w-full flex-col items-center justify-start overflow-hidden p-2.5',
-        'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
-        reversed
-          ? 'rounded-tr-[10px] bg-[#1e68ae]'
-          : 'rounded-tl-[10px] bg-linear-to-b from-[#d80405] to-[#9b0002]',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface PlayerLabelProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const PlayerLabel = ({ children, className }: PlayerLabelProps) => {
-  return (
-    <h1
-      className={cn(
-        'my-2.5 text-center text-3xl leading-none font-semibold text-white',
-        className
-      )}
-    >
-      {children}
-    </h1>
-  );
-};
-
-interface ScoreButtonsContainerProps {
-  children: React.ReactNode;
-  reversed?: boolean;
-  className?: string;
-}
-
-export const ScoreButtonsContainer = ({
-  children,
-  reversed,
-  className,
-}: ScoreButtonsContainerProps) => {
-  return (
-    <div
-      className={cn(
-        'flex flex-row items-center justify-between py-[4.8vh]',
-        reversed ? 'flex-row-reverse' : '',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
-
-// Re-export sub-components
-export {
-  ScoreButton,
-  CriticalButtonsColumn,
-  NormalButtonsColumn,
-} from './score-button';
+export { Controller, ControllerContent, ScoreButtons } from './controller';
+export { CriticalButtons, NormalButtons } from './score-button';
 export { PenaltyBox, Penalty } from './penalty-section';
+export { PlayerLabel } from './player-label';

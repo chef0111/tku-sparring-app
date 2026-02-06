@@ -16,7 +16,7 @@ interface ButtonColumnProps {
   className?: string;
 }
 
-export const CriticalButtonsColumn = ({
+export const CriticalButtons = ({
   player,
   onHit,
   disabled,
@@ -52,7 +52,7 @@ export const CriticalButtonsColumn = ({
   );
 };
 
-export const NormalButtonsColumn = ({
+export const NormalButtons = ({
   player,
   onHit,
   disabled,
@@ -151,7 +151,7 @@ export const ScoreButton = ({
       {keyLabel && (
         <span
           className={cn(
-            'absolute -bottom-7.5 flex h-3.75 w-3.75 -translate-y-8.25 items-center justify-center rounded-full text-center text-[18px] leading-none font-bold text-[#a6a6a6]',
+            'absolute -bottom-7.5 flex size-4 -translate-y-8 items-center justify-center rounded-full text-center text-[18px] leading-none font-bold text-[#a6a6a6]',
             player === 'red'
               ? 'bg-[#ff0000] text-shadow-[1px_1px_0_#ff0000,-1px_-1px_0_#ff0000]'
               : 'bg-[#0070c0] text-shadow-[1px_1px_0_#0070c0,-1px_-1px_0_#0070c0]'

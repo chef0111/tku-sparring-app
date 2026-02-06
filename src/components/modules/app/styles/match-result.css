@@ -1,0 +1,15 @@
+@utility winner-label {
+  @apply relative flex items-center justify-center truncate rounded-md! border-5! font-bold ring-2! select-none;
+}
+
+@utility action-btn {
+  @apply h-14! rounded-md! border-2! px-8! text-xl! font-semibold! tracking-wide! transition-colors! duration-200!;
+}
+
+@utility action-btn-cancel {
+  @apply border-red-500/50! bg-red-500/20! text-red-400! hover:bg-red-500/30! hover:text-red-300!;
+}
+
+@utility action-btn-accept {
+  @apply border-green-500/50! bg-green-500/20! text-green-400! hover:bg-green-500/30! hover:text-green-300!;
+}

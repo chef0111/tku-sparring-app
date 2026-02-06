@@ -17,6 +17,8 @@ interface TimerActions {
   toggle: () => void;
   tick: (deltaMs: number) => void;
   startBreak: () => void;
+  toggleBreak: () => void;
+  skipBreak: () => void;
   tickBreak: (deltaMs: number) => void;
   setRoundEnded: (ended: boolean) => void;
   reset: () => void;
@@ -88,9 +90,29 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
     const state = get();
     set({
       isBreakTime: true,
-      isRunning: false,
+      isRunning: true,
       breakTimeLeft: state.breakDuration,
       roundEnded: false,
+    });
+  },
+
+  toggleBreak: () => {
+    const state = get();
+    if (!state.isBreakTime) return;
+
+    set({
+      isRunning: !state.isRunning,
+    });
+  },
+
+  skipBreak: () => {
+    const state = get();
+    if (!state.isBreakTime) return;
+
+    set({
+      breakTimeLeft: 0,
+      isBreakTime: false,
+      isRunning: false,
     });
   },
 
@@ -100,7 +122,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
 
   tickBreak: (deltaMs) => {
     const state = get();
-    if (!state.isBreakTime) return;
+    if (!state.isBreakTime || !state.isRunning) return;
 
     const newBreakTimeLeft = Math.max(0, state.breakTimeLeft - deltaMs);
 
@@ -108,6 +130,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
       set({
         breakTimeLeft: 0,
         isBreakTime: false,
+        isRunning: false,
       });
     } else {
       set({ breakTimeLeft: newBreakTimeLeft });

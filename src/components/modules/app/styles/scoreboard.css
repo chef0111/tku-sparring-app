@@ -252,3 +252,7 @@
 @utility match-info {
   @apply text-center font-bold text-white select-none;
 }
+
+@utility metrics {
+  @apply text-center! leading-none! font-semibold! drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]! select-none!;
+}

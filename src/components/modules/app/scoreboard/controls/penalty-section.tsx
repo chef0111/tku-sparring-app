@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 interface PenaltyBoxProps {
@@ -54,12 +55,8 @@ export const Penalty = ({
         className
       )}
     >
-      <p className="m-0 text-center text-2xl leading-none font-semibold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]">
-        GAM-JEOM
-      </p>
-      <p className="m-0 text-center text-6xl leading-none font-semibold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]">
-        {fouls}
-      </p>
+      <Label className="metrics text-2xl">GAM-JEOM</Label>
+      <p className="metrics text-6xl">{fouls}</p>
     </div>
   );
 };

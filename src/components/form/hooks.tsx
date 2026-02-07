@@ -3,6 +3,7 @@ import { FormInput, FormNumberInput, FormPasswordInput } from './form-input';
 import { FormTextarea } from './form-textarea';
 import { FormSelect } from './form-select';
 import { FormCheckbox } from './form-checkbox';
+import { FormCombobox } from './form-combobox';
 
 const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -15,6 +16,7 @@ const { useAppForm } = createFormHook({
     Checkbox: FormCheckbox,
     PasswordInput: FormPasswordInput,
     NumberInput: FormNumberInput,
+    Combobox: FormCombobox,
   },
   formComponents: {},
   fieldContext,

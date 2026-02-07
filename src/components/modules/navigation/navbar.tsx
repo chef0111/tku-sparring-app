@@ -1,12 +1,17 @@
 import { LogInIcon, MenuIcon } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { UserDropdown } from '../user/user-dropdown';
+import { AppSettings } from '../app/settings';
 import { Button } from '@/components/ui/button';
 import { authClient } from '@/lib/auth-client';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { useSettings } from '@/contexts/settings';
 
 const Navbar = () => {
   const { data, isPending } = authClient.useSession();
   const user = data?.user;
+
+  const { isOpen, setIsOpen } = useSettings();
 
   return (
     <nav className="bg-backround flex h-20 w-full items-center justify-between">
@@ -37,12 +42,20 @@ const Navbar = () => {
             </Button>
           </Link>
         )}
-        <Button
-          variant="ghost"
-          className="cursor-pointer hover:bg-transparent! [&_svg:not([class*='size-'])]:size-10!"
-        >
-          <MenuIcon className="size-12" />
-        </Button>
+
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger
+            render={
+              <Button
+                variant="ghost"
+                className="no-focus cursor-pointer hover:bg-transparent! [&_svg:not([class*='size-'])]:size-10!"
+              >
+                <MenuIcon className="size-12" />
+              </Button>
+            }
+          />
+          <AppSettings />
+        </Dialog>
       </div>
     </nav>
   );

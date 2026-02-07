@@ -20,9 +20,13 @@ interface TabsContextValue {
 }
 
 type TabsVariant = 'default' | 'outline' | 'underline';
+type TabsDirection = 'horizontal' | 'vertical';
+type TabsUnderlinePosition = 'left' | 'right';
 
 interface TabsVariantContextValue {
   variant: TabsVariant;
+  direction: TabsDirection;
+  underlinePosition: TabsUnderlinePosition;
 }
 
 // --- Internal Primitive Logic ---
@@ -60,8 +64,15 @@ interface PrimitiveTabsHighlightProps extends Omit<HighlightProps, 'value'> {
   transition?: Transition;
 }
 
+const UNDERLINE_TRANSITION: Transition = {
+  type: 'spring',
+  stiffness: 350,
+  damping: 30,
+};
+
 function PrimitiveTabsHighlight({
-  transition = { type: 'spring', stiffness: 200, damping: 25 },
+  transition = UNDERLINE_TRANSITION,
+  containerClassName,
   ...props
 }: PrimitiveTabsHighlightProps = {}) {
   const { value } = useTabs();
@@ -73,6 +84,7 @@ function PrimitiveTabsHighlight({
       value={value}
       transition={transition}
       click={false}
+      containerClassName={containerClassName}
       {...props}
     />
   );
@@ -204,40 +216,100 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
 
 // --- User-Facing Components ---
 
-const highlightStyles: Record<TabsVariant, string> = {
-  default:
-    'absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm',
-  outline:
-    'absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30',
-  underline: 'absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground',
+const highlightStyles: Record<TabsVariant, Record<TabsDirection, string>> = {
+  default: {
+    horizontal:
+      'absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm',
+    vertical:
+      'absolute z-0 inset-0 border border-transparent rounded-md bg-background dark:border-input dark:bg-input/30 shadow-sm',
+  },
+  outline: {
+    horizontal:
+      'absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30',
+    vertical:
+      'absolute z-0 inset-0 border rounded-md dark:border-input dark:bg-input/30',
+  },
+  underline: {
+    horizontal: 'absolute z-0 -bottom-0.25 left-0 right-0 h-0.5 bg-foreground',
+    vertical: 'absolute z-0 top-0 bottom-0 w-0.5 bg-foreground',
+  },
 } as const;
 
-const listStyles: Record<TabsVariant, string> = {
-  default:
-    'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
-  outline:
-    'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
-  underline:
-    'inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border',
+const underlinePositionStyles: Record<
+  TabsUnderlinePosition,
+  { highlight: string; list: string; gradient: string }
+> = {
+  right: {
+    highlight: '-right-0.25',
+    list: 'border-r',
+    gradient: 'bg-gradient-to-l from-foreground/10 to-transparent',
+  },
+  left: {
+    highlight: '-left-0.25',
+    list: 'border-l',
+    gradient: 'bg-gradient-to-r from-foreground/10 to-transparent',
+  },
 } as const;
 
-const triggerStyles: Record<TabsVariant, string> = {
-  default:
-    "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  outline:
-    "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  underline:
-    "data-[selected]:text-foreground text-muted-foreground inline-flex h-full flex-1 items-center justify-center gap-1.5 w-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+const listStyles: Record<TabsVariant, Record<TabsDirection, string>> = {
+  default: {
+    horizontal:
+      'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
+    vertical:
+      'bg-muted text-muted-foreground inline-flex flex-col h-fit w-fit items-stretch justify-start rounded-lg p-[3px]',
+  },
+  outline: {
+    horizontal:
+      'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
+    vertical:
+      'bg-muted text-muted-foreground inline-flex flex-col h-fit w-fit items-stretch justify-start rounded-lg p-[3px]',
+  },
+  underline: {
+    horizontal:
+      'inline-flex h-9 w-fit items-center justify-center gap-1 border-b border-border',
+    vertical:
+      'inline-flex flex-col h-fit w-fit items-stretch justify-start gap-1 border-border',
+  },
+} as const;
+
+const triggerStyles: Record<TabsVariant, Record<TabsDirection, string>> = {
+  default: {
+    horizontal:
+      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    vertical:
+      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex w-full flex-1 items-center justify-start gap-1.5 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  },
+  outline: {
+    horizontal:
+      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md w-full px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    vertical:
+      "data-[selected]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-muted-foreground inline-flex w-full flex-1 items-center justify-start gap-1.5 rounded-md px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-500 ease-in-out focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  },
+  underline: {
+    horizontal:
+      "data-[selected]:text-foreground text-muted-foreground inline-flex h-full flex-1 items-center justify-center gap-1.5 w-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    vertical:
+      "data-[selected]:text-foreground text-muted-foreground inline-flex w-full flex-1 items-center justify-start gap-1.5 px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  },
 } as const;
 
 interface TabsProps extends PrimitiveTabsProps {
   className?: string;
+  direction?: TabsDirection;
 }
 
-function Tabs({ className = '', ...props }: TabsProps = {}) {
+function Tabs({
+  className = '',
+  direction = 'horizontal',
+  ...props
+}: TabsProps = {}) {
   return (
     <PrimitiveTabs
-      className={cn('flex flex-col gap-2', className)}
+      className={cn(
+        'flex gap-2',
+        direction === 'horizontal' ? 'flex-col' : 'flex-row',
+        className
+      )}
       {...props}
     />
   );
@@ -246,18 +318,37 @@ function Tabs({ className = '', ...props }: TabsProps = {}) {
 interface TabsListProps extends PrimitiveTabsListProps {
   className?: string;
   variant?: TabsVariant;
+  direction?: TabsDirection;
+  underlinePosition?: TabsUnderlinePosition;
 }
 
 function TabsList({
   className = '',
   variant = 'default',
+  direction = 'horizontal',
+  underlinePosition = 'right',
   ...props
 }: TabsListProps = {}) {
+  const isVerticalUnderline =
+    variant === 'underline' && direction === 'vertical';
+  const positionStyles = isVerticalUnderline
+    ? underlinePositionStyles[underlinePosition]
+    : null;
+
   return (
-    <TabsVariantProvider value={{ variant }}>
-      <PrimitiveTabsHighlight className={highlightStyles[variant]}>
+    <TabsVariantProvider value={{ variant, direction, underlinePosition }}>
+      <PrimitiveTabsHighlight
+        className={cn(
+          highlightStyles[variant][direction],
+          positionStyles?.highlight
+        )}
+      >
         <PrimitiveTabsList
-          className={cn(listStyles[variant], className)}
+          className={cn(
+            listStyles[variant][direction],
+            positionStyles?.list,
+            className
+          )}
           {...props}
         />
       </PrimitiveTabsHighlight>
@@ -271,15 +362,57 @@ interface TabsTabProps extends Omit<PrimitiveTabsTabProps, 'value'> {
 }
 
 function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
-  const { variant } = useTabsVariant();
+  const { variant, direction, underlinePosition } = useTabsVariant();
+  const { value: selectedValue } = useTabs();
+  const isVerticalUnderline =
+    variant === 'underline' && direction === 'vertical';
+  const gradientClass = isVerticalUnderline
+    ? underlinePositionStyles[underlinePosition].gradient
+    : undefined;
+  const isSelected = selectedValue === value;
 
   return (
-    <PrimitiveTabsHighlightItem value={value} className="flex-1">
-      <PrimitiveTabsTab
-        value={value}
-        className={cn(triggerStyles[variant], className)}
-        {...props}
-      />
+    <PrimitiveTabsHighlightItem
+      value={value}
+      className={direction === 'horizontal' ? 'flex-1' : undefined}
+    >
+      <div className="relative">
+        {isVerticalUnderline && (
+          <AnimatePresence>
+            {isSelected && (
+              <motion.div
+                key={String(value)}
+                className={cn('absolute inset-0 z-0', gradientClass)}
+                initial={{
+                  clipPath:
+                    underlinePosition === 'right'
+                      ? 'inset(0 0 0 100%)'
+                      : 'inset(0 100% 0 0)',
+                }}
+                animate={{ clipPath: 'inset(0 0 0 0)' }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  clipPath: {
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 30,
+                    delay: 0.1,
+                  },
+                }}
+              />
+            )}
+          </AnimatePresence>
+        )}
+        <PrimitiveTabsTab
+          value={value}
+          className={cn(
+            triggerStyles[variant][direction],
+            'relative z-1',
+            className
+          )}
+          {...props}
+        />
+      </div>
     </PrimitiveTabsHighlightItem>
   );
 }

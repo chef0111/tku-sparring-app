@@ -5,6 +5,7 @@ import { AppHUD } from '@/components/modules/app/hud';
 import { Scoreboard } from '@/components/modules/app/scoreboard';
 import { ResultDialog } from '@/components/modules/app/match-result';
 import { useMatchResult } from '@/hooks/use-match-result';
+import { SettingsProvider } from '@/contexts/settings';
 
 export const Route = createFileRoute('/')({ component: App });
 
@@ -14,13 +15,19 @@ function App() {
 
   return (
     <div className="h-dvh w-dvw">
-      <Navbar />
-      <AppHUD />
-      <Scoreboard />
+      <SettingsProvider>
+        <Navbar />
+        <AppHUD />
+        <Scoreboard />
 
-      <Dialog open={isMatchOver} onOpenChange={(open) => !open && onClose()}>
-        <ResultDialog winner={matchWinner} redWon={redWon} blueWon={blueWon} />
-      </Dialog>
+        <Dialog open={isMatchOver} onOpenChange={(open) => !open && onClose()}>
+          <ResultDialog
+            winner={matchWinner}
+            redWon={redWon}
+            blueWon={blueWon}
+          />
+        </Dialog>
+      </SettingsProvider>
     </div>
   );
 }

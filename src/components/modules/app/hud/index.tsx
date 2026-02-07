@@ -1,10 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
 import { usePlayerStore } from '@/stores/player-store';
 import { useDeclareWinner } from '@/hooks/use-winner';
+import { isCriticalHit } from '@/lib/scoreboard/hit-types';
 
 const AppHUD = () => {
   return (
@@ -24,6 +25,26 @@ export const RedPlayerHUD = () => {
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
 
+  const lastBlueHit = usePlayerStore((s) => s.lastBlueHit);
+  const prevHitTimestamp = useRef<number | null>(null);
+  const [showCriticalAnimation, setShowCriticalAnimation] = useState(false);
+
+  useEffect(() => {
+    if (
+      lastBlueHit &&
+      lastBlueHit.timestamp !== prevHitTimestamp.current &&
+      isCriticalHit(lastBlueHit.hitType)
+    ) {
+      setShowCriticalAnimation(true);
+      const timer = setTimeout(() => setShowCriticalAnimation(false), 500);
+      prevHitTimestamp.current = lastBlueHit.timestamp;
+      return () => clearTimeout(timer);
+    }
+    if (lastBlueHit) {
+      prevHitTimestamp.current = lastBlueHit.timestamp;
+    }
+  }, [lastBlueHit]);
+
   const { forceWinner } = useDeclareWinner();
   const handleForceWin = useCallback(() => forceWinner('red'), [forceWinner]);
 
@@ -41,6 +62,7 @@ export const RedPlayerHUD = () => {
           />
         }
         onDoubleClick={handleForceWin}
+        isCriticalHit={showCriticalAnimation}
       />
       <div className="flex h-full w-full flex-col items-start">
         <Healthbar
@@ -62,6 +84,26 @@ export const BluePlayerHUD = () => {
     }))
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
+
+  const lastRedHit = usePlayerStore((s) => s.lastRedHit);
+  const prevHitTimestamp = useRef<number | null>(null);
+  const [showCriticalAnimation, setShowCriticalAnimation] = useState(false);
+
+  useEffect(() => {
+    if (
+      lastRedHit &&
+      lastRedHit.timestamp !== prevHitTimestamp.current &&
+      isCriticalHit(lastRedHit.hitType)
+    ) {
+      setShowCriticalAnimation(true);
+      const timer = setTimeout(() => setShowCriticalAnimation(false), 500);
+      prevHitTimestamp.current = lastRedHit.timestamp;
+      return () => clearTimeout(timer);
+    }
+    if (lastRedHit) {
+      prevHitTimestamp.current = lastRedHit.timestamp;
+    }
+  }, [lastRedHit]);
 
   const { forceWinner } = useDeclareWinner();
   const handleForceWin = useCallback(() => forceWinner('blue'), [forceWinner]);
@@ -89,6 +131,7 @@ export const BluePlayerHUD = () => {
           />
         }
         onDoubleClick={handleForceWin}
+        isCriticalHit={showCriticalAnimation}
       />
     </div>
   );

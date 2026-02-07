@@ -158,62 +158,6 @@
     1px 1px 0 #0070c0;
 }
 
-/* Mana flash animation */
-@keyframes mana-flash {
-  0% {
-    opacity: 1;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-  25% {
-    opacity: 0.75;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-  50% {
-    opacity: 0.5;
-    box-shadow: 0 0 20px 10px #fbcf08;
-  }
-  75% {
-    opacity: 0.25;
-    box-shadow: 0 0 10px 5px #fbcf08;
-  }
-  100% {
-    opacity: 0;
-    box-shadow: 0 0 0 0 #fbcf08;
-  }
-}
-
-@utility animate-mana-flash {
-  animation: mana-flash 0.8s forwards;
-}
-
-/* Avatar critical hit animation */
-@keyframes avatar-critical-hit {
-  0% {
-    transform: scale(1) rotate(0deg);
-    filter: hue-rotate(0deg);
-  }
-  25% {
-    transform: scale(1.1) rotate(5deg);
-    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
-  }
-  50% {
-    transform: scale(1.2) rotate(-5deg);
-    filter: hue-rotate(0deg);
-  }
-  75% {
-    transform: scale(1.1) rotate(5deg);
-    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    filter: hue-rotate(0deg);
-  }
-}
-
-@utility animate-avatar-critical {
-  animation: avatar-critical-hit 0.5s ease-in-out;
-}
-
 /* Scoreboard container overlay effect */
 @utility scoreboard-overlay {
   &::before {

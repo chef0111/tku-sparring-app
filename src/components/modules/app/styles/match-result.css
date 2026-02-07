@@ -2,6 +2,18 @@
   @apply relative flex items-center justify-center truncate rounded-md! border-5! font-bold ring-2! select-none;
 }
 
+@utility winner-label-indicator {
+  @apply border-yellow-300! bg-[#5d583a]! ring-yellow-600!;
+}
+
+@utility winner-label-red {
+  @apply border-destructive! bg-[#46282a]! ring-red-900!;
+}
+
+@utility winner-label-blue {
+  @apply border-blue-600! bg-[#233448]! ring-indigo-900!;
+}
+
 @utility action-btn {
   @apply h-14! rounded-md! border-2! px-8! text-xl! font-semibold! tracking-wide! transition-colors! duration-200!;
 }

@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ManabarProps {
@@ -58,6 +59,35 @@ export const ManabarMeter = ({
   reversed,
 }: ManabarMeterProps) => {
   const maxMana = 5;
+  const prevMana = useRef(mana);
+  const [flash, setFlash] = useState<{
+    index: number;
+    type: 'gain' | 'loss';
+  } | null>(null);
+
+  useEffect(() => {
+    if (prevMana.current !== mana) {
+      const affectedMana = Math.max(mana, prevMana.current) - 1;
+      const type = mana > prevMana.current ? 'gain' : 'loss';
+      setFlash({ index: affectedMana, type });
+      const timer = setTimeout(() => setFlash(null), 800);
+      prevMana.current = mana;
+      return () => clearTimeout(timer);
+    }
+  }, [mana]);
+
+  const manaBlocks = (
+    <div className="flex h-full w-full">
+      {Array.from({ length: maxMana }).map((_, index) => (
+        <ManaBlock
+          key={index}
+          manaLevel={maxMana - index}
+          flashType={flash?.index === index ? flash.type : null}
+          isVisible={index < mana}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <div
@@ -67,19 +97,7 @@ export const ManabarMeter = ({
         className
       )}
     >
-      {reversed ? (
-        <div className="flex h-full w-full">
-          {Array.from({ length: mana }).map((_, index) => (
-            <ManaBlock key={index} manaLevel={maxMana - index} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex h-full w-full">
-          {Array.from({ length: mana }).map((_, index) => (
-            <ManaBlock key={index} manaLevel={maxMana - index} />
-          ))}
-        </div>
-      )}
+      {manaBlocks}
     </div>
   );
 };
@@ -87,9 +105,16 @@ export const ManabarMeter = ({
 interface ManaBlockProps {
   manaLevel: number;
   className?: string;
+  flashType?: 'gain' | 'loss' | null;
+  isVisible?: boolean;
 }
 
-export const ManaBlock = ({ manaLevel, className }: ManaBlockProps) => {
+export const ManaBlock = ({
+  manaLevel,
+  className,
+  flashType,
+  isVisible = true,
+}: ManaBlockProps) => {
   const manaColorMap: Record<number, string> = {
     1: '#fcf652',
     2: '#fae624',
@@ -100,8 +125,16 @@ export const ManaBlock = ({ manaLevel, className }: ManaBlockProps) => {
 
   return (
     <div
-      className={cn('relative h-full w-[20%] border-2 border-white', className)}
-      style={{ backgroundColor: manaColorMap[manaLevel] ?? '#09090b' }}
+      className={cn(
+        'relative h-full w-[20%] border-2 border-white transition-all duration-1000',
+        flashType === 'loss' && 'animate-mana-flash',
+        flashType === 'gain' && 'animate-mana-gain',
+        !isVisible && 'opacity-0',
+        className
+      )}
+      style={{
+        backgroundColor: isVisible ? manaColorMap[manaLevel] : 'transparent',
+      }}
     />
   );
 };

@@ -80,6 +80,7 @@ export const useTimerStore = create<TimerStore>()((set, get) => ({
       set({
         timeLeft: 0,
         isRunning: false,
+        roundEnded: true,
       });
     } else {
       set({ timeLeft: newTimeLeft });

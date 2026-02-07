@@ -42,3 +42,82 @@
 @utility manabar-primitive {
   @apply h-[5vh]! w-[27vw]!;
 }
+
+/* Mana flash animation (for losing mana) */
+@keyframes mana-flash {
+  0% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 #fbcf08;
+  }
+  50% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1.2);
+    box-shadow: 0 0 20px 10px #fbce0882;
+  }
+  100% {
+    opacity: 0;
+    border-color: transparent;
+    transform: scale(0.5);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@utility animate-mana-flash {
+  animation: mana-flash 0.8s forwards;
+}
+
+/* Mana gain animation (for gaining mana) */
+@keyframes mana-gain {
+  0% {
+    opacity: 0;
+    border-color: transparent;
+    transform: scale(0.5);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1.2);
+    box-shadow: 0 0 20px 10px #fbcf08;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 #fbcf08;
+  }
+}
+
+@utility animate-mana-gain {
+  animation: mana-gain 0.5s ease-out forwards;
+}
+
+/* Avatar critical hit animation */
+@keyframes avatar-critical-hit {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(5deg);
+    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(-5deg);
+    filter: hue-rotate(0deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+}
+
+@utility animate-avatar-critical {
+  animation: avatar-critical-hit 0.5s ease-in-out;
+}

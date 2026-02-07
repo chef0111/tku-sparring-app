@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { SkipForward } from 'lucide-react';
 import { ClockSection } from './clock-section';
 import { MatchInfo, RoundInfo } from './match-info';
@@ -57,30 +58,20 @@ export const Timer = () => {
     }
   }, [isMatchOver, isBreakTime, isRunning, pause]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        if (isBreakTime && !isMatchOver) {
-          toggleBreak();
-        } else if (roundEnded && !isMatchOver) {
-          declareWinner();
-        } else if (!roundEnded && !isMatchOver) {
-          toggle();
-        }
+  useHotkeys(
+    'space',
+    (e) => {
+      e.preventDefault();
+      if (isBreakTime && !isMatchOver) {
+        toggleBreak();
+      } else if (roundEnded && !isMatchOver) {
+        declareWinner();
+      } else if (!roundEnded && !isMatchOver) {
+        toggle();
       }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [
-    isBreakTime,
-    roundEnded,
-    isMatchOver,
-    toggle,
-    toggleBreak,
-    declareWinner,
-  ]);
+    },
+    [isBreakTime, roundEnded, isMatchOver, toggle, toggleBreak, declareWinner]
+  );
 
   const handleTimeBoxClick = useCallback(() => {
     if (isMatchOver) return;
@@ -93,7 +84,7 @@ export const Timer = () => {
 
   const displayTime = isBreakTime ? breakTimeLeft : timeLeft;
   const showMilliseconds = !isBreakTime && timeLeft < 10000 && timeLeft > 0;
-  const shouldBlink = !isBreakTime && timeLeft < 10000 && timeLeft > 0;
+  const shouldBlink = !isBreakTime && timeLeft < 10000;
   const isPaused = !isRunning && !isBreakTime && timeLeft > 0 && roundStarted;
 
   const handleSkipBreak = useCallback(() => {

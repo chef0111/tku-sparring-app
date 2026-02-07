@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Controller, ControllerContent, ScoreButtons } from './controller';
 import { CriticalButtons, NormalButtons } from './score-button';
 import { PenaltyBox } from './penalty-section';
@@ -81,8 +82,11 @@ export const Controls = ({ reversed = false, className }: ControlsProps) => {
     [isBreakTime, roundEnded, player, removePenalty]
   );
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+  // Hit scoring keybinds
+  const keys = Object.keys(KEYBOARD_MAPPINGS[player]);
+  useHotkeys(
+    keys.join(','),
+    (e) => {
       if (!canScore) return;
 
       const key = e.key.toLowerCase();
@@ -99,11 +103,25 @@ export const Controls = ({ reversed = false, className }: ControlsProps) => {
 
         setTimeout(() => setActiveHitType(null), 100);
       }
-    };
+    },
+    [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]
+  );
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]);
+  const foulKey = player === 'red' ? 'w' : 'i';
+  useHotkeys(
+    foulKey,
+    (e) => {
+      if (!isBreakTime && !roundEnded) {
+        e.preventDefault();
+        const disqualified = addPenalty(player);
+
+        if (disqualified) {
+          setRoundEnded(true);
+        }
+      }
+    },
+    [isBreakTime, roundEnded, player, addPenalty, setRoundEnded]
+  );
 
   return (
     <Controller className={className}>

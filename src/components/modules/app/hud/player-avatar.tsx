@@ -38,20 +38,23 @@ const PlayerAvatar = ({
       }}
     >
       <Avatar
-        className={cn('avatar no-focus relative after:border-none', className)}
+        className={cn(
+          'avatar no-focus group relative after:border-none',
+          className
+        )}
       >
         <AvatarImage
           src={image ?? ''}
           alt={name}
           className={cn(
-            'relative rounded-sm object-contain',
+            'relative rounded-sm object-contain transition-all duration-150 group-hover:scale-105',
             isCriticalHit && 'animate-avatar-critical',
             imageClassName
           )}
         />
         <AvatarFallback
           className={cn(
-            'font-esbuild text-foreground bg-transparent font-bold tracking-wider',
+            'font-esbuild text-foreground bg-transparent font-bold tracking-wider transition-all duration-150 group-hover:scale-105',
             fallbackClassName
           )}
         >

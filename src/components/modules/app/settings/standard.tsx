@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { PlayerAvatar } from '../hud/player-avatar';
-import { avatarGroup } from './constant/form';
+import { avatarGroup, durationGroup, playerGroup } from './constant/form';
 import type z from 'zod';
 import type { StandardSettingsSchema } from '@/lib/validations';
 import { useAppForm } from '@/components/form/hooks';
@@ -70,11 +70,7 @@ export const StandardSettings = () => {
                   image={avatarPreviews[player.name] || ''}
                   className={player.className}
                   fallback={
-                    <img
-                      src={player.fallback}
-                      alt={player.playerName}
-                      className="relative size-full rounded-sm object-contain"
-                    />
+                    <img src={player.fallback} alt={player.playerName} />
                   }
                 />
                 <form.AppField name={player.name}>
@@ -118,24 +114,17 @@ export const StandardSettings = () => {
           SET PLAYER NAMES
         </FieldLabel>
         <FieldGroup className="flex-row">
-          <form.AppField name="redPlayerName">
-            {(field) => (
-              <field.Input
-                label="RED PLAYER NAME"
-                placeholder="Enter Red Player Name"
-                className="h-10 w-full"
-              />
-            )}
-          </form.AppField>
-          <form.AppField name="bluePlayerName">
-            {(field) => (
-              <field.Input
-                label="BLUE PLAYER NAME"
-                placeholder="Enter Blue Player Name"
-                className="h-10 w-full"
-              />
-            )}
-          </form.AppField>
+          {playerGroup.map((player) => (
+            <form.AppField key={player.name} name={player.name}>
+              {(field) => (
+                <field.Input
+                  label={player.label}
+                  placeholder={player.placeholder}
+                  className="h-10 w-full"
+                />
+              )}
+            </form.AppField>
+          ))}
         </FieldGroup>
       </FieldGroup>
 
@@ -144,26 +133,18 @@ export const StandardSettings = () => {
           SET ROUND & BREAK DURATIONS (SECONDS)
         </FieldLabel>
         <FieldGroup className="flex-row">
-          <form.AppField name="roundDuration">
-            {(field) => (
-              <field.NumberInput
-                label="ROUND DURATION"
-                className="h-10 w-full text-center"
-                min={1}
-                step={5}
-              />
-            )}
-          </form.AppField>
-          <form.AppField name="breakDuration">
-            {(field) => (
-              <field.NumberInput
-                label="BREAK DURATION"
-                className="h-10 w-full text-center"
-                min={1}
-                step={5}
-              />
-            )}
-          </form.AppField>
+          {durationGroup.map((duration) => (
+            <form.AppField key={duration.name} name={duration.name}>
+              {(field) => (
+                <field.NumberInput
+                  label={duration.label}
+                  className="h-10 w-full text-center"
+                  min={1}
+                  step={5}
+                />
+              )}
+            </form.AppField>
+          ))}
         </FieldGroup>
       </FieldGroup>
 

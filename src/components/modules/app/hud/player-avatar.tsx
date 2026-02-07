@@ -7,6 +7,7 @@ interface PlayerAvatarProps {
   image?: string | null;
   className?: string;
   imageClassName?: string;
+  ringClassName?: string;
   fallback?: React.ReactNode;
   fallbackClassName?: string;
   onDoubleClick?: () => void;
@@ -18,6 +19,7 @@ const PlayerAvatar = ({
   image,
   className,
   imageClassName,
+  ringClassName,
   fallback,
   fallbackClassName,
   onDoubleClick,
@@ -56,7 +58,7 @@ const PlayerAvatar = ({
           {fallback}
         </AvatarFallback>
       </Avatar>
-      <Ring className="rounded-xl ring-3" />
+      <Ring className={cn('rounded-xl ring-3', ringClassName)} />
     </div>
   );
 };

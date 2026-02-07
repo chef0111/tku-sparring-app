@@ -25,7 +25,7 @@ type TabsUnderlinePosition = 'left' | 'right';
 
 interface TabsVariantContextValue {
   variant: TabsVariant;
-  direction: TabsDirection;
+  orientation: TabsDirection;
   underlinePosition: TabsUnderlinePosition;
 }
 
@@ -33,6 +33,10 @@ interface TabsVariantContextValue {
 
 const [TabsProvider, useTabs] =
   getStrictContext<TabsContextValue>('TabsContext');
+
+const [TabsDirectionProvider, useTabsDirection] = getStrictContext<{
+  orientation: TabsDirection;
+}>('TabsDirectionContext');
 
 const [TabsVariantProvider, useTabsVariant] =
   getStrictContext<TabsVariantContextValue>('TabsVariantContext');
@@ -121,29 +125,34 @@ interface PrimitiveTabsPanelProps extends Omit<
 
 function PrimitiveTabsPanel({
   value = '',
-  keepMounted = false,
-  transition = { duration: 0.5, ease: 'easeInOut' },
+  keepMounted = true, // Changed default to true for state preservation
+  transition = { duration: 0.2, ease: 'easeInOut' },
   ...props
 }: PrimitiveTabsPanelProps = {}) {
+  const { value: activeValue } = useTabs();
+  const isActive = activeValue === value;
+
   return (
-    <AnimatePresence mode="wait">
-      <BaseTabs.Panel
-        render={
-          <motion.div
-            data-slot="tabs-panel"
-            layout
-            layoutDependency={value}
-            initial={{ opacity: 0, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, filter: 'blur(4px)' }}
-            transition={transition}
-            {...props}
-          />
-        }
-        keepMounted={keepMounted}
-        value={value}
-      />
-    </AnimatePresence>
+    <BaseTabs.Panel
+      render={
+        <motion.div
+          data-slot="tabs-panel"
+          data-active={isActive}
+          layout
+          layoutDependency={value}
+          initial={false} // Prevent initial animation
+          animate={{
+            opacity: isActive ? 1 : 0,
+            filter: isActive ? 'blur(0px)' : 'blur(4px)',
+            display: isActive ? 'block' : 'none',
+          }}
+          transition={transition}
+          {...props}
+        />
+      }
+      keepMounted={keepMounted}
+      value={value}
+    />
   );
 }
 
@@ -187,7 +196,7 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
         transition={transition}
         {...autoProps}
       >
-        <React.Fragment key={value as React.Key}>{children}</React.Fragment>
+        {children}
       </AutoHeight>
     );
   }
@@ -209,7 +218,7 @@ function PrimitiveTabsPanels(props: PrimitiveTabsPanelsProps = {}) {
       style={{ overflow: 'hidden', ...style }}
       {...layoutProps}
     >
-      <React.Fragment key={value as React.Key}>{children}</React.Fragment>
+      {children}
     </motion.div>
   );
 }
@@ -295,57 +304,59 @@ const triggerStyles: Record<TabsVariant, Record<TabsDirection, string>> = {
 
 interface TabsProps extends PrimitiveTabsProps {
   className?: string;
-  direction?: TabsDirection;
+  orientation?: TabsDirection;
 }
 
 function Tabs({
   className = '',
-  direction = 'horizontal',
+  orientation = 'horizontal',
   ...props
 }: TabsProps = {}) {
   return (
-    <PrimitiveTabs
-      className={cn(
-        'flex gap-2',
-        direction === 'horizontal' ? 'flex-col' : 'flex-row',
-        className
-      )}
-      {...props}
-    />
+    <TabsDirectionProvider value={{ orientation }}>
+      <PrimitiveTabs
+        className={cn(
+          'flex gap-2',
+          orientation === 'horizontal' ? 'flex-col' : 'flex-row',
+          className
+        )}
+        {...props}
+      />
+    </TabsDirectionProvider>
   );
 }
 
 interface TabsListProps extends PrimitiveTabsListProps {
   className?: string;
   variant?: TabsVariant;
-  direction?: TabsDirection;
+  orientation?: TabsDirection;
   underlinePosition?: TabsUnderlinePosition;
 }
 
 function TabsList({
   className = '',
   variant = 'default',
-  direction = 'horizontal',
+  orientation = 'horizontal',
   underlinePosition = 'right',
   ...props
 }: TabsListProps = {}) {
   const isVerticalUnderline =
-    variant === 'underline' && direction === 'vertical';
+    variant === 'underline' && orientation === 'vertical';
   const positionStyles = isVerticalUnderline
     ? underlinePositionStyles[underlinePosition]
     : null;
 
   return (
-    <TabsVariantProvider value={{ variant, direction, underlinePosition }}>
+    <TabsVariantProvider value={{ variant, orientation, underlinePosition }}>
       <PrimitiveTabsHighlight
         className={cn(
-          highlightStyles[variant][direction],
+          highlightStyles[variant][orientation],
           positionStyles?.highlight
         )}
       >
         <PrimitiveTabsList
           className={cn(
-            listStyles[variant][direction],
+            listStyles[variant][orientation],
             positionStyles?.list,
             className
           )}
@@ -362,10 +373,10 @@ interface TabsTabProps extends Omit<PrimitiveTabsTabProps, 'value'> {
 }
 
 function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
-  const { variant, direction, underlinePosition } = useTabsVariant();
+  const { variant, orientation, underlinePosition } = useTabsVariant();
   const { value: selectedValue } = useTabs();
   const isVerticalUnderline =
-    variant === 'underline' && direction === 'vertical';
+    variant === 'underline' && orientation === 'vertical';
   const gradientClass = isVerticalUnderline
     ? underlinePositionStyles[underlinePosition].gradient
     : undefined;
@@ -374,7 +385,7 @@ function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
   return (
     <PrimitiveTabsHighlightItem
       value={value}
-      className={direction === 'horizontal' ? 'flex-1' : undefined}
+      className={orientation === 'horizontal' ? 'flex-1' : undefined}
     >
       <div className="relative">
         {isVerticalUnderline && (
@@ -406,7 +417,7 @@ function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
         <PrimitiveTabsTab
           value={value}
           className={cn(
-            triggerStyles[variant][direction],
+            triggerStyles[variant][orientation],
             'relative z-1',
             className
           )}
@@ -419,19 +430,40 @@ function TabsTab({ className = '', value = '', ...props }: TabsTabProps = {}) {
 
 // Aliases for backward compatibility
 const TabsTrigger = TabsTab;
-const TabsPanels = PrimitiveTabsPanels;
-const TabsContents = PrimitiveTabsPanels;
+
+interface TabsContentsProps extends PrimitiveTabsPanelsProps {
+  className?: string;
+}
+
+function TabsContents({ className = '', ...props }: TabsContentsProps = {}) {
+  const { orientation } = useTabsDirection();
+  return (
+    <PrimitiveTabsPanels
+      className={cn(orientation === 'vertical' && 'flex-1', className)}
+      {...props}
+    />
+  );
+}
+
+const TabsPanels = TabsContents;
 
 interface TabsPanelProps extends PrimitiveTabsPanelProps {
   className?: string;
 }
 
-const TabsPanel = ({ className = '', ...props }: TabsPanelProps = {}) => (
-  <PrimitiveTabsPanel
-    className={cn('flex-1 outline-none', className)}
-    {...props}
-  />
-);
+function TabsPanel({ className = '', ...props }: TabsPanelProps = {}) {
+  const { orientation } = useTabsDirection();
+  return (
+    <PrimitiveTabsPanel
+      className={cn(
+        'outline-none',
+        orientation === 'vertical' && 'flex-1',
+        className
+      )}
+      {...props}
+    />
+  );
+}
 const TabsContent = TabsPanel;
 
 Tabs.displayName = 'Tabs';

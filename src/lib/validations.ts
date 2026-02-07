@@ -38,3 +38,13 @@ export const LoginSchema = z.object({
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
     }),
 });
+
+export const StandardSettingsSchema = z.object({
+  redPlayerAvatar: z.file().optional(),
+  bluePlayerAvatar: z.file().optional(),
+  redPlayerName: z.string().optional(),
+  bluePlayerName: z.string().optional(),
+  roundDuration: z.number().optional(),
+  breakDuration: z.number().optional(),
+  maxHealth: z.number().optional(),
+});

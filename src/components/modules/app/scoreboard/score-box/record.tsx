@@ -2,25 +2,25 @@ import type { Player } from '@/stores/player-store';
 import { Ring } from '@/components/ui/ring';
 import { cn } from '@/lib/utils';
 
-interface RecordSectionProps {
+interface RecordProps {
   roundScores: Array<number>;
   roundWinners: Array<Player | null>;
   player: Player;
-  reversed?: boolean;
+  side?: 'red' | 'blue';
   currentRound: number;
   isBreakTime?: boolean;
   className?: string;
 }
 
-export const RecordSection = ({
+export const Record = ({
   roundScores,
   roundWinners,
   player,
-  reversed,
+  side,
   currentRound,
   isBreakTime = false,
   className,
-}: RecordSectionProps) => {
+}: RecordProps) => {
   const roundsToShow = isBreakTime
     ? currentRound
     : currentRound > 1
@@ -44,7 +44,7 @@ export const RecordSection = ({
           round={round}
           score={roundScores[round - 1]}
           isWinner={roundWinners[round - 1] === player}
-          reversed={reversed}
+          side={side}
         />
       ))}
     </div>
@@ -55,7 +55,7 @@ interface RoundRecordProps {
   round: number;
   score: number;
   isWinner: boolean;
-  reversed?: boolean;
+  side?: 'red' | 'blue';
   className?: string;
 }
 
@@ -63,7 +63,7 @@ export const RoundRecord = ({
   round,
   score,
   isWinner,
-  reversed,
+  side,
   className,
 }: RoundRecordProps) => {
   const redWinIndicator = isWinner ? (
@@ -86,7 +86,7 @@ export const RoundRecord = ({
     </div>
   ) : null;
 
-  const winIcon = reversed ? blueWinIndicator : redWinIndicator;
+  const winIcon = side === 'blue' ? blueWinIndicator : redWinIndicator;
 
   return (
     <div

@@ -69,8 +69,9 @@ export const RedPlayerHUD = () => {
           health={health}
           maxHealth={maxHealth}
           className="healthbar-primitive"
+          side="red"
         />
-        <Manabar mana={mana} className="manabar-primitive" />
+        <Manabar mana={mana} className="manabar-primitive" side="red" />
       </div>
     </div>
   );
@@ -115,9 +116,9 @@ export const BluePlayerHUD = () => {
           health={health}
           maxHealth={maxHealth}
           className="healthbar-primitive"
-          reversed
+          side="blue"
         />
-        <Manabar mana={mana} className="manabar-primitive" reversed />
+        <Manabar mana={mana} className="manabar-primitive" side="blue" />
       </div>
       <PlayerAvatar
         name="Blue Player"

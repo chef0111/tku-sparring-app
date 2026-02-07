@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface PenaltyBoxProps {
   fouls: number;
-  reversed?: boolean;
+  side: 'red' | 'blue';
   onClick?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
   className?: string;
@@ -12,7 +12,7 @@ interface PenaltyBoxProps {
 
 export const PenaltyBox = ({
   fouls,
-  reversed,
+  side,
   onClick,
   onContextMenu,
   className,
@@ -22,7 +22,7 @@ export const PenaltyBox = ({
       className={cn(
         'py relative flex h-[15.5vh] w-full flex-col items-center justify-center gap-2.5 overflow-hidden rounded-none px-4',
         'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
-        reversed
+        side === 'blue'
           ? 'rounded-br-[10px] bg-[#125a9f]'
           : 'rounded-bl-[10px] bg-[#c10002]',
         className

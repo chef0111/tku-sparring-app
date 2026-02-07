@@ -5,22 +5,18 @@ interface ManabarProps {
   mana: number;
   className?: string;
   meterClassName?: string;
-  reversed?: boolean;
+  side: 'red' | 'blue';
 }
 
 export const Manabar = ({
   mana,
   className,
   meterClassName,
-  reversed,
+  side,
 }: ManabarProps) => {
   return (
     <ManabarFrame className={className}>
-      <ManabarMeter
-        mana={mana}
-        className={meterClassName}
-        reversed={reversed}
-      />
+      <ManabarMeter mana={mana} className={meterClassName} side={side} />
     </ManabarFrame>
   );
 };
@@ -50,14 +46,10 @@ export const ManabarFrame = ({ children, className }: ManabarFrameProps) => {
 interface ManabarMeterProps {
   mana: number;
   className?: string;
-  reversed?: boolean;
+  side: 'red' | 'blue';
 }
 
-export const ManabarMeter = ({
-  mana,
-  className,
-  reversed,
-}: ManabarMeterProps) => {
+export const ManabarMeter = ({ mana, className, side }: ManabarMeterProps) => {
   const maxMana = 5;
   const prevMana = useRef(mana);
   const [flash, setFlash] = useState<{
@@ -93,7 +85,7 @@ export const ManabarMeter = ({
     <div
       className={cn(
         'relative flex h-full w-full',
-        reversed ? 'rotate-180' : '',
+        side === 'blue' ? 'rotate-180' : '',
         className
       )}
     >

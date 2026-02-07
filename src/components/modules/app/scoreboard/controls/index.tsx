@@ -11,12 +11,12 @@ import { useTimerStore } from '@/stores/timer-store';
 import { usePlayerStore } from '@/stores/player-store';
 
 interface ControlsProps {
-  reversed?: boolean;
+  side: 'red' | 'blue';
   className?: string;
 }
 
-export const Controls = ({ reversed = false, className }: ControlsProps) => {
-  const player: Player = reversed ? 'blue' : 'red';
+export const Controls = ({ side = 'red', className }: ControlsProps) => {
+  const player: Player = side;
 
   const { isRunning, isBreakTime } = useTimerStore(
     useShallow((s) => ({
@@ -125,9 +125,9 @@ export const Controls = ({ reversed = false, className }: ControlsProps) => {
 
   return (
     <Controller className={className}>
-      <ControllerContent reversed={reversed}>
-        <PlayerLabel>{reversed ? 'PLAYER B' : 'PLAYER A'}</PlayerLabel>
-        <ScoreButtons reversed={reversed}>
+      <ControllerContent side={side}>
+        <PlayerLabel>{side === 'blue' ? 'PLAYER B' : 'PLAYER A'}</PlayerLabel>
+        <ScoreButtons side={side}>
           <CriticalButtons
             player={player}
             onHit={handleHit}
@@ -144,7 +144,7 @@ export const Controls = ({ reversed = false, className }: ControlsProps) => {
       </ControllerContent>
       <PenaltyBox
         fouls={fouls}
-        reversed={reversed}
+        side={side}
         onClick={handlePenaltyClick}
         onContextMenu={handlePenaltyRightClick}
       />

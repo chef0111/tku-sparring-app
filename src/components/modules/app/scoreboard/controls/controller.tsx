@@ -20,13 +20,13 @@ export const Controller = ({ children, className }: ControllerProps) => {
 
 interface ControllerContentProps {
   children: React.ReactNode;
-  reversed?: boolean;
+  side: 'red' | 'blue';
   className?: string;
 }
 
 export const ControllerContent = ({
   children,
-  reversed,
+  side,
   className,
 }: ControllerContentProps) => {
   return (
@@ -34,7 +34,7 @@ export const ControllerContent = ({
       className={cn(
         'relative flex h-full w-full flex-col items-center justify-start overflow-hidden p-2.5',
         'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
-        reversed
+        side === 'blue'
           ? 'rounded-tr-[10px] bg-[#1e68ae]'
           : 'rounded-tl-[10px] bg-linear-to-b from-[#d80405] to-[#9b0002]',
         className
@@ -47,20 +47,20 @@ export const ControllerContent = ({
 
 interface ScoreButtonsProps {
   children: React.ReactNode;
-  reversed?: boolean;
+  side: 'red' | 'blue';
   className?: string;
 }
 
 export const ScoreButtons = ({
   children,
-  reversed,
+  side,
   className,
 }: ScoreButtonsProps) => {
   return (
     <div
       className={cn(
         'flex flex-row items-center justify-between py-[4.8vh]',
-        reversed ? 'flex-row-reverse' : '',
+        side === 'blue' ? 'flex-row-reverse' : '',
         className
       )}
     >

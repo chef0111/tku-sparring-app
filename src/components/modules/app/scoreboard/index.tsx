@@ -16,14 +16,14 @@ export const Scoreboard = ({ className }: ScoreboardProps) => {
       )}
     >
       {/* Red player side */}
-      <Controls reversed={false} />
-      <ScoreBox reversed={false} />
+      <Controls side="red" />
+      <ScoreBox side="red" />
 
       <Timer />
 
       {/* Blue player side */}
-      <ScoreBox reversed={true} />
-      <Controls reversed={true} />
+      <ScoreBox side="blue" />
+      <Controls side="blue" />
     </section>
   );
 };

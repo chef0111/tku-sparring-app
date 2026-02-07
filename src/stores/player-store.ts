@@ -37,7 +37,6 @@ interface PlayerState {
 }
 
 interface PlayerActions {
-  // Scoring
   recordHit: (
     player: Player,
     hitType: HitType,
@@ -45,20 +44,15 @@ interface PlayerActions {
     isBreakTime: boolean
   ) => boolean; // Returns true if KO occurred
 
-  // Penalties
   addPenalty: (player: Player) => boolean; // Returns true if disqualified
   removePenalty: (player: Player) => void;
 
-  // Reset
   resetScores: () => void;
   resetHealth: () => void;
   resetRoundStats: () => void;
   resetAll: () => void;
 
-  // Round scores
   saveRoundScores: (roundIndex: number) => void;
-
-  // Configuration
   setMaxHealth: (health: number) => void;
   setMaxMana: (mana: number) => void;
   setPlayerName: (player: Player, name: string) => void;
@@ -85,7 +79,6 @@ const createInitialPlayerData = (
 });
 
 export const usePlayerStore = create<PlayerStore>()((set, get) => ({
-  // Initial state
   red: createInitialPlayerData('Red Player'),
   blue: createInitialPlayerData('Blue Player'),
   maxHealth: 120,

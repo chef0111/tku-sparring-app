@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PlayerAvatar } from '../hud/player-avatar';
 import { avatarGroup, durationGroup, playerGroup } from './constant/form';
 import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';
+import { StandardSettingsSchema } from '@/lib/validations';
 import {
   Field,
   FieldDescription,
@@ -15,15 +16,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export const StandardSettings = () => {
-  const { formData, updateStandardForm } = useSettings();
+  const { formData, updateStandardForm, setFormState } = useSettings();
   const { standard } = formData;
 
-  const [fileNames, setFileNames] = useState<{
-    redPlayerAvatar?: string;
-    bluePlayerAvatar?: string;
-  }>({});
-
-  // Initialize form with context values (persisted from last submit)
   const form = useAppForm({
     defaultValues: {
       redPlayerAvatar: undefined as File | undefined,
@@ -38,7 +33,9 @@ export const StandardSettings = () => {
 
   useEffect(() => {
     const unsubscribe = form.store.subscribe(() => {
-      const values = form.store.state.values;
+      const state = form.store.state;
+      const values = state.values;
+
       updateStandardForm({
         redPlayerName: values.redPlayerName,
         bluePlayerName: values.bluePlayerName,
@@ -46,9 +43,15 @@ export const StandardSettings = () => {
         breakDuration: values.breakDuration,
         maxHealth: values.maxHealth,
       });
+
+      const validation = StandardSettingsSchema.safeParse(values);
+      setFormState({
+        isDirty: state.isDirty,
+        isValid: validation.success,
+      });
     });
     return unsubscribe;
-  }, [form.store, updateStandardForm]);
+  }, [form.store, updateStandardForm, setFormState]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -57,8 +60,14 @@ export const StandardSettings = () => {
     const file = e.target.files?.[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
-      updateStandardForm({ [name]: previewUrl });
-      setFileNames((prev) => ({ ...prev, [name]: file.name }));
+      const fileNameKey =
+        name === 'redPlayerAvatar'
+          ? 'redPlayerAvatarName'
+          : 'bluePlayerAvatarName';
+      updateStandardForm({
+        [name]: previewUrl,
+        [fileNameKey]: file.name,
+      });
     }
   };
 
@@ -108,7 +117,9 @@ export const StandardSettings = () => {
                         }
                       />
                       <FieldDescription className="w-full truncate">
-                        {fileNames[player.name] || 'No file chosen'}
+                        {(player.name === 'redPlayerAvatar'
+                          ? standard.redPlayerAvatarName
+                          : standard.bluePlayerAvatarName) || 'No file chosen'}
                       </FieldDescription>
                     </Field>
                   )}

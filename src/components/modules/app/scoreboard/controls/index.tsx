@@ -25,19 +25,32 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
     }))
   );
 
-  const { fouls, redHealth, blueHealth, redMana, blueMana } = usePlayerStore(
+  const {
+    red,
+    blue,
+    fouls,
+    redHealth,
+    blueHealth,
+    redMana,
+    blueMana,
+    recordHit,
+    addPenalty,
+    removePenalty,
+  } = usePlayerStore(
     useShallow((s) => ({
+      red: s.red,
+      blue: s.blue,
       fouls: s[player].fouls,
       redHealth: s.red.health,
       blueHealth: s.blue.health,
       redMana: s.red.mana,
       blueMana: s.blue.mana,
+      recordHit: s.recordHit,
+      addPenalty: s.addPenalty,
+      removePenalty: s.removePenalty,
     }))
   );
 
-  const recordHit = usePlayerStore((s) => s.recordHit);
-  const addPenalty = usePlayerStore((s) => s.addPenalty);
-  const removePenalty = usePlayerStore((s) => s.removePenalty);
   const setRoundEnded = useTimerStore((s) => s.setRoundEnded);
 
   const anyPlayerKO = redHealth <= 0 || blueHealth <= 0;
@@ -126,7 +139,7 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
   return (
     <Controller className={className}>
       <ControllerContent side={side}>
-        <PlayerLabel>{side === 'blue' ? 'PLAYER B' : 'PLAYER A'}</PlayerLabel>
+        <PlayerLabel>{side === 'blue' ? blue.name : red.name}</PlayerLabel>
         <ScoreButtons side={side}>
           <CriticalButtons
             player={player}

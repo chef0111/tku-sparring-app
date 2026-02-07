@@ -40,11 +40,11 @@ export const LoginSchema = z.object({
 });
 
 export const StandardSettingsSchema = z.object({
-  redPlayerAvatar: z.file().optional(),
-  bluePlayerAvatar: z.file().optional(),
-  redPlayerName: z.string().optional(),
-  bluePlayerName: z.string().optional(),
-  roundDuration: z.number().optional(),
-  breakDuration: z.number().optional(),
-  maxHealth: z.number().optional(),
+  redPlayerAvatar: z.string().optional(),
+  bluePlayerAvatar: z.string().optional(),
+  redPlayerName: z.string().min(1, 'Player name is required'),
+  bluePlayerName: z.string().min(1, 'Player name is required'),
+  roundDuration: z.number().min(1, 'Round duration must be at least 1 second'),
+  breakDuration: z.number().min(1, 'Break duration must be at least 1 second'),
+  maxHealth: z.number().min(1, 'Max health must be at least 1'),
 });

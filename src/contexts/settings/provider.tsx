@@ -3,7 +3,12 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useShallow } from 'zustand/react/shallow';
 import { SettingsContext, defaultFormData } from './context';
 import type { ReactNode } from 'react';
-import type { AdvancedFormData, FormData, StandardFormData } from './context';
+import type {
+  AdvancedFormData,
+  FormData,
+  FormState,
+  StandardFormData,
+} from './context';
 import { usePlayerStore } from '@/stores/player-store';
 import { useTimerStore } from '@/stores/timer-store';
 import { useMatchStore } from '@/stores/match-store';
@@ -11,6 +16,10 @@ import { useMatchStore } from '@/stores/match-store';
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>(defaultFormData);
+  const [formState, setFormStateInternal] = useState<FormState>({
+    isDirty: false,
+    isValid: true,
+  });
 
   const setMaxHealth = usePlayerStore((s) => s.setMaxHealth);
   const resetAll = usePlayerStore((s) => s.resetAll);
@@ -40,6 +49,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       ...prev,
       advanced: { ...prev.advanced, ...data },
     }));
+  }, []);
+
+  const setFormState = useCallback((state: Partial<FormState>) => {
+    setFormStateInternal((prev) => ({ ...prev, ...state }));
   }, []);
 
   const applySettings = useCallback(() => {
@@ -102,16 +115,20 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       setIsOpen,
       toggleSettings,
       formData,
+      formState,
       updateStandardForm,
       updateAdvancedForm,
+      setFormState,
       applySettings,
     }),
     [
       isOpen,
       toggleSettings,
       formData,
+      formState,
       updateStandardForm,
       updateAdvancedForm,
+      setFormState,
       applySettings,
     ]
   );

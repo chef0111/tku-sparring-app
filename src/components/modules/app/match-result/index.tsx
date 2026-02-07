@@ -90,7 +90,7 @@ export const ResultDialog = ({
 
         <Card
           className={cn(
-            'winner-label w-[74%] truncate text-7xl text-white',
+            'winner-label w-[74%] truncate text-7xl text-white uppercase',
             winner === 'red' ? 'winner-label-red' : 'winner-label-blue'
           )}
         >

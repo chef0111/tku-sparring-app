@@ -5,6 +5,8 @@ import { HIT_COOLDOWN, HIT_DAMAGE_MAP } from '@/lib/scoreboard/hit-types';
 export type Player = 'red' | 'blue';
 
 export interface PlayerData {
+  name: string;
+  avatar: string | null;
   score: number;
   health: number;
   hits: number;
@@ -21,11 +23,9 @@ interface HitInfo {
 }
 
 interface PlayerState {
-  // Player data
   red: PlayerData;
   blue: PlayerData;
 
-  // Configuration
   maxHealth: number;
   maxMana: number;
 
@@ -61,11 +61,19 @@ interface PlayerActions {
   // Configuration
   setMaxHealth: (health: number) => void;
   setMaxMana: (mana: number) => void;
+  setPlayerName: (player: Player, name: string) => void;
+  setPlayerAvatar: (player: Player, avatar: string | null) => void;
 }
 
 type PlayerStore = PlayerState & PlayerActions;
 
-const createInitialPlayerData = (maxHealth = 120, maxMana = 5): PlayerData => ({
+const createInitialPlayerData = (
+  name: string,
+  maxHealth = 120,
+  maxMana = 5
+): PlayerData => ({
+  name,
+  avatar: null,
   score: 0,
   health: maxHealth,
   hits: 0,
@@ -78,15 +86,14 @@ const createInitialPlayerData = (maxHealth = 120, maxMana = 5): PlayerData => ({
 
 export const usePlayerStore = create<PlayerStore>()((set, get) => ({
   // Initial state
-  red: createInitialPlayerData(),
-  blue: createInitialPlayerData(),
+  red: createInitialPlayerData('Red Player'),
+  blue: createInitialPlayerData('Blue Player'),
   maxHealth: 120,
   maxMana: 5,
   lastRedHit: null,
   lastBlueHit: null,
   lastHitTimes: { red: 0, blue: 0 },
 
-  // Actions
   recordHit: (player, hitType, isTimerRunning, isBreakTime) => {
     const state = get();
     const currentTime = Date.now();
@@ -96,7 +103,6 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       return false;
     }
 
-    // Don't allow hits during break time or when timer not running
     if (isBreakTime || !isTimerRunning) {
       return false;
     }
@@ -108,15 +114,12 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
     const opponentHealth = Math.max(0, state[opponent].health - damage);
     const playerScore = Math.min(state.maxHealth, state[player].score + points);
 
-    // Track technique points for 4 or 5 point hits (20 or 25 damage)
     const technique =
       damage >= 20 ? state[player].technique + damage : state[player].technique;
 
-    // Track head hits for 3 point hits (15 damage)
     const headHits =
       damage === 15 ? state[player].headHits + 1 : state[player].headHits;
 
-    // Set the appropriate player's lastHit
     const hitUpdate =
       player === 'red'
         ? { lastRedHit: { hitType, timestamp: currentTime } }
@@ -141,7 +144,6 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       },
     });
 
-    // Return true if KO occurred
     return opponentHealth <= 0;
   },
 
@@ -158,7 +160,6 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       },
     });
 
-    // Return true if disqualified (mana depleted)
     return newMana <= 0;
   },
 
@@ -222,8 +223,24 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
   resetAll: () => {
     const state = get();
     set({
-      red: createInitialPlayerData(state.maxHealth, state.maxMana),
-      blue: createInitialPlayerData(state.maxHealth, state.maxMana),
+      red: {
+        ...createInitialPlayerData(
+          state.red.name,
+          state.maxHealth,
+          state.maxMana
+        ),
+        name: state.red.name,
+        avatar: state.red.avatar,
+      },
+      blue: {
+        ...createInitialPlayerData(
+          state.blue.name,
+          state.maxHealth,
+          state.maxMana
+        ),
+        name: state.blue.name,
+        avatar: state.blue.avatar,
+      },
       lastRedHit: null,
       lastBlueHit: null,
       lastHitTimes: { red: 0, blue: 0 },
@@ -254,5 +271,19 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
 
   setMaxMana: (mana) => {
     set({ maxMana: mana });
+  },
+
+  setPlayerName: (player, name) => {
+    const state = get();
+    set({
+      [player]: { ...state[player], name },
+    });
+  },
+
+  setPlayerAvatar: (player, avatar) => {
+    const state = get();
+    set({
+      [player]: { ...state[player], avatar },
+    });
   },
 }));

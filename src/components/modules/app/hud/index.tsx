@@ -7,7 +7,7 @@ import { usePlayerStore } from '@/stores/player-store';
 import { useDeclareWinner } from '@/hooks/use-winner';
 import { isCriticalHit } from '@/lib/scoreboard/hit-types';
 
-const AppHUD = () => {
+export const AppHUD = () => {
   return (
     <section className="flex h-[14vh] w-full max-w-screen items-center justify-between">
       <RedPlayerHUD />
@@ -17,10 +17,12 @@ const AppHUD = () => {
 };
 
 export const RedPlayerHUD = () => {
-  const { health, mana } = usePlayerStore(
+  const { health, mana, name, avatar } = usePlayerStore(
     useShallow((s) => ({
       health: s.red.health,
       mana: s.red.mana,
+      name: s.red.name,
+      avatar: s.red.avatar,
     }))
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
@@ -51,13 +53,13 @@ export const RedPlayerHUD = () => {
   return (
     <div className="flex h-full w-[50%] items-center justify-start">
       <PlayerAvatar
-        name="Red Player"
-        image="assets/CapybaraTKU1.webp"
+        name={name}
+        image={avatar ?? 'assets/CapybaraTKU1.webp'}
         className="bg-red-player relative h-[14vh] w-[13vw] rounded-xl!"
         fallback={
           <img
-            src="assets/CapybaraTKU1.webp"
-            alt="Red Player"
+            src={avatar ?? 'assets/CapybaraTKU1.webp'}
+            alt={name}
             className="relative size-full rounded-sm object-contain"
           />
         }
@@ -78,10 +80,12 @@ export const RedPlayerHUD = () => {
 };
 
 export const BluePlayerHUD = () => {
-  const { health, mana } = usePlayerStore(
+  const { health, mana, name, avatar } = usePlayerStore(
     useShallow((s) => ({
       health: s.blue.health,
       mana: s.blue.mana,
+      name: s.blue.name,
+      avatar: s.blue.avatar,
     }))
   );
   const maxHealth = usePlayerStore((s) => s.maxHealth);
@@ -121,13 +125,13 @@ export const BluePlayerHUD = () => {
         <Manabar mana={mana} className="manabar-primitive" side="blue" />
       </div>
       <PlayerAvatar
-        name="Blue Player"
-        image="assets/CapybaraTKU2.webp"
+        name={name}
+        image={avatar ?? 'assets/CapybaraTKU2.webp'}
         className="bg-blue-player relative h-[14vh] w-[13vw] rounded-xl!"
         fallback={
           <img
-            src="assets/CapybaraTKU2.webp"
-            alt="Blue Player"
+            src={avatar ?? 'assets/CapybaraTKU2.webp'}
+            alt={name}
             className="relative size-full rounded-sm object-contain"
           />
         }
@@ -137,5 +141,3 @@ export const BluePlayerHUD = () => {
     </div>
   );
 };
-
-export { AppHUD };

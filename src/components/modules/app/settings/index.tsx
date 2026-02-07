@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/tabs';
 
 export const AppSettings = () => {
-  const { setIsOpen } = useSettings();
+  const { setIsOpen, applySettings } = useSettings();
   return (
     <DialogContent
       className="bg-background min-h-180 min-w-200 p-0"
@@ -74,7 +74,7 @@ export const AppSettings = () => {
         >
           Cancel
         </Button>
-        <Button size="xl" className="px-4 text-xl">
+        <Button size="xl" className="px-4 text-xl" onClick={applySettings}>
           Confirm
         </Button>
       </DialogFooter>

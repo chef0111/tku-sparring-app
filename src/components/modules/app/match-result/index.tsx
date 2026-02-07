@@ -1,4 +1,6 @@
+import { useShallow } from 'zustand/react/shallow';
 import type { Player } from '@/stores/player-store';
+import { usePlayerStore } from '@/stores/player-store';
 import {
   DialogContent,
   DialogFooter,
@@ -24,9 +26,20 @@ export const ResultDialog = ({
   blueWon,
   className,
 }: ResultDialogProps) => {
-  const winnerName = winner === 'red' ? 'PLAYER A' : 'PLAYER B';
+  const { redName, redAvatar, blueName, blueAvatar } = usePlayerStore(
+    useShallow((s) => ({
+      redName: s.red.name,
+      redAvatar: s.red.avatar,
+      blueName: s.blue.name,
+      blueAvatar: s.blue.avatar,
+    }))
+  );
+
+  const winnerName = winner === 'red' ? redName : blueName;
   const winnerAvatar =
-    winner === 'red' ? 'assets/CapybaraTKU1.webp' : 'assets/CapybaraTKU2.webp';
+    winner === 'red'
+      ? redAvatar || 'assets/CapybaraTKU1.webp'
+      : blueAvatar || 'assets/CapybaraTKU2.webp';
 
   return (
     <DialogContent
@@ -71,13 +84,13 @@ export const ResultDialog = ({
             className="h-full w-full rounded-xl object-contain"
           />
           <AvatarFallback className="text-4xl font-bold">
-            {winner === 'red' ? 'A' : 'B'}
+            {winner === 'red' ? 'RED' : 'BLUE'}
           </AvatarFallback>
         </Avatar>
 
         <Card
           className={cn(
-            'winner-label w-[74%] text-7xl text-white',
+            'winner-label w-[74%] truncate text-7xl text-white',
             winner === 'red' ? 'winner-label-red' : 'winner-label-blue'
           )}
         >

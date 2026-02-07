@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { PlayerAvatar } from '../hud/player-avatar';
 import { avatarGroup, durationGroup, playerGroup } from './constant/form';
-import type z from 'zod';
-import type { StandardSettingsSchema } from '@/lib/validations';
+import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';
 import {
   Field,
@@ -15,30 +14,41 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
-type FormData = z.infer<typeof StandardSettingsSchema>;
-
 export const StandardSettings = () => {
-  const [avatarPreviews, setAvatarPreviews] = useState<{
-    redPlayerAvatar?: string;
-    bluePlayerAvatar?: string;
-  }>({});
+  const { formData, updateStandardForm } = useSettings();
+  const { standard } = formData;
 
   const [fileNames, setFileNames] = useState<{
     redPlayerAvatar?: string;
     bluePlayerAvatar?: string;
   }>({});
 
+  // Initialize form with context values (persisted from last submit)
   const form = useAppForm({
     defaultValues: {
-      redPlayerAvatar: undefined,
-      bluePlayerAvatar: undefined,
-      redPlayerName: '',
-      bluePlayerName: '',
-      roundDuration: 60,
-      breakDuration: 30,
-      maxHealth: 120,
-    } satisfies FormData as FormData,
+      redPlayerAvatar: undefined as File | undefined,
+      bluePlayerAvatar: undefined as File | undefined,
+      redPlayerName: standard.redPlayerName,
+      bluePlayerName: standard.bluePlayerName,
+      roundDuration: standard.roundDuration,
+      breakDuration: standard.breakDuration,
+      maxHealth: standard.maxHealth,
+    },
   });
+
+  useEffect(() => {
+    const unsubscribe = form.store.subscribe(() => {
+      const values = form.store.state.values;
+      updateStandardForm({
+        redPlayerName: values.redPlayerName,
+        bluePlayerName: values.bluePlayerName,
+        roundDuration: values.roundDuration,
+        breakDuration: values.breakDuration,
+        maxHealth: values.maxHealth,
+      });
+    });
+    return unsubscribe;
+  }, [form.store, updateStandardForm]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -47,7 +57,7 @@ export const StandardSettings = () => {
     const file = e.target.files?.[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
-      setAvatarPreviews((prev) => ({ ...prev, [name]: previewUrl }));
+      updateStandardForm({ [name]: previewUrl });
       setFileNames((prev) => ({ ...prev, [name]: file.name }));
     }
   };
@@ -67,7 +77,7 @@ export const StandardSettings = () => {
               <FieldGroup className="flex-row items-start">
                 <PlayerAvatar
                   name={player.playerName}
-                  image={avatarPreviews[player.name] || ''}
+                  image={standard[player.name] || ''}
                   className={player.className}
                   fallback={
                     <img src={player.fallback} alt={player.playerName} />

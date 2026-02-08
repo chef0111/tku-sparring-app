@@ -71,7 +71,7 @@ export const TimeBox = ({
     >
       <h1
         className={cn(
-          'm-0 text-center text-8xl leading-none font-bold text-white select-none',
+          'm-0 text-center text-8xl leading-none font-bold text-white select-none max-xl:text-7xl',
           shouldBlink && 'animate-timer-blink',
           isPaused && !isBreakTime && 'text-yellow-500'
         )}
@@ -96,13 +96,13 @@ export const TimeoutIndicator = ({
   return (
     <div
       className={cn(
-        'relative flex h-[9.5vh] w-full items-center justify-center gap-2.5 px-10.25 py-3.75 transition-all duration-100',
+        'relative flex h-[9.5vh] w-full items-center justify-center gap-2.5 px-10.25 py-3.75 transition-all duration-100 max-xl:h-[8vh]',
         isBreakTime ? 'bg-foreground' : 'bg-yellow-500',
         isVisible ? 'visible opacity-100' : 'invisible opacity-0',
         className
       )}
     >
-      <h2 className="text-background m-0 text-center text-6xl leading-none font-bold whitespace-nowrap select-none">
+      <h2 className="text-background m-0 text-center text-6xl leading-none font-bold whitespace-nowrap select-none max-2xl:text-5xl max-xl:text-[44px]">
         Time out
       </h2>
     </div>

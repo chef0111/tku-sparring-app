@@ -1,6 +1,12 @@
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Timer } from './timer';
 import { ScoreBox } from './score-box';
 import { Controls } from './controls';
+import type { TemporalState } from 'zundo';
+import type { StoreApi } from 'zustand';
+import type { PlayerStore } from '@/stores/player-store';
+import { usePlayerStore } from '@/stores/player-store';
+import { useSettings } from '@/contexts/settings';
 import { cn } from '@/lib/utils';
 
 interface ScoreboardProps {
@@ -8,6 +14,26 @@ interface ScoreboardProps {
 }
 
 export const Scoreboard = ({ className }: ScoreboardProps) => {
+  const { isOpen } = useSettings();
+
+  useHotkeys(
+    'mod+z',
+    (e) => {
+      e.preventDefault();
+      if (isOpen) return;
+
+      const temporal = (
+        usePlayerStore as unknown as {
+          temporal: StoreApi<TemporalState<PlayerStore>>;
+        }
+      ).temporal;
+      if (temporal) {
+        temporal.getState().undo();
+      }
+    },
+    [isOpen]
+  );
+
   return (
     <section
       className={cn(
@@ -16,14 +42,14 @@ export const Scoreboard = ({ className }: ScoreboardProps) => {
       )}
     >
       {/* Red player side */}
-      <Controls reversed={false} />
-      <ScoreBox reversed={false} />
+      <Controls side="red" />
+      <ScoreBox side="red" />
 
       <Timer />
 
       {/* Blue player side */}
-      <ScoreBox reversed={true} />
-      <Controls reversed={true} />
+      <ScoreBox side="blue" />
+      <Controls side="blue" />
     </section>
   );
 };

@@ -1,4 +1,5 @@
-export { FormInput, FormPasswordInput } from './form-input';
+export { FormInput, FormNumberInput, FormPasswordInput } from './form-input';
 export { FormTextarea } from './form-textarea';
 export { FormSelect } from './form-select';
 export { FormCheckbox } from './form-checkbox';
+export { FormCombobox } from './form-combobox';

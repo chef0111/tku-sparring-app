@@ -1,8 +1,8 @@
 import { Activity } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { HitIcon } from './hit-icon';
-import { RecordSection, TotalWins } from './record-section';
-import { StatsSection } from './stats-section';
+import { Record, TotalWins } from './record';
+import { StatsCard } from './stats';
 import type { Player } from '@/stores/player-store';
 import type { HitType } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
@@ -12,12 +12,12 @@ import { useTimerStore } from '@/stores/timer-store';
 import { Card } from '@/components/ui/card';
 
 interface ScoreBoxProps {
-  reversed?: boolean;
+  side?: 'red' | 'blue';
   className?: string;
 }
 
-export const ScoreBox = ({ reversed = false, className }: ScoreBoxProps) => {
-  const player: Player = reversed ? 'blue' : 'red';
+export const ScoreBox = ({ side = 'red', className }: ScoreBoxProps) => {
+  const player: Player = side;
 
   const { roundScores, hits } = usePlayerStore(
     useShallow((s) => ({
@@ -41,20 +41,20 @@ export const ScoreBox = ({ reversed = false, className }: ScoreBoxProps) => {
 
   const isBreakTime = useTimerStore((s) => s.isBreakTime);
 
-  const wins = reversed ? blueWon : redWon;
+  const wins = side === 'blue' ? blueWon : redWon;
 
   return (
-    <ScoreBoxColumn className={className}>
-      <ScoreBoxFrame
-        reversed={reversed}
+    <ScoreboxGroup className={className}>
+      <ScoreboxContent
+        side={side}
         className={cn(isBreakTime ? 'justify-between' : 'justify-center')}
       >
         <Activity mode={isBreakTime ? 'visible' : 'hidden'}>
-          <RecordSection
+          <Record
             roundScores={roundScores}
             roundWinners={roundWinners}
             player={player}
-            reversed={reversed}
+            side={side}
             currentRound={currentRound}
             isBreakTime={isBreakTime}
           />
@@ -71,21 +71,18 @@ export const ScoreBox = ({ reversed = false, className }: ScoreBoxProps) => {
         <Activity mode={isBreakTime ? 'visible' : 'hidden'}>
           <TotalWins wins={wins} />
         </Activity>
-      </ScoreBoxFrame>
-      <StatsSection hits={hits} wins={wins} reversed={reversed} />
-    </ScoreBoxColumn>
+      </ScoreboxContent>
+      <StatsCard hits={hits} wins={wins} side={side} />
+    </ScoreboxGroup>
   );
 };
 
-interface ScoreBoxColumnProps {
+interface ScoreboxGroupProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const ScoreBoxColumn = ({
-  children,
-  className,
-}: ScoreBoxColumnProps) => {
+export const ScoreboxGroup = ({ children, className }: ScoreboxGroupProps) => {
   return (
     <div
       className={cn(
@@ -98,24 +95,24 @@ export const ScoreBoxColumn = ({
   );
 };
 
-interface ScoreBoxFrameProps {
+interface ScoreboxContentProps {
   children: React.ReactNode;
-  reversed?: boolean;
+  side: 'red' | 'blue';
   className?: string;
 }
 
-export const ScoreBoxFrame = ({
+export const ScoreboxContent = ({
   children,
-  reversed,
+  side,
   className,
-}: ScoreBoxFrameProps) => {
+}: ScoreboxContentProps) => {
   return (
     <Card
       className={cn(
         'relative flex h-full w-full grow flex-col items-center overflow-hidden rounded-none p-5',
         'before:pointer-events-none before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
         'after:pointer-events-none after:absolute after:top-[-50%] after:left-[-50%] after:h-[200%] after:w-[200%] after:rotate-30 after:bg-white/10',
-        reversed
+        side === 'blue'
           ? 'bg-linear-to-bl from-[#01559a] via-[#0070c0] to-[#0070c0] shadow-[inset_-5px_-5px_15px_rgba(0,0,0,0.3),inset_0_0_15px_rgba(0,0,0,0.3),0_5px_15px_rgba(0,112,192,0.4)]'
           : 'bg-linear-to-br from-[#bf0000] via-[#ff0000] to-[#ff0000] shadow-[inset_5px_-5px_15px_rgba(0,0,0,0.3),inset_0_0_15px_rgba(0,0,0,0.3),0_5px_15px_rgba(255,0,0,0.4)]',
         className
@@ -156,7 +153,6 @@ export const DamageScore = ({
   );
 };
 
-// Re-export sub-components
-export { RecordSection, RoundRecord, TotalWins } from './record-section';
-export { StatsSection, StatItem } from './stats-section';
+export { Record, RoundRecord, TotalWins } from './record';
+export { StatsCard, StatItem } from './stats';
 export { HitIcon } from './hit-icon';

@@ -7,8 +7,7 @@ export type HitType =
 
 export type Player = 'red' | 'blue';
 
-// Hit points to damage mapping
-export const HIT_DAMAGE_MAP: Record<HitType, number> = {
+export const hitDamage: Record<HitType, number> = {
   headCrit: 25,
   trunkCrit: 20,
   head: 15,
@@ -16,8 +15,7 @@ export const HIT_DAMAGE_MAP: Record<HitType, number> = {
   punch: 5,
 };
 
-// Hit type to point value (for display)
-export const HIT_POINTS_MAP: Record<HitType, number> = {
+export const hitPoints: Record<HitType, number> = {
   headCrit: 5,
   trunkCrit: 4,
   head: 3,
@@ -25,10 +23,8 @@ export const HIT_POINTS_MAP: Record<HitType, number> = {
   punch: 1,
 };
 
-// Cooldown between hits for the same player (ms)
-export const HIT_COOLDOWN = 300;
+export const hitCooldown = 300;
 
-// Icon paths for each hit type and player
 export const getHitIconPath = (player: Player, hitType: HitType): string => {
   const iconMap: Record<HitType, string> = {
     headCrit: `${player}HeadCrit`,
@@ -41,7 +37,7 @@ export const getHitIconPath = (player: Player, hitType: HitType): string => {
   return `/assets/${iconMap[hitType]}.webp`;
 };
 
-// Button icon paths (different from hit display icons)
+// Button icons
 export const getButtonIconPath = (player: Player, hitType: HitType): string => {
   const iconMap: Record<HitType, string> = {
     headCrit: `${player}HeadCritButton`,
@@ -54,8 +50,7 @@ export const getButtonIconPath = (player: Player, hitType: HitType): string => {
   return `/assets/${iconMap[hitType]}.webp`;
 };
 
-// Keyboard mappings for each player
-export const KEYBOARD_MAPPINGS: Record<Player, Record<string, HitType>> = {
+export const keyboardMappings: Record<Player, Record<string, HitType>> = {
   red: {
     e: 'headCrit',
     q: 'trunkCrit',
@@ -72,16 +67,13 @@ export const KEYBOARD_MAPPINGS: Record<Player, Record<string, HitType>> = {
   },
 };
 
-// Check if hit is critical (for animations)
 export const isCriticalHit = (hitType: HitType): boolean => {
   return hitType === 'headCrit' || hitType === 'trunkCrit';
 };
 
-// Check if hit is super critical (head crit only)
 export const isSuperCriticalHit = (hitType: HitType): boolean => {
   return hitType === 'headCrit';
 };
 
-// Hit type display order for buttons
-export const CRITICAL_HITS: Array<HitType> = ['headCrit', 'trunkCrit'];
-export const NORMAL_HITS: Array<HitType> = ['head', 'punch', 'trunk'];
+export const criticalHits: Array<HitType> = ['headCrit', 'trunkCrit'];
+export const normalHits: Array<HitType> = ['head', 'punch', 'trunk'];

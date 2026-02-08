@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 export type FormControlProps = {
-  label: string;
+  label?: string;
   description?: string;
   fieldClassName?: string;
   descPosition?: 'after-label' | 'after-field';

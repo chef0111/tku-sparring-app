@@ -38,3 +38,19 @@ export const LoginSchema = z.object({
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
     }),
 });
+
+export const StandardSettingsSchema = z.object({
+  redPlayerAvatar: z.string().optional(),
+  bluePlayerAvatar: z.string().optional(),
+  redPlayerName: z.string().min(1, 'Player name is required'),
+  bluePlayerName: z.string().min(1, 'Player name is required'),
+  roundDuration: z.number().min(1, 'Round duration must be at least 1 second'),
+  breakDuration: z.number().min(1, 'Break duration must be at least 1 second'),
+  maxHealth: z.number().min(1, 'Max health must be at least 1'),
+});
+
+export const AdvanceSettingsSchema = StandardSettingsSchema.extend({
+  tournament: z.string().min(1, 'Tournament is required'),
+  group: z.string().min(1, 'Group is required'),
+  match: z.string().min(1, 'Match is required'),
+});

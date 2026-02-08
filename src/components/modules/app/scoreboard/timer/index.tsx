@@ -11,6 +11,7 @@ import { useTimerTick } from '@/hooks/use-timer-tick';
 import { useRoundTransition } from '@/hooks/use-round-transition';
 import { useDeclareWinner } from '@/hooks/use-winner';
 import { Button } from '@/components/ui/button';
+import { useSettings } from '@/contexts/settings';
 
 export const Timer = () => {
   const {
@@ -47,6 +48,8 @@ export const Timer = () => {
     }))
   );
 
+  const { isOpen } = useSettings();
+
   useTimerTick();
   useRoundTransition();
 
@@ -61,6 +64,8 @@ export const Timer = () => {
   useHotkeys(
     'space',
     (e) => {
+      if (isOpen) return;
+
       e.preventDefault();
       if (isBreakTime && !isMatchOver) {
         toggleBreak();
@@ -70,7 +75,15 @@ export const Timer = () => {
         toggle();
       }
     },
-    [isBreakTime, roundEnded, isMatchOver, toggle, toggleBreak, declareWinner]
+    [
+      isOpen,
+      isBreakTime,
+      roundEnded,
+      isMatchOver,
+      toggle,
+      toggleBreak,
+      declareWinner,
+    ]
   );
 
   const handleTimeBoxClick = useCallback(() => {

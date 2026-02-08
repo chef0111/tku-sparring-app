@@ -1,10 +1,14 @@
 import { create } from 'zustand';
+import { temporal } from 'zundo';
+import type { StateCreator } from 'zustand';
 import type { HitType } from '@/lib/scoreboard/hit-types';
-import { HIT_COOLDOWN, HIT_DAMAGE_MAP } from '@/lib/scoreboard/hit-types';
+import { hitCooldown, hitDamage } from '@/lib/scoreboard/hit-types';
 
 export type Player = 'red' | 'blue';
 
 export interface PlayerData {
+  name: string;
+  avatar: string | null;
   score: number;
   health: number;
   hits: number;
@@ -21,11 +25,9 @@ interface HitInfo {
 }
 
 interface PlayerState {
-  // Player data
   red: PlayerData;
   blue: PlayerData;
 
-  // Configuration
   maxHealth: number;
   maxMana: number;
 
@@ -37,7 +39,6 @@ interface PlayerState {
 }
 
 interface PlayerActions {
-  // Scoring
   recordHit: (
     player: Player,
     hitType: HitType,
@@ -45,27 +46,30 @@ interface PlayerActions {
     isBreakTime: boolean
   ) => boolean; // Returns true if KO occurred
 
-  // Penalties
   addPenalty: (player: Player) => boolean; // Returns true if disqualified
   removePenalty: (player: Player) => void;
 
-  // Reset
   resetScores: () => void;
   resetHealth: () => void;
   resetRoundStats: () => void;
   resetAll: () => void;
 
-  // Round scores
   saveRoundScores: (roundIndex: number) => void;
-
-  // Configuration
   setMaxHealth: (health: number) => void;
   setMaxMana: (mana: number) => void;
+  setPlayerName: (player: Player, name: string) => void;
+  setPlayerAvatar: (player: Player, avatar: string | null) => void;
 }
 
-type PlayerStore = PlayerState & PlayerActions;
+export type PlayerStore = PlayerState & PlayerActions;
 
-const createInitialPlayerData = (maxHealth = 120, maxMana = 5): PlayerData => ({
+const createInitialPlayerData = (
+  name: string,
+  maxHealth = 120,
+  maxMana = 5
+): PlayerData => ({
+  name,
+  avatar: null,
   score: 0,
   health: maxHealth,
   hits: 0,
@@ -76,47 +80,41 @@ const createInitialPlayerData = (maxHealth = 120, maxMana = 5): PlayerData => ({
   roundScores: [0, 0, 0],
 });
 
-export const usePlayerStore = create<PlayerStore>()((set, get) => ({
-  // Initial state
-  red: createInitialPlayerData(),
-  blue: createInitialPlayerData(),
+const initializer: StateCreator<PlayerStore> = (set, get) => ({
+  red: createInitialPlayerData('Player A'),
+  blue: createInitialPlayerData('Player B'),
   maxHealth: 120,
   maxMana: 5,
   lastRedHit: null,
   lastBlueHit: null,
   lastHitTimes: { red: 0, blue: 0 },
 
-  // Actions
   recordHit: (player, hitType, isTimerRunning, isBreakTime) => {
     const state = get();
     const currentTime = Date.now();
 
     // Prevent rapid hits (cooldown)
-    if (currentTime - state.lastHitTimes[player] < HIT_COOLDOWN) {
+    if (currentTime - state.lastHitTimes[player] < hitCooldown) {
       return false;
     }
 
-    // Don't allow hits during break time or when timer not running
     if (isBreakTime || !isTimerRunning) {
       return false;
     }
 
     const opponent: Player = player === 'red' ? 'blue' : 'red';
-    const damage = HIT_DAMAGE_MAP[hitType];
+    const damage = hitDamage[hitType];
     const points = damage;
 
     const opponentHealth = Math.max(0, state[opponent].health - damage);
     const playerScore = Math.min(state.maxHealth, state[player].score + points);
 
-    // Track technique points for 4 or 5 point hits (20 or 25 damage)
     const technique =
       damage >= 20 ? state[player].technique + damage : state[player].technique;
 
-    // Track head hits for 3 point hits (15 damage)
     const headHits =
       damage === 15 ? state[player].headHits + 1 : state[player].headHits;
 
-    // Set the appropriate player's lastHit
     const hitUpdate =
       player === 'red'
         ? { lastRedHit: { hitType, timestamp: currentTime } }
@@ -141,7 +139,6 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       },
     });
 
-    // Return true if KO occurred
     return opponentHealth <= 0;
   },
 
@@ -158,7 +155,6 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       },
     });
 
-    // Return true if disqualified (mana depleted)
     return newMana <= 0;
   },
 
@@ -222,8 +218,24 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
   resetAll: () => {
     const state = get();
     set({
-      red: createInitialPlayerData(state.maxHealth, state.maxMana),
-      blue: createInitialPlayerData(state.maxHealth, state.maxMana),
+      red: {
+        ...createInitialPlayerData(
+          state.red.name,
+          state.maxHealth,
+          state.maxMana
+        ),
+        name: state.red.name,
+        avatar: state.red.avatar,
+      },
+      blue: {
+        ...createInitialPlayerData(
+          state.blue.name,
+          state.maxHealth,
+          state.maxMana
+        ),
+        name: state.blue.name,
+        avatar: state.blue.avatar,
+      },
       lastRedHit: null,
       lastBlueHit: null,
       lastHitTimes: { red: 0, blue: 0 },
@@ -255,4 +267,28 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
   setMaxMana: (mana) => {
     set({ maxMana: mana });
   },
-}));
+
+  setPlayerName: (player, name) => {
+    const state = get();
+    set({
+      [player]: { ...state[player], name },
+    });
+  },
+
+  setPlayerAvatar: (player, avatar) => {
+    const state = get();
+    set({
+      [player]: { ...state[player], avatar },
+    });
+  },
+});
+
+export const usePlayerStore = create<PlayerStore>()(
+  temporal(initializer, {
+    limit: 50,
+    partialize: (state) => {
+      const { red, blue, lastRedHit, lastBlueHit, lastHitTimes } = state;
+      return { red, blue, lastRedHit, lastBlueHit, lastHitTimes };
+    },
+  })
+);

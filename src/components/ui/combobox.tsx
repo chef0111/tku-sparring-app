@@ -1,5 +1,3 @@
-'use client';
-
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
@@ -21,9 +19,9 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-type ComboboxData = {
-  label: string;
-  value: string;
+export type ComboboxData = {
+  label?: string;
+  value?: string;
 };
 
 type ComboboxContextType = {

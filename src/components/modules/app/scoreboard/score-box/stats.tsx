@@ -2,29 +2,24 @@ import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
-interface StatsSectionProps {
+interface StatsCardProps {
   hits: number;
   wins: number;
-  reversed?: boolean;
+  side?: 'red' | 'blue';
   className?: string;
 }
 
-export const StatsSection = ({
-  hits,
-  wins,
-  reversed,
-  className,
-}: StatsSectionProps) => {
+export const StatsCard = ({ hits, wins, side, className }: StatsCardProps) => {
   return (
     <Card
       className={cn(
         'pointers-event-none relative flex h-[15.5vh] w-full flex-row items-center justify-center gap-15 overflow-hidden rounded-none',
         'before:absolute before:inset-0 before:bg-linear-to-br before:from-white/10 before:to-transparent',
-        reversed ? 'bg-[#155ea4]' : 'bg-[#dc0000]',
+        side === 'blue' ? 'bg-[#155ea4]' : 'bg-[#dc0000]',
         className
       )}
     >
-      {reversed ? (
+      {side === 'blue' ? (
         <>
           <StatItem label="HITS" value={hits} variant="blue" />
           <StatItem label="#WON" value={wins} variant="blue" />

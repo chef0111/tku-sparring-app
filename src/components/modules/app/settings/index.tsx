@@ -1,44 +1,113 @@
-import { settingTabs } from '@/common/constants';
+import { settingTabs } from './constant/tabs';
+import { Unauthorized } from './unauthorized';
+import { useSettings } from '@/contexts/settings';
+import { Button } from '@/components/ui/button';
 import {
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tabs,
+  TabsContent,
+  TabsContents,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
+import { authClient } from '@/lib/auth-client';
+import { cn } from '@/lib/utils';
 
 export const AppSettings = () => {
+  const { data } = authClient.useSession();
+  const isLoggedIn = !!data?.user;
+
+  const { setIsOpen, applySettings, formState, activeTab, setActiveTab } =
+    useSettings();
+  const isConfirmDisabled = !formState.isDirty || !formState.isValid;
+
   return (
     <DialogContent
-      className="bg-card min-h-180 min-w-3xl p-0"
+      className="bg-background min-h-180 min-w-200 p-0"
       closeButtonClassName="[&_svg:not([class*='size-'])]:size-6 no-focus"
     >
-      <DialogHeader className="max-h-17 w-full border-b-2 pt-4">
-        <DialogTitle className="text-center text-4xl font-semibold tracking-wide">
+      <DialogHeader className="bg-card max-h-16 w-full rounded-t-xl border-b-2 pt-4">
+        <DialogTitle className="text-center text-4xl leading-none font-semibold tracking-wide">
           MATCH SETTINGS
         </DialogTitle>
       </DialogHeader>
 
-      <Tabs
-        className="absolute top-17 h-163 flex-row"
-        defaultValue={settingTabs[0].value}
-      >
-        <TabsList
-          variant="underline"
-          direction="vertical"
-          underlinePosition="right"
-          className="bg-background h-full w-30 justify-start rounded-bl-2xl border-r-2"
+      <div className="absolute top-16 h-142 w-full">
+        <Tabs
+          className="h-full flex-row gap-0"
+          value={activeTab}
+          onValueChange={(value) =>
+            setActiveTab(value as 'standard' | 'advance')
+          }
         >
-          {settingTabs.map((tab) => (
-            <TabsTrigger
-              className="data-active:text-foreground no-focus max-h-10! text-lg font-light transition-all duration-300 data-active:font-semibold!"
-              key={tab.value}
-              value={tab.value}
-            >
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+          <TabsList
+            variant="underline"
+            orientation="vertical"
+            underlinePosition="right"
+            className="bg-card h-full w-36 justify-start border-r-2"
+          >
+            {settingTabs.map((tab) => (
+              <TabsTrigger
+                className="data-active:text-foreground no-focus max-h-10! text-lg font-light transition-all duration-300 data-active:font-semibold!"
+                key={tab.value}
+                value={tab.value}
+              >
+                {tab.icon && <tab.icon className="size-3" />}
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <TabsContents mode="layout" className="h-full w-full">
+            {settingTabs.map((tab) => {
+              const disabled = !isLoggedIn && tab.value === 'advance';
+              return (
+                <TabsContent
+                  key={tab.value}
+                  value={tab.value}
+                  className={cn(
+                    'h-full w-full overflow-y-auto px-4 py-4',
+                    disabled ? 'overflow-hidden' : ''
+                  )}
+                >
+                  {disabled && (
+                    <div className="bg-background/80 absolute top-0 left-0 z-50 flex h-full w-full items-center justify-center rounded-md backdrop-blur-sm">
+                      <Unauthorized />
+                    </div>
+                  )}
+                  <div className={cn(disabled ? 'pointer-events-none' : '')}>
+                    <tab.content />
+                  </div>
+                </TabsContent>
+              );
+            })}
+          </TabsContents>
+        </Tabs>
+      </div>
+
+      <DialogFooter className="bg-card fixed bottom-0 h-22 w-full items-center rounded-b-xl border-t-2 px-4">
+        <Button
+          variant="outline"
+          size="xl"
+          className="px-4 text-xl"
+          onClick={() => setIsOpen(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          size="xl"
+          className="px-4 text-xl"
+          onClick={applySettings}
+          disabled={isConfirmDisabled}
+        >
+          Confirm
+        </Button>
+      </DialogFooter>
     </DialogContent>
   );
 };

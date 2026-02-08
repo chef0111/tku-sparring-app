@@ -195,6 +195,8 @@ function Kbd({
     );
   }, [hotkey, hotkeyProp, children]);
 
+  const isSpace = useMemo(() => hotkey === 'space', [hotkey]);
+
   const handleHotkeyPress = useCallback(
     (event: KeyboardEvent | ReactKeyboardEvent) => {
       event?.preventDefault?.();
@@ -324,7 +326,8 @@ function Kbd({
       ref={kbdRef}
       data-slot="kbd"
       className={cn(
-        !isCompound && 'aspect-square',
+        !isCompound && !isSpace && 'aspect-square',
+        isSpace && 'w-24',
         kbdVariants({ variant }),
         isPressed && 'shadow-none',
         className

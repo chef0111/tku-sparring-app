@@ -1,0 +1,11 @@
+@utility settings-field-group {
+  @apply bg-card! flex! w-full! gap-4! rounded-lg! border! p-4!;
+}
+
+@utility settings-group-label {
+  @apply text-lg! font-bold! tracking-wider!;
+}
+
+@utility avatar-group {
+  @apply bg-accent/50 flex w-full flex-col gap-4 rounded-lg border p-4;
+}

@@ -7,14 +7,14 @@ interface HealthbarProps {
   health: number;
   maxHealth?: number;
   className?: string;
-  reversed?: boolean;
+  side: 'red' | 'blue';
 }
 
 export const Healthbar = ({
   health,
   maxHealth = 120,
   className,
-  reversed,
+  side,
 }: HealthbarProps) => {
   const healthPct = (health / maxHealth) * 100;
 
@@ -70,7 +70,7 @@ export const Healthbar = ({
         healthPct={healthPct}
         delayedHealthPct={delayedHealthPct}
         animationDuration={animationDuration}
-        reversed={reversed}
+        side={side}
       />
     </HealthbarFrame>
   );
@@ -101,7 +101,7 @@ interface HealthbarMeterProps {
   healthPct: number;
   delayedHealthPct: number;
   animationDuration: number;
-  reversed?: boolean;
+  side: 'red' | 'blue';
 }
 
 export const HealthbarMeter = ({
@@ -109,7 +109,7 @@ export const HealthbarMeter = ({
   healthPct,
   delayedHealthPct,
   animationDuration,
-  reversed,
+  side,
   ref,
 }: HealthbarMeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const initialKeyframes = computeHealthKeyframes(healthPct, healthPct);
@@ -118,7 +118,7 @@ export const HealthbarMeter = ({
     <div
       className={cn(
         'relative flex h-full w-full',
-        reversed ? 'justify-end' : 'justify-start',
+        side === 'blue' ? 'justify-end' : 'justify-start',
         className
       )}
     >
@@ -135,7 +135,7 @@ export const HealthbarMeter = ({
         style={{
           width: `${delayedHealthPct}%`,
           transition: `width ${animationDuration}s ease-out 0.5s`,
-          ...(reversed ? { right: 0 } : { left: 0 }),
+          ...(side === 'blue' ? { right: 0 } : { left: 0 }),
         }}
       />
     </div>

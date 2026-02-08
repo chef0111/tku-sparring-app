@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { toast } from 'sonner';
 import { useShallow } from 'zustand/react/shallow';
 import { SettingsContext, defaultFormData } from './context';
 import type { ReactNode } from 'react';
@@ -129,6 +130,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
     resetMatch();
     resetAll();
+
+    toast.success('Settings applied', {
+      description: 'Applied latest settings for the next matches.',
+      className: 'min-w-8! mx-auto inset-x-0 justify-center',
+      position: 'top-center',
+    });
+
     setIsOpen(false);
   }, [
     activeTab,

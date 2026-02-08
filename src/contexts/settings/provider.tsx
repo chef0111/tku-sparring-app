@@ -19,10 +19,19 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     'standard'
   );
   const [formData, setFormData] = useState<FormData>(defaultFormData);
-  const [formState, setFormStateInternal] = useState<FormState>({
+  const [standardFormState, setStandardFormStateInternal] = useState<FormState>(
+    {
+      isDirty: false,
+      isValid: true,
+    }
+  );
+  const [advanceFormState, setAdvanceFormStateInternal] = useState<FormState>({
     isDirty: false,
     isValid: true,
   });
+
+  const formState =
+    activeTab === 'standard' ? standardFormState : advanceFormState;
 
   const setMaxHealth = usePlayerStore((s) => s.setMaxHealth);
   const resetAll = usePlayerStore((s) => s.resetAll);
@@ -54,8 +63,12 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, []);
 
-  const setFormState = useCallback((state: Partial<FormState>) => {
-    setFormStateInternal((prev) => ({ ...prev, ...state }));
+  const setStandardFormState = useCallback((state: Partial<FormState>) => {
+    setStandardFormStateInternal((prev) => ({ ...prev, ...state }));
+  }, []);
+
+  const setAdvanceFormState = useCallback((state: Partial<FormState>) => {
+    setAdvanceFormStateInternal((prev) => ({ ...prev, ...state }));
   }, []);
 
   const applySettings = useCallback(() => {
@@ -150,7 +163,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       formState,
       updateStandardForm,
       updateAdvanceForm,
-      setFormState,
+      setStandardFormState,
+      setAdvanceFormState,
       applySettings,
     }),
     [
@@ -161,7 +175,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       formState,
       updateStandardForm,
       updateAdvanceForm,
-      setFormState,
+      setStandardFormState,
+      setAdvanceFormState,
       applySettings,
     ]
   );

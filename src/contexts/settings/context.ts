@@ -64,7 +64,8 @@ type SettingsContextType = {
   formState: FormState;
   updateStandardForm: (data: Partial<StandardFormData>) => void;
   updateAdvanceForm: (data: Partial<AdvanceFormData>) => void;
-  setFormState: (state: Partial<FormState>) => void;
+  setStandardFormState: (state: Partial<FormState>) => void;
+  setAdvanceFormState: (state: Partial<FormState>) => void;
 
   applySettings: () => void;
 };

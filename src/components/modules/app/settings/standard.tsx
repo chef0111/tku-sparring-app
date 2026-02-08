@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export const StandardSettings = () => {
-  const { formData, updateStandardForm, setFormState } = useSettings();
+  const { formData, updateStandardForm, setStandardFormState } = useSettings();
   const { standard } = formData;
 
   const form = useAppForm({
@@ -46,13 +46,13 @@ export const StandardSettings = () => {
       });
 
       const validation = StandardSettingsSchema.safeParse(values);
-      setFormState({
+      setStandardFormState({
         isDirty: state.isDirty,
         isValid: validation.success,
       });
     });
     return unsubscribe;
-  }, [form.store, updateStandardForm, setFormState]);
+  }, [form.store, updateStandardForm, setStandardFormState]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,

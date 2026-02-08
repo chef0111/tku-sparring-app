@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { useGroups, useMatches, useTournaments } from '@/hooks/use-tournaments';
 
 export const AdvanceSettings = () => {
-  const { formData, updateAdvanceForm, setFormState } = useSettings();
+  const { formData, updateAdvanceForm, setAdvanceFormState } = useSettings();
   const { advance } = formData;
 
   const form = useAppForm({
@@ -47,13 +47,13 @@ export const AdvanceSettings = () => {
       });
 
       const validation = AdvanceSettingsSchema.safeParse(values);
-      setFormState({
+      setAdvanceFormState({
         isDirty: state.isDirty,
         isValid: validation.success,
       });
     });
     return unsubscribe;
-  }, [form.store, updateAdvanceForm, setFormState]);
+  }, [form.store, updateAdvanceForm, setAdvanceFormState]);
 
   const { data: tournaments, refetch: refetchTournaments } = useTournaments();
   const { data: groups, isDisabled: groupsDisabled } = useGroups(

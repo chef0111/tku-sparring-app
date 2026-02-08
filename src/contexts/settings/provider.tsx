@@ -47,7 +47,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   );
   const resetMatch = useMatchStore((s) => s.resetMatch);
 
-  const toggleSettings = useCallback(() => setIsOpen((prev) => !prev), []);
+  const toggleSettings = useCallback(() => setIsOpen(true), []);
 
   const updateStandardForm = useCallback((data: Partial<StandardFormData>) => {
     setFormData((prev) => ({

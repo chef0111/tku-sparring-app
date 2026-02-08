@@ -3,6 +3,7 @@ import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { LucideProps } from 'lucide-react';
 import { StandardSettings } from '@/components/modules/app/settings/standard';
 import { AdvanceSettings } from '@/components/modules/app/settings/advance';
+import { Helps } from '@/components/modules/app/settings/helps';
 
 type SettingTab = {
   value: string;
@@ -30,6 +31,6 @@ export const settingTabs: Array<SettingTab> = [
     value: 'helps',
     label: 'Helps',
     icon: HelpCircle,
-    content: () => null,
+    content: Helps,
   },
-] as const;
+];

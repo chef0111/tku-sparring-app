@@ -2,9 +2,9 @@ import { motion } from 'motion/react';
 import type { HitType, Player } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
 import {
-  CRITICAL_HITS,
-  KEYBOARD_MAPPINGS,
-  NORMAL_HITS,
+  criticalHits,
+  keyboardMappings,
+  normalHits,
   getButtonIconPath,
 } from '@/lib/scoreboard/hit-types';
 
@@ -23,7 +23,7 @@ export const CriticalButtons = ({
   activeHitType,
   className,
 }: ButtonColumnProps) => {
-  const keyMap = KEYBOARD_MAPPINGS[player];
+  const keyMap = keyboardMappings[player];
 
   return (
     <div
@@ -32,7 +32,7 @@ export const CriticalButtons = ({
         className
       )}
     >
-      {CRITICAL_HITS.map((hitType) => {
+      {criticalHits.map((hitType) => {
         const key = Object.entries(keyMap).find(
           ([, type]) => type === hitType
         )?.[0];
@@ -59,7 +59,7 @@ export const NormalButtons = ({
   activeHitType,
   className,
 }: ButtonColumnProps) => {
-  const keyMap = KEYBOARD_MAPPINGS[player];
+  const keyMap = keyboardMappings[player];
 
   return (
     <div
@@ -68,7 +68,7 @@ export const NormalButtons = ({
         className
       )}
     >
-      {NORMAL_HITS.map((hitType) => {
+      {normalHits.map((hitType) => {
         const key = Object.entries(keyMap).find(
           ([, type]) => type === hitType
         )?.[0];

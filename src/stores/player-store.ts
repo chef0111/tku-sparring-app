@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import { temporal } from 'zundo';
+import type { StateCreator } from 'zustand';
 import type { HitType } from '@/lib/scoreboard/hit-types';
-import { HIT_COOLDOWN, HIT_DAMAGE_MAP } from '@/lib/scoreboard/hit-types';
+import { hitCooldown, hitDamage } from '@/lib/scoreboard/hit-types';
 
 export type Player = 'red' | 'blue';
 
@@ -59,7 +61,7 @@ interface PlayerActions {
   setPlayerAvatar: (player: Player, avatar: string | null) => void;
 }
 
-type PlayerStore = PlayerState & PlayerActions;
+export type PlayerStore = PlayerState & PlayerActions;
 
 const createInitialPlayerData = (
   name: string,
@@ -78,7 +80,7 @@ const createInitialPlayerData = (
   roundScores: [0, 0, 0],
 });
 
-export const usePlayerStore = create<PlayerStore>()((set, get) => ({
+const initializer: StateCreator<PlayerStore> = (set, get) => ({
   red: createInitialPlayerData('Player A'),
   blue: createInitialPlayerData('Player B'),
   maxHealth: 120,
@@ -92,7 +94,7 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
     const currentTime = Date.now();
 
     // Prevent rapid hits (cooldown)
-    if (currentTime - state.lastHitTimes[player] < HIT_COOLDOWN) {
+    if (currentTime - state.lastHitTimes[player] < hitCooldown) {
       return false;
     }
 
@@ -101,7 +103,7 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
     }
 
     const opponent: Player = player === 'red' ? 'blue' : 'red';
-    const damage = HIT_DAMAGE_MAP[hitType];
+    const damage = hitDamage[hitType];
     const points = damage;
 
     const opponentHealth = Math.max(0, state[opponent].health - damage);
@@ -279,4 +281,14 @@ export const usePlayerStore = create<PlayerStore>()((set, get) => ({
       [player]: { ...state[player], avatar },
     });
   },
-}));
+});
+
+export const usePlayerStore = create<PlayerStore>()(
+  temporal(initializer, {
+    limit: 50,
+    partialize: (state) => {
+      const { red, blue, lastRedHit, lastBlueHit, lastHitTimes } = state;
+      return { red, blue, lastRedHit, lastBlueHit, lastHitTimes };
+    },
+  })
+);

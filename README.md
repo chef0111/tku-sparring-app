@@ -6,7 +6,7 @@ A modern, user-friendly web application for managing Taekwondo sparring matches 
 
 ### Option 1: Direct Access (Recommended)
 
-Simply visit [TKU Sparring App](https://tku-sparring.vercel.app/) in your web browser to start using the application immediately.
+Simply visit [TKU Sparring App](https://tku-sparring.netlify.app/) in your web browser to start using the application immediately.
 
 ### Option 2: Local Installation
 

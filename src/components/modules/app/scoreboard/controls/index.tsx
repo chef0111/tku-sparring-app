@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Controller, ControllerContent, ScoreButtons } from './controller';
 import { CriticalButtons, NormalButtons } from './score-button';
-import { PenaltyBox } from './penalty-section';
+import { PenaltyBox } from './penalty-box';
 import { PlayerLabel } from './player-label';
 import type { HitType, Player } from '@/lib/scoreboard/hit-types';
 import { keyboardMappings } from '@/lib/scoreboard/hit-types';
@@ -171,5 +171,5 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
 
 export { Controller, ControllerContent, ScoreButtons } from './controller';
 export { CriticalButtons, NormalButtons } from './score-button';
-export { PenaltyBox, Penalty } from './penalty-section';
+export { PenaltyBox, Penalty } from './penalty-box';
 export { PlayerLabel } from './player-label';

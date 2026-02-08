@@ -55,7 +55,7 @@ export const Penalty = ({
         className
       )}
     >
-      <Label className="metrics text-2xl">GAM-JEOM</Label>
+      <Label className="metrics text-2xl max-xl:text-xl">GAM-JEOM</Label>
       <p className="metrics text-6xl">{fouls}</p>
     </div>
   );

@@ -12,6 +12,11 @@ import type { FormControlProps } from './form-base';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export type FormInputProps = FormControlProps &
   Omit<
@@ -19,15 +24,33 @@ export type FormInputProps = FormControlProps &
     'id' | 'name' | 'value' | 'onChange' | 'onBlur'
   >;
 
+type InputTooltip = {
+  tooltip?: string;
+  tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
+};
+
 export function FormInput({
   label,
   description,
   fieldClassName,
   descPosition,
+  tooltip,
+  tooltipSide,
   ...inputProps
-}: FormInputProps) {
+}: FormInputProps & InputTooltip) {
   const field = useFieldContext<string>();
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+  const input = (
+    <Input
+      id={field.name}
+      name={field.name}
+      value={field.state.value}
+      onBlur={field.handleBlur}
+      onChange={(e) => field.handleChange(e.target.value)}
+      aria-invalid={isInvalid}
+      {...inputProps}
+    />
+  );
 
   return (
     <FormBase
@@ -36,15 +59,16 @@ export function FormInput({
       descPosition={descPosition}
       className={fieldClassName}
     >
-      <Input
-        id={field.name}
-        name={field.name}
-        value={field.state.value}
-        onBlur={field.handleBlur}
-        onChange={(e) => field.handleChange(e.target.value)}
-        aria-invalid={isInvalid}
-        {...inputProps}
-      />
+      {tooltip ? (
+        <Tooltip>
+          <TooltipTrigger>{input}</TooltipTrigger>
+          <TooltipContent side={tooltipSide}>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        input
+      )}
     </FormBase>
   );
 }
@@ -158,7 +182,7 @@ export function FormNumberInput({
           title=""
           {...inputProps}
           className={cn(
-            '[appearance:textfield] pr-16 [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+            '[appearance:textfield] [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
             inputProps.className
           )}
         />

@@ -31,10 +31,29 @@ export const playerGroup = [
 export const durationGroup = [
   {
     name: 'roundDuration' as const,
-    label: 'ROUND DURATION',
+    label: 'ROUND DURATION (s)',
   },
   {
     name: 'breakDuration' as const,
-    label: 'BREAK DURATION',
+    label: 'BREAK DURATION (s)',
+  },
+];
+
+export const advancePlayerGroup = [
+  {
+    label: 'RED ATHLETE',
+    nameAvatar: 'redPlayerAvatar' as const,
+    namePlayer: 'redPlayerName' as const,
+    playerName: 'PLAYER A',
+    className: 'bg-red-player  relative size-25 rounded-xl!',
+    fallback: 'assets/CapybaraTKU1.webp',
+  },
+  {
+    label: 'BLUE ATHLETE',
+    nameAvatar: 'bluePlayerAvatar' as const,
+    namePlayer: 'bluePlayerName' as const,
+    playerName: 'PLAYER B',
+    className: 'bg-blue-player  relative size-25 rounded-xl!',
+    fallback: 'assets/CapybaraTKU2.webp',
   },
 ];

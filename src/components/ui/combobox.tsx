@@ -20,8 +20,8 @@ import {
 import { cn } from '@/lib/utils';
 
 export type ComboboxData = {
-  label: string;
-  value: string;
+  label?: string;
+  value?: string;
 };
 
 type ComboboxContextType = {

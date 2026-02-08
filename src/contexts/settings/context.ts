@@ -12,15 +12,15 @@ export type StandardFormData = {
   maxHealth: number;
 };
 
-export type AdvancedFormData = {
-  roundDuration: number;
-  breakDuration: number;
-  maxHealth: number;
+export type AdvanceFormData = StandardFormData & {
+  tournament: string | null;
+  group: string | null;
+  match: string | null;
 };
 
 export type FormData = {
   standard: StandardFormData;
-  advanced: AdvancedFormData;
+  advance: AdvanceFormData;
 };
 
 export type FormState = {
@@ -40,15 +40,16 @@ export const defaultStandardFormData: StandardFormData = {
   maxHealth: 120,
 };
 
-export const defaultAdvancedFormData: AdvancedFormData = {
-  roundDuration: 60,
-  breakDuration: 30,
-  maxHealth: 120,
+export const defaultAdvanceFormData: AdvanceFormData = {
+  ...defaultStandardFormData,
+  tournament: null,
+  group: null,
+  match: null,
 };
 
 export const defaultFormData: FormData = {
   standard: defaultStandardFormData,
-  advanced: defaultAdvancedFormData,
+  advance: defaultAdvanceFormData,
 };
 
 type SettingsContextType = {
@@ -59,7 +60,7 @@ type SettingsContextType = {
   formData: FormData;
   formState: FormState;
   updateStandardForm: (data: Partial<StandardFormData>) => void;
-  updateAdvancedForm: (data: Partial<AdvancedFormData>) => void;
+  updateAdvanceForm: (data: Partial<AdvanceFormData>) => void;
   setFormState: (state: Partial<FormState>) => void;
 
   applySettings: () => void;

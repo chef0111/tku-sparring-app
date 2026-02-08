@@ -4,7 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { SettingsContext, defaultFormData } from './context';
 import type { ReactNode } from 'react';
 import type {
-  AdvancedFormData,
+  AdvanceFormData,
   FormData,
   FormState,
   StandardFormData,
@@ -44,7 +44,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, []);
 
-  const updateAdvancedForm = useCallback((data: Partial<AdvancedFormData>) => {
+  const updateAdvanceForm = useCallback((data: Partial<AdvanceFormData>) => {
     setFormData((prev) => ({
       ...prev,
       advanced: { ...prev.advanced, ...data },
@@ -117,7 +117,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       formData,
       formState,
       updateStandardForm,
-      updateAdvancedForm,
+      updateAdvanceForm,
       setFormState,
       applySettings,
     }),
@@ -127,7 +127,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       formData,
       formState,
       updateStandardForm,
-      updateAdvancedForm,
+      updateAdvanceForm,
       setFormState,
       applySettings,
     ]

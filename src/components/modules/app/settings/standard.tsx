@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PlayerAvatar } from '../hud/player-avatar';
-import { avatarGroup, durationGroup, playerGroup } from './constant/form';
+import { avatarGroup, playerGroup } from './constant/form';
+import { CommonSettings, DurationFields, MaxHealthField } from './common';
 import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';
 import { StandardSettingsSchema } from '@/lib/validations';
@@ -10,7 +11,6 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSet,
 } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -72,7 +72,7 @@ export const StandardSettings = () => {
   };
 
   return (
-    <FieldSet className="font-esbuild w-full">
+    <CommonSettings>
       <FieldGroup className="settings-field-group">
         <FieldLabel className="settings-group-label">
           SELECT PLAYER AVATARS
@@ -149,41 +149,8 @@ export const StandardSettings = () => {
         </FieldGroup>
       </FieldGroup>
 
-      <FieldGroup className="settings-field-group">
-        <FieldLabel className="settings-group-label">
-          SET ROUND & BREAK DURATIONS (SECONDS)
-        </FieldLabel>
-        <FieldGroup className="flex-row">
-          {durationGroup.map((duration) => (
-            <form.AppField key={duration.name} name={duration.name}>
-              {(field) => (
-                <field.NumberInput
-                  label={duration.label}
-                  className="h-10 w-full text-center"
-                  min={1}
-                  step={5}
-                />
-              )}
-            </form.AppField>
-          ))}
-        </FieldGroup>
-      </FieldGroup>
-
-      <FieldGroup className="settings-field-group">
-        <FieldLabel className="settings-group-label">SET MAX HEALTH</FieldLabel>
-        <FieldGroup className="flex-row">
-          <form.AppField name="maxHealth">
-            {(field) => (
-              <field.NumberInput
-                label="MAX HEALTH"
-                className="h-10 w-full text-center"
-                min={1}
-                step={10}
-              />
-            )}
-          </form.AppField>
-        </FieldGroup>
-      </FieldGroup>
-    </FieldSet>
+      <DurationFields form={form} />
+      <MaxHealthField form={form} />
+    </CommonSettings>
   );
 };

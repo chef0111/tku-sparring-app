@@ -2,6 +2,7 @@ import { HelpCircle } from 'lucide-react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { LucideProps } from 'lucide-react';
 import { StandardSettings } from '@/components/modules/app/settings/standard';
+import { AdvanceSettings } from '@/components/modules/app/settings/advance';
 
 type SettingTab = {
   value: string;
@@ -20,10 +21,10 @@ export const settingTabs: Array<SettingTab> = [
     content: StandardSettings,
   },
   {
-    value: 'advanced',
-    label: 'Advanced',
+    value: 'advance',
+    label: 'Advance',
     icon: null,
-    content: () => null,
+    content: AdvanceSettings,
   },
   {
     value: 'helps',

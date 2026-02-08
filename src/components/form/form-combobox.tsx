@@ -40,8 +40,9 @@ export function FormCombobox({
           aria-invalid={isInvalid}
           id={field.name}
           onBlur={field.handleBlur}
+          className="w-full"
         />
-        <ComboboxContent>
+        <ComboboxContent className="w-full">
           <ComboboxInput />
           <ComboboxEmpty />
           <ComboboxList>

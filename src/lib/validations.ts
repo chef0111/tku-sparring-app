@@ -48,3 +48,9 @@ export const StandardSettingsSchema = z.object({
   breakDuration: z.number().min(1, 'Break duration must be at least 1 second'),
   maxHealth: z.number().min(1, 'Max health must be at least 1'),
 });
+
+export const AdvanceSettingsSchema = StandardSettingsSchema.extend({
+  tournament: z.string().min(1, 'Tournament is required'),
+  group: z.string().min(1, 'Group is required'),
+  match: z.string().min(1, 'Match is required'),
+});

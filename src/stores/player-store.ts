@@ -79,8 +79,8 @@ const createInitialPlayerData = (
 });
 
 export const usePlayerStore = create<PlayerStore>()((set, get) => ({
-  red: createInitialPlayerData('Red Player'),
-  blue: createInitialPlayerData('Blue Player'),
+  red: createInitialPlayerData('Player A'),
+  blue: createInitialPlayerData('Player B'),
   maxHealth: 120,
   maxMana: 5,
   lastRedHit: null,

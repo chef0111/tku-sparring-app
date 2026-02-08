@@ -7,7 +7,7 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
 import type { auth } from './auth';
 
 export const authClient = createAuthClient({
-  baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+  baseURL: process.env.BETTER_AUTH_URL as string,
   fetchOptions: {
     onError: (context) => {
       const { response } = context;

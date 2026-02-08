@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import { PlayerAvatar } from '../hud/player-avatar';
-import { avatarGroup, playerGroup } from './constant/form';
+import { PlayerAvatar } from '../../hud/player-avatar';
+import { avatarGroup, playerGroup } from '../constant/form';
 import { CommonSettings } from './common';
 import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';

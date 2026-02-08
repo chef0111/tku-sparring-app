@@ -1,9 +1,9 @@
 import { HelpCircle } from 'lucide-react';
-import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { StandardSettings } from '../tabs/standard';
+import { AdvanceSettings } from '../tabs/advance';
+import { Helps } from '../tabs/helps';
 import type { LucideProps } from 'lucide-react';
-import { StandardSettings } from '@/components/modules/app/settings/standard';
-import { AdvanceSettings } from '@/components/modules/app/settings/advance';
-import { Helps } from '@/components/modules/app/settings/helps';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 
 type SettingTab = {
   value: string;

@@ -1,4 +1,4 @@
-import { durationGroup } from './constant/form';
+import { durationGroup } from '../constant/form';
 import type { FormNumberInputProps } from '@/components/form/form-input';
 import { FieldGroup, FieldLabel } from '@/components/ui/field';
 import { cn } from '@/lib/utils';

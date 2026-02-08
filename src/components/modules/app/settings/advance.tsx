@@ -1,17 +1,15 @@
-// eslint-disable-next-line
-// @ts-nocheck
-
 import { useEffect } from 'react';
 import { IconReload } from '@tabler/icons-react';
 import { PlayerAvatar } from '../hud/player-avatar';
-import { advancePlayerGroup } from './constant/form';
-import { CommonSettings, DurationFields, MaxHealthField } from './common';
+import { advancePlayerGroup, getTournamentFields } from './constant/form';
+import { CommonSettings } from './common';
 import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';
 import { AdvanceSettingsSchema } from '@/lib/validations';
-import { FieldGroup, FieldLabel } from '@/components/ui/field';
+import { FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
 import { ComboboxItem } from '@/components/ui/combobox';
 import { Button } from '@/components/ui/button';
+import { useGroups, useMatches, useTournaments } from '@/hooks/use-tournaments';
 
 export const AdvanceSettings = () => {
   const { formData, updateAdvanceForm, setFormState } = useSettings();
@@ -38,6 +36,9 @@ export const AdvanceSettings = () => {
       const values = state.values;
 
       updateAdvanceForm({
+        tournament: values.tournament,
+        group: values.group,
+        match: values.match,
         redPlayerName: values.redPlayerName,
         bluePlayerName: values.bluePlayerName,
         roundDuration: values.roundDuration,
@@ -54,12 +55,32 @@ export const AdvanceSettings = () => {
     return unsubscribe;
   }, [form.store, updateAdvanceForm, setFormState]);
 
-  const tournaments = [];
-  const groups = [];
-  const matches = [];
+  const { data: tournaments, refetch: refetchTournaments } = useTournaments();
+  const { data: groups, isDisabled: groupsDisabled } = useGroups(
+    advance.tournament
+  );
+  const { data: matches, isDisabled: matchesDisabled } = useMatches(
+    advance.group
+  );
+
+  // Convert to ComboboxData format
+  const tournamentOptions = tournaments.map((t) => ({
+    value: t.id,
+    label: t.name,
+  }));
+  const groupOptions = groups.map((g) => ({ value: g.id, label: g.name }));
+  const matchOptions = matches.map((m) => ({ value: m.id, label: m.name }));
+
+  const tournamentFields = getTournamentFields(
+    tournamentOptions,
+    groupOptions,
+    matchOptions,
+    groupsDisabled,
+    matchesDisabled
+  );
 
   return (
-    <CommonSettings>
+    <FieldSet className="font-esbuild w-full">
       <FieldGroup className="settings-field-group relative items-center">
         <FieldLabel className="settings-group-label text-2xl!">
           TOURNAMENT SETTINGS
@@ -68,70 +89,35 @@ export const AdvanceSettings = () => {
           variant="outline"
           size="icon-sm"
           className="absolute top-4 right-4"
+          onClick={refetchTournaments}
+          type="button"
         >
           <IconReload />
         </Button>
-        <FieldGroup>
-          <form.AppField name="tournament">
-            {(field) => (
-              <field.Combobox
-                data={tournaments}
-                type="tournaments"
-                label="SELECT TOURNAMENT"
-              >
-                {tournaments.map((tournament) => (
-                  <ComboboxItem
-                    key={tournament.value}
-                    value={tournament.value}
-                    className="hover:bg-accent! bg-transparent!"
-                  >
-                    {tournament.label}
-                  </ComboboxItem>
-                ))}
-              </field.Combobox>
-            )}
-          </form.AppField>
-        </FieldGroup>
-
-        <FieldGroup>
-          <form.AppField name="group">
-            {(field) => (
-              <field.Combobox data={groups} type="groups" label="SELECT GROUP">
-                {groups.map((group) => (
-                  <ComboboxItem
-                    key={group.value}
-                    value={group.value}
-                    className="hover:bg-accent! bg-transparent!"
-                  >
-                    {group.label}
-                  </ComboboxItem>
-                ))}
-              </field.Combobox>
-            )}
-          </form.AppField>
-        </FieldGroup>
-
-        <FieldGroup>
-          <form.AppField name="match">
-            {(field) => (
-              <field.Combobox
-                data={matches}
-                type="matches"
-                label="SELECT MATCH"
-              >
-                {matches.map((match) => (
-                  <ComboboxItem
-                    key={match.value}
-                    value={match.value}
-                    className="hover:bg-accent! bg-transparent!"
-                  >
-                    {match.label}
-                  </ComboboxItem>
-                ))}
-              </field.Combobox>
-            )}
-          </form.AppField>
-        </FieldGroup>
+        {tournamentFields.map((field) => (
+          <FieldGroup key={field.name}>
+            <form.AppField name={field.name}>
+              {(formField) => (
+                <formField.Combobox
+                  data={field.data}
+                  type={field.type}
+                  label={field.label}
+                  disabled={field.disabled}
+                >
+                  {field.data.map((item) => (
+                    <ComboboxItem
+                      key={item.value}
+                      value={item.value}
+                      className="hover:bg-accent! bg-transparent!"
+                    >
+                      {item.label}
+                    </ComboboxItem>
+                  ))}
+                </formField.Combobox>
+              )}
+            </form.AppField>
+          </FieldGroup>
+        ))}
       </FieldGroup>
 
       <FieldGroup className="settings-field-group">
@@ -144,7 +130,11 @@ export const AdvanceSettings = () => {
               <FieldGroup className="flex-row items-center">
                 <PlayerAvatar
                   name={player.playerName}
-                  image={advance[player.nameAvatar] || ''}
+                  image={
+                    (advance[
+                      player.nameAvatar as keyof typeof advance
+                    ] as string) || ''
+                  }
                   className={player.className}
                   fallback={
                     <img src={player.fallback} alt={player.playerName} />
@@ -154,9 +144,17 @@ export const AdvanceSettings = () => {
                   {(field) => (
                     <field.Input
                       label={player.label}
-                      defaultValue={player.playerName}
+                      defaultValue={
+                        (advance[
+                          player.namePlayer as keyof typeof advance
+                        ] as string) ?? player.playerName
+                      }
                       className="h-10 w-full truncate"
-                      tooltip={player.playerName}
+                      tooltip={
+                        (advance[
+                          player.namePlayer as keyof typeof advance
+                        ] as string) ?? player.playerName
+                      }
                       disabled
                       tooltipSide="bottom"
                     />
@@ -168,8 +166,7 @@ export const AdvanceSettings = () => {
         </FieldGroup>
       </FieldGroup>
 
-      <DurationFields form={form} className="items-center" />
-      <MaxHealthField form={form} className="items-center" />
-    </CommonSettings>
+      <CommonSettings form={form} className="items-center" />
+    </FieldSet>
   );
 };

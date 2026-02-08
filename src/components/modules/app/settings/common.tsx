@@ -1,15 +1,7 @@
 import { durationGroup } from './constant/form';
 import type { FormNumberInputProps } from '@/components/form/form-input';
-import { FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field';
+import { FieldGroup, FieldLabel } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
-
-interface CommonSettingsProps {
-  children?: React.ReactNode;
-}
-
-export const CommonSettings = ({ children }: CommonSettingsProps) => {
-  return <FieldSet className="font-esbuild w-full">{children}</FieldSet>;
-};
 
 type FieldNumberInput = {
   NumberInput: React.ComponentType<FormNumberInputProps>;
@@ -24,6 +16,15 @@ interface CommonFieldsProps {
   };
   className?: string;
 }
+
+export const CommonSettings = ({ form, className }: CommonFieldsProps) => {
+  return (
+    <>
+      <DurationFields form={form} className={className} />
+      <MaxHealthField form={form} className={className} />
+    </>
+  );
+};
 
 export const DurationFields = ({ form, className }: CommonFieldsProps) => (
   <FieldGroup className={cn('settings-field-group', className)}>

@@ -1,4 +1,5 @@
 import { settingTabs } from './constant/tabs';
+import { Unauthorized } from './unauthorized';
 import { useSettings } from '@/contexts/settings';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,9 +15,15 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
+import { authClient } from '@/lib/auth-client';
+import { cn } from '@/lib/utils';
 
 export const AppSettings = () => {
-  const { setIsOpen, applySettings, formState } = useSettings();
+  const { data } = authClient.useSession();
+  const isLoggedIn = !!data?.user;
+
+  const { setIsOpen, applySettings, formState, activeTab, setActiveTab } =
+    useSettings();
   const isConfirmDisabled = !formState.isDirty || !formState.isValid;
 
   return (
@@ -33,7 +40,10 @@ export const AppSettings = () => {
       <div className="absolute top-16 h-142 w-full">
         <Tabs
           className="h-full flex-row gap-0"
-          defaultValue={settingTabs[0].value}
+          value={activeTab}
+          onValueChange={(value) =>
+            setActiveTab(value as 'standard' | 'advance')
+          }
         >
           <TabsList
             variant="underline"
@@ -54,15 +64,28 @@ export const AppSettings = () => {
           </TabsList>
 
           <TabsContents mode="layout" className="h-full w-full">
-            {settingTabs.map((tab) => (
-              <TabsContent
-                key={tab.value}
-                value={tab.value}
-                className="h-full w-full overflow-y-auto px-4 py-4"
-              >
-                <tab.content />
-              </TabsContent>
-            ))}
+            {settingTabs.map((tab) => {
+              const disabled = !isLoggedIn && tab.value === 'advance';
+              return (
+                <TabsContent
+                  key={tab.value}
+                  value={tab.value}
+                  className={cn(
+                    'h-full w-full overflow-y-auto px-4 py-4',
+                    disabled ? 'overflow-hidden' : ''
+                  )}
+                >
+                  {disabled && (
+                    <div className="bg-background/80 absolute top-0 left-0 z-50 flex h-full w-full items-center justify-center rounded-md backdrop-blur-sm">
+                      <Unauthorized />
+                    </div>
+                  )}
+                  <div className={cn(disabled ? 'pointer-events-none' : '')}>
+                    <tab.content />
+                  </div>
+                </TabsContent>
+              );
+            })}
           </TabsContents>
         </Tabs>
       </div>

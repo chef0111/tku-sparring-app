@@ -15,6 +15,9 @@ import { useMatchStore } from '@/stores/match-store';
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'standard' | 'advance'>(
+    'standard'
+  );
   const [formData, setFormData] = useState<FormData>(defaultFormData);
   const [formState, setFormStateInternal] = useState<FormState>({
     isDirty: false,
@@ -47,7 +50,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const updateAdvanceForm = useCallback((data: Partial<AdvanceFormData>) => {
     setFormData((prev) => ({
       ...prev,
-      advanced: { ...prev.advanced, ...data },
+      advance: { ...prev.advance, ...data },
     }));
   }, []);
 
@@ -56,39 +59,66 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const applySettings = useCallback(() => {
-    const { standard } = formData;
+    // Standard and Advance tabs are completely independent
+    if (activeTab === 'standard') {
+      const { standard } = formData;
 
-    if (standard.maxHealth > 0) {
-      setMaxHealth(standard.maxHealth);
-    }
-    if (standard.roundDuration > 0) {
-      setRoundDuration(standard.roundDuration * 1000);
-    }
-    if (standard.breakDuration > 0) {
-      setBreakDuration(standard.breakDuration * 1000);
-    }
+      if (standard.maxHealth > 0) {
+        setMaxHealth(standard.maxHealth);
+      }
+      if (standard.roundDuration > 0) {
+        setRoundDuration(standard.roundDuration * 1000);
+      }
+      if (standard.breakDuration > 0) {
+        setBreakDuration(standard.breakDuration * 1000);
+      }
+      if (standard.redPlayerName) {
+        setPlayerName('red', standard.redPlayerName);
+      }
+      if (standard.bluePlayerName) {
+        setPlayerName('blue', standard.bluePlayerName);
+      }
+      if (standard.redPlayerAvatar) {
+        setPlayerAvatar('red', standard.redPlayerAvatar);
+      }
+      if (standard.bluePlayerAvatar) {
+        setPlayerAvatar('blue', standard.bluePlayerAvatar);
+      }
 
-    // Apply player names
-    if (standard.redPlayerName) {
-      setPlayerName('red', standard.redPlayerName);
-    }
-    if (standard.bluePlayerName) {
-      setPlayerName('blue', standard.bluePlayerName);
-    }
+      resetRoundStats(standard.roundDuration * 1000);
+    } else {
+      const { advance } = formData;
 
-    // Apply player avatars
-    if (standard.redPlayerAvatar) {
-      setPlayerAvatar('red', standard.redPlayerAvatar);
-    }
-    if (standard.bluePlayerAvatar) {
-      setPlayerAvatar('blue', standard.bluePlayerAvatar);
+      if (advance.maxHealth > 0) {
+        setMaxHealth(advance.maxHealth);
+      }
+      if (advance.roundDuration > 0) {
+        setRoundDuration(advance.roundDuration * 1000);
+      }
+      if (advance.breakDuration > 0) {
+        setBreakDuration(advance.breakDuration * 1000);
+      }
+      if (advance.redPlayerName) {
+        setPlayerName('red', advance.redPlayerName);
+      }
+      if (advance.bluePlayerName) {
+        setPlayerName('blue', advance.bluePlayerName);
+      }
+      if (advance.redPlayerAvatar) {
+        setPlayerAvatar('red', advance.redPlayerAvatar);
+      }
+      if (advance.bluePlayerAvatar) {
+        setPlayerAvatar('blue', advance.bluePlayerAvatar);
+      }
+
+      resetRoundStats(advance.roundDuration * 1000);
     }
 
     resetMatch();
     resetAll();
-    resetRoundStats(standard.roundDuration * 1000);
     setIsOpen(false);
   }, [
+    activeTab,
     formData,
     setMaxHealth,
     setRoundDuration,
@@ -114,6 +144,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       isOpen,
       setIsOpen,
       toggleSettings,
+      activeTab,
+      setActiveTab,
       formData,
       formState,
       updateStandardForm,
@@ -124,6 +156,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     [
       isOpen,
       toggleSettings,
+      activeTab,
       formData,
       formState,
       updateStandardForm,

@@ -57,6 +57,9 @@ type SettingsContextType = {
   setIsOpen: (open: boolean) => void;
   toggleSettings: () => void;
 
+  activeTab: 'standard' | 'advance';
+  setActiveTab: (tab: 'standard' | 'advance') => void;
+
   formData: FormData;
   formState: FormState;
   updateStandardForm: (data: Partial<StandardFormData>) => void;

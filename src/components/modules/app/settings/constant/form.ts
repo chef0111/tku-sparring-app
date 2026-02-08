@@ -57,3 +57,38 @@ export const advancePlayerGroup = [
     fallback: 'assets/CapybaraTKU2.webp',
   },
 ];
+
+type ComboboxOption = {
+  value: string;
+  label: string;
+};
+
+export const getTournamentFields = (
+  tournamentOptions: Array<ComboboxOption>,
+  groupOptions: Array<ComboboxOption>,
+  matchOptions: Array<ComboboxOption>,
+  groupsDisabled: boolean,
+  matchesDisabled: boolean
+) => [
+  {
+    name: 'tournament' as const,
+    data: tournamentOptions,
+    type: 'tournaments',
+    label: 'SELECT TOURNAMENT',
+    disabled: false,
+  },
+  {
+    name: 'group' as const,
+    data: groupOptions,
+    type: 'groups',
+    label: 'SELECT GROUP',
+    disabled: groupsDisabled,
+  },
+  {
+    name: 'match' as const,
+    data: matchOptions,
+    type: 'matches',
+    label: 'SELECT MATCH',
+    disabled: matchesDisabled,
+  },
+];

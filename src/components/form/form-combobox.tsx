@@ -16,6 +16,7 @@ type FormComboboxProps = FormControlProps & {
   children: React.ReactNode;
   data: Array<ComboboxData>;
   type: string;
+  disabled?: boolean;
 };
 
 export function FormCombobox({
@@ -23,6 +24,7 @@ export function FormCombobox({
   type,
   children,
   descPosition,
+  disabled,
   ...props
 }: FormComboboxProps) {
   const field = useFieldContext<string>();
@@ -41,6 +43,7 @@ export function FormCombobox({
           id={field.name}
           onBlur={field.handleBlur}
           className="w-full"
+          disabled={disabled}
         />
         <ComboboxContent className="w-full">
           <ComboboxInput />

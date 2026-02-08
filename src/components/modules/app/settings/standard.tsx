@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PlayerAvatar } from '../hud/player-avatar';
 import { avatarGroup, playerGroup } from './constant/form';
-import { CommonSettings, DurationFields, MaxHealthField } from './common';
+import { CommonSettings } from './common';
 import { useSettings } from '@/contexts/settings';
 import { useAppForm } from '@/components/form/hooks';
 import { StandardSettingsSchema } from '@/lib/validations';
@@ -11,6 +11,7 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldSet,
 } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -72,7 +73,7 @@ export const StandardSettings = () => {
   };
 
   return (
-    <CommonSettings>
+    <FieldSet className="font-esbuild w-full">
       <FieldGroup className="settings-field-group">
         <FieldLabel className="settings-group-label">
           SELECT PLAYER AVATARS
@@ -149,8 +150,7 @@ export const StandardSettings = () => {
         </FieldGroup>
       </FieldGroup>
 
-      <DurationFields form={form} />
-      <MaxHealthField form={form} />
-    </CommonSettings>
+      <CommonSettings form={form} />
+    </FieldSet>
   );
 };

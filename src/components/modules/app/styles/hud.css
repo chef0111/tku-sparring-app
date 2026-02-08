@@ -1,0 +1,123 @@
+@utility avatar {
+  @apply relative overflow-hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  &::before {
+    content: '';
+    @apply pointer-events-none absolute top-0 right-0 bottom-0 left-0 rounded-xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  &::after {
+    content: '';
+    @apply pointer-events-none absolute top-0 right-0 bottom-0 left-0 rounded-xl;
+  }
+}
+
+@utility healthbar-head {
+  @apply z-10 h-full w-2.5 rounded-[3px] border-2 border-black bg-white;
+}
+
+@utility manabar-head {
+  @apply z-10 h-full w-1.5 rounded-xs border border-black bg-white;
+}
+
+@utility health-meter {
+  @apply relative z-20 flex h-full w-full transition-all duration-500 ease-out;
+}
+
+@utility health-meter-delay {
+  @apply absolute top-0 z-10 flex h-full w-full;
+  background-image: linear-gradient(180deg, rgb(213, 33, 33), rgb(182, 15, 15));
+}
+
+@utility healthbar-primitive {
+  @apply h-[9vh]! w-full!;
+}
+
+@utility manabar-primitive {
+  @apply h-[5vh]! w-[27vw]!;
+}
+
+/* Mana flash animation (for losing mana) */
+@keyframes mana-flash {
+  0% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 #fbcf08;
+  }
+  50% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1.2);
+    box-shadow: 0 0 20px 10px #fbce0882;
+  }
+  100% {
+    opacity: 0;
+    border-color: transparent;
+    transform: scale(0.5);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@utility animate-mana-flash {
+  animation: mana-flash 0.8s forwards;
+}
+
+/* Mana gain animation (for gaining mana) */
+@keyframes mana-gain {
+  0% {
+    opacity: 0;
+    border-color: transparent;
+    transform: scale(0.5);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    opacity: 1;
+    border-color: transparent;
+    transform: scale(1.2);
+    box-shadow: 0 0 20px 10px #fbcf08;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 #fbcf08;
+  }
+}
+
+@utility animate-mana-gain {
+  animation: mana-gain 0.5s ease-out forwards;
+}
+
+/* Avatar critical hit animation */
+@keyframes avatar-critical-hit {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(5deg);
+    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(-5deg);
+    filter: hue-rotate(0deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+    filter: hue-rotate(0deg) sepia(1) saturate(5) hue-rotate(340deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+}
+
+@utility animate-avatar-critical {
+  animation: avatar-critical-hit 0.5s ease-in-out;
+}

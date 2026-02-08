@@ -1,0 +1,202 @@
+@keyframes timer-blink {
+  0% {
+    color: #fff;
+  }
+  50% {
+    color: var(--color-yellow-400);
+  }
+  100% {
+    color: #fff;
+  }
+}
+
+@utility animate-timer-blink {
+  animation: timer-blink 0.5s step-end infinite;
+}
+
+@keyframes hit-shake {
+  0% {
+    transform: translateX(-5px);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes critical-hit-glow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    transform: scale(1);
+  }
+  25% {
+    filter: brightness(1.5) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+    transform: scale(1.1);
+  }
+  50% {
+    filter: brightness(2) drop-shadow(0 0 25px rgba(255, 0, 0, 1));
+    transform: scale(1.2);
+  }
+  75% {
+    filter: brightness(1.5) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+    transform: scale(1.1);
+  }
+  100% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    transform: scale(1);
+  }
+}
+
+@keyframes super-critical-hit-glow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    filter: brightness(1.8) drop-shadow(0 0 20px rgba(255, 0, 0, 0.9));
+    transform: scale(1.2) rotate(5deg);
+  }
+  50% {
+    filter: brightness(2.5) drop-shadow(0 0 30px rgba(255, 0, 0, 1));
+    transform: scale(1.4) rotate(-5deg);
+  }
+  75% {
+    filter: brightness(1.8) drop-shadow(0 0 20px rgba(255, 0, 0, 0.9));
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 0, 0, 0.5));
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@utility animate-hit-shake {
+  animation: hit-shake 0.3s ease-in-out;
+}
+
+@utility animate-critical-glow {
+  animation: critical-hit-glow 0.5s ease-in-out;
+}
+
+@utility animate-super-critical-glow {
+  animation: super-critical-hit-glow 0.5s ease-in-out;
+}
+
+@utility score-button-red {
+  &:hover:not(:disabled) {
+    box-shadow:
+      0 0 10px rgba(255, 255, 0, 0.7),
+      0 0 20px rgba(255, 255, 0, 0.5);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1;
+    border-radius: 50%;
+  }
+
+  &:hover:not(:disabled)::before {
+    opacity: 1;
+  }
+}
+
+@utility score-button-blue {
+  &:hover:not(:disabled) {
+    box-shadow:
+      0 0 5px rgba(0, 255, 0, 0.7),
+      0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(153, 255, 102, 0.2);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1;
+    border-radius: 50%;
+  }
+
+  &:hover:not(:disabled)::before {
+    opacity: 1;
+  }
+}
+
+@utility text-shadow-red {
+  text-shadow:
+    -1px -1px 0 #ff0000,
+    1px -1px 0 #ff0000,
+    -1px 1px 0 #ff0000,
+    1px 1px 0 #ff0000;
+}
+
+@utility text-shadow-blue {
+  text-shadow:
+    -1px -1px 0 #0070c0,
+    1px -1px 0 #0070c0,
+    -1px 1px 0 #0070c0,
+    1px 1px 0 #0070c0;
+}
+
+/* Scoreboard container overlay effect */
+@utility scoreboard-overlay {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+/* Score box gradient effects */
+@utility score-box-red-gradient {
+  background: linear-gradient(135deg, #bf0000 5%, #ff0000 20%);
+  box-shadow:
+    inset 5px -5px 15px rgba(0, 0, 0, 0.3),
+    inset 0 0 15px rgba(0, 0, 0, 0.3),
+    0 5px 15px rgba(255, 0, 0, 0.4);
+}
+
+@utility score-box-blue-gradient {
+  background: linear-gradient(225deg, #01559a 5%, #0070c0 20%);
+  box-shadow:
+    inset -5px -5px 15px rgba(0, 0, 0, 0.3),
+    inset 0 0 15px rgba(0, 0, 0, 0.3),
+    0 5px 15px rgba(0, 112, 192, 0.4);
+}
+
+@utility match-info {
+  @apply text-center font-bold text-white select-none;
+}
+
+@utility metrics {
+  @apply text-center! leading-none! font-semibold! drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)]! select-none!;
+}

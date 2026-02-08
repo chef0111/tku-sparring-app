@@ -24,7 +24,7 @@ const config = defineConfig({
   ],
   ssr: {
     // Prevent SSR-specific packages from being bundled into the client
-    noExternal: [],
+    noExternal: ['@tabler/icons-react'],
   },
   build: {
     rollupOptions: {

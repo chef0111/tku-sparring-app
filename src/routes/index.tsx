@@ -2,13 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Activity } from 'react';
 
 import { IconDeviceLaptop } from '@tabler/icons-react';
-import { Dialog } from '@/components/ui/dialog';
-import { Navbar } from '@/components/modules/navigation/navbar';
-import { AppHUD } from '@/components/modules/app/hud';
-import { Scoreboard } from '@/components/modules/app/scoreboard';
-import { ResultDialog } from '@/components/modules/app/match-result';
-import { useMatchResult } from '@/hooks/use-match-result';
-import { SettingsProvider } from '@/contexts/settings';
+import { AppHome } from '@/modules/app';
 import {
   Empty,
   EmptyDescription,
@@ -21,29 +15,12 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 export const Route = createFileRoute('/')({ component: App });
 
 function App() {
-  const { isMatchOver, matchWinner, redWon, blueWon, onClose } =
-    useMatchResult();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   return (
     <div className="h-dvh w-dvw">
       <Activity mode={isDesktop ? 'visible' : 'hidden'}>
-        <SettingsProvider>
-          <Navbar />
-          <AppHUD />
-          <Scoreboard />
-
-          <Dialog
-            open={isMatchOver}
-            onOpenChange={(open) => !open && onClose()}
-          >
-            <ResultDialog
-              winner={matchWinner}
-              redWon={redWon}
-              blueWon={blueWon}
-            />
-          </Dialog>
-        </SettingsProvider>
+        <AppHome />
       </Activity>
 
       <Activity mode={!isDesktop ? 'visible' : 'hidden'}>

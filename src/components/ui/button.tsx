@@ -46,10 +46,15 @@ function Button({
   className,
   variant = 'default',
   size = 'default',
+  ref,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) {
   return (
     <ButtonPrimitive
+      ref={ref}
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}

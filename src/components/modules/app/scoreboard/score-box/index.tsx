@@ -3,7 +3,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { HitIcon } from './hit-icon';
 import { Record, TotalWins } from './record';
 import { StatsCard } from './stats';
-import type { Player } from '@/stores/player-store';
 import type { HitType } from '@/lib/scoreboard/hit-types';
 import { cn } from '@/lib/utils';
 import { usePlayerStore } from '@/stores/player-store';

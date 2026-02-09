@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import type { Player } from '@/stores/player-store';
+import type { PlayerData } from '@/stores/player-store';
 import { usePlayerStore } from '@/stores/player-store';
 import { useMatchStore } from '@/stores/match-store';
 import { useTimerStore } from '@/stores/timer-store';
@@ -8,10 +8,31 @@ import { useTimerStore } from '@/stores/timer-store';
 type WinResult = Player | 'tie';
 
 export const useDeclareWinner = () => {
-  const { red, blue, saveRoundScores, resetRoundStats } = usePlayerStore(
+  const {
+    redHealth,
+    redMana,
+    redFouls,
+    redTechnique,
+    redHeadHits,
+    blueHealth,
+    blueMana,
+    blueFouls,
+    blueTechnique,
+    blueHeadHits,
+    saveRoundScores,
+    resetRoundStats,
+  } = usePlayerStore(
     useShallow((s) => ({
-      red: s.red,
-      blue: s.blue,
+      redHealth: s.red.health,
+      redMana: s.red.mana,
+      redFouls: s.red.fouls,
+      redTechnique: s.red.technique,
+      redHeadHits: s.red.headHits,
+      blueHealth: s.blue.health,
+      blueMana: s.blue.mana,
+      blueFouls: s.blue.fouls,
+      blueTechnique: s.blue.technique,
+      blueHeadHits: s.blue.headHits,
       saveRoundScores: s.saveRoundScores,
       resetRoundStats: s.resetRoundStats,
     }))
@@ -41,8 +62,36 @@ export const useDeclareWinner = () => {
   );
 
   const determineWinner = useCallback((): WinResult => {
-    return getWinner(red, blue);
-  }, [red, blue, getWinner]);
+    const red = {
+      health: redHealth,
+      mana: redMana,
+      fouls: redFouls,
+      technique: redTechnique,
+      headHits: redHeadHits,
+    };
+
+    const blue = {
+      health: blueHealth,
+      mana: blueMana,
+      fouls: blueFouls,
+      technique: blueTechnique,
+      headHits: blueHeadHits,
+    };
+
+    return getWinner(red as PlayerData, blue as PlayerData);
+  }, [
+    redHealth,
+    redMana,
+    redFouls,
+    redTechnique,
+    redHeadHits,
+    blueHealth,
+    blueMana,
+    blueFouls,
+    blueTechnique,
+    blueHeadHits,
+    getWinner,
+  ]);
 
   const declareWinner = useCallback(() => {
     if (isBreakTime || isRunning || !roundStarted) return;

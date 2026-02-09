@@ -1,15 +1,17 @@
-declare interface Tournament {
+type Player = 'red' | 'blue';
+
+interface Tournament {
   id: string;
   name: string;
 }
 
-declare interface Group {
+interface Group {
   id: string;
   name: string;
   tournamentId: string;
 }
 
-declare interface Match {
+interface Match {
   id: string;
   name: string;
   groupId: string;
@@ -17,7 +19,7 @@ declare interface Match {
   blueAthlete: Athlete;
 }
 
-declare interface Athlete {
+interface Athlete {
   id: string;
   name: string;
   avatar: string | null;

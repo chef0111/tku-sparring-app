@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Player, PlayerData } from './player-store';
+import type { PlayerData } from './player-store';
 
 interface MatchState {
   matchId: string;

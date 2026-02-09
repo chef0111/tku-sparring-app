@@ -18,6 +18,7 @@ interface ControlsProps {
 
 export const Controls = ({ side = 'red', className }: ControlsProps) => {
   const player: Player = side;
+  const opponent: Player = player === 'red' ? 'blue' : 'red';
 
   const { isRunning, isBreakTime, setRoundEnded } = useTimerStore(
     useShallow((s) => ({
@@ -28,25 +29,19 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
   );
 
   const {
-    red,
-    blue,
+    playerName,
     fouls,
-    redHealth,
-    blueHealth,
-    redMana,
-    blueMana,
+    opponentHealth,
+    opponentMana,
     recordHit,
     addPenalty,
     removePenalty,
   } = usePlayerStore(
     useShallow((s) => ({
-      red: s.red,
-      blue: s.blue,
+      playerName: s[player].name,
       fouls: s[player].fouls,
-      redHealth: s.red.health,
-      blueHealth: s.blue.health,
-      redMana: s.red.mana,
-      blueMana: s.blue.mana,
+      opponentHealth: s[opponent].health,
+      opponentMana: s[opponent].mana,
       recordHit: s.recordHit,
       addPenalty: s.addPenalty,
       removePenalty: s.removePenalty,
@@ -55,9 +50,9 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
 
   const { isOpen } = useSettings();
 
-  const anyPlayerKO = redHealth <= 0 || blueHealth <= 0;
-  const anyPlayerDisqualified = redMana <= 0 || blueMana <= 0;
-  const roundEnded = anyPlayerKO || anyPlayerDisqualified;
+  const playerKO = opponentHealth <= 0;
+  const playerDisqualified = opponentMana <= 0;
+  const roundEnded = playerKO || playerDisqualified;
 
   const canScore = !isOpen && isRunning && !isBreakTime && !roundEnded;
 
@@ -143,7 +138,7 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
   return (
     <Controller className={className}>
       <ControllerContent side={side}>
-        <PlayerLabel>{side === 'blue' ? blue.name : red.name}</PlayerLabel>
+        <PlayerLabel>{playerName}</PlayerLabel>
         <ScoreButtons side={side}>
           <CriticalButtons
             player={player}

@@ -10,7 +10,6 @@ const config = defineConfig({
   plugins: [
     devtools(),
     nitro(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
@@ -22,9 +21,14 @@ const config = defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['lucide-react', '@tabler/icons-react'],
+  },
   ssr: {
-    // Prevent SSR-specific packages from being bundled into the client
     noExternal: ['@tabler/icons-react'],
+    optimizeDeps: {
+      include: ['lucide-react', '@tabler/icons-react'],
+    },
   },
   build: {
     rollupOptions: {

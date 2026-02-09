@@ -3,7 +3,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { Healthbar } from './healthbar';
 import { Manabar } from './manabar';
 import { PlayerAvatar } from './player-avatar';
-import type { Player } from '@/stores/player-store';
 import { usePlayerStore } from '@/stores/player-store';
 import { useDeclareWinner } from '@/hooks/use-winner';
 import { isCriticalHit } from '@/lib/scoreboard/hit-types';
@@ -62,8 +61,8 @@ const PlayerHUD = ({ player }: PlayerHUDProps) => {
     player === 'red' ? 'assets/CapybaraTKU1.webp' : 'assets/CapybaraTKU2.webp';
   const avatarSrc = avatar ?? defaultAvatar;
 
-  if (player === 'red') {
-    return (
+  const playerHud =
+    player === 'red' ? (
       <div className="flex h-full w-[50%] items-center justify-start">
         <PlayerAvatar
           name={name}
@@ -89,34 +88,33 @@ const PlayerHUD = ({ player }: PlayerHUDProps) => {
           <Manabar mana={mana} className="manabar-primitive" side="red" />
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="flex h-full w-[50%] items-center justify-end">
-      <div className="flex h-full w-full flex-col items-end">
-        <Healthbar
-          health={health}
-          maxHealth={maxHealth}
-          className="healthbar-primitive"
-          side="blue"
-        />
-        <Manabar mana={mana} className="manabar-primitive" side="blue" />
-      </div>
-      <PlayerAvatar
-        name={name}
-        image={avatarSrc}
-        className="bg-blue-player relative h-[14vh] w-[13vw] rounded-xl!"
-        fallback={
-          <img
-            src={avatarSrc}
-            alt={name}
-            className="relative size-full rounded-sm object-contain"
+    ) : (
+      <div className="flex h-full w-[50%] items-center justify-end">
+        <div className="flex h-full w-full flex-col items-end">
+          <Healthbar
+            health={health}
+            maxHealth={maxHealth}
+            className="healthbar-primitive"
+            side="blue"
           />
-        }
-        onDoubleClick={handleForceWin}
-        isCriticalHit={showCriticalAnimation}
-      />
-    </div>
-  );
+          <Manabar mana={mana} className="manabar-primitive" side="blue" />
+        </div>
+        <PlayerAvatar
+          name={name}
+          image={avatarSrc}
+          className="bg-blue-player relative h-[14vh] w-[13vw] rounded-xl!"
+          fallback={
+            <img
+              src={avatarSrc}
+              alt={name}
+              className="relative size-full rounded-sm object-contain"
+            />
+          }
+          onDoubleClick={handleForceWin}
+          isCriticalHit={showCriticalAnimation}
+        />
+      </div>
+    );
+
+  return playerHud;
 };

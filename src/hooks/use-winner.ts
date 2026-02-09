@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import type { Player, PlayerData } from '@/stores/player-store';
+import type { PlayerData } from '@/stores/player-store';
 import { usePlayerStore } from '@/stores/player-store';
 import { useMatchStore } from '@/stores/match-store';
 import { useTimerStore } from '@/stores/timer-store';

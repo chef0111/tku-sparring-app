@@ -4,8 +4,6 @@ import type { StateCreator } from 'zustand';
 import type { HitType } from '@/lib/scoreboard/hit-types';
 import { hitCooldown, hitDamage } from '@/lib/scoreboard/hit-types';
 
-export type Player = 'red' | 'blue';
-
 export interface PlayerData {
   name: string;
   avatar: string | null;

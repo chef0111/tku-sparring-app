@@ -1,4 +1,3 @@
-import type { Player } from '@/stores/player-store';
 import { Ring } from '@/components/ui/ring';
 import { cn } from '@/lib/utils';
 

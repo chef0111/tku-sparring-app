@@ -1,8 +1,6 @@
-'use client';
-
-import { LogOutIcon } from 'lucide-react';
+import { LayoutDashboard, LogOutIcon } from 'lucide-react';
 import { toast } from 'sonner';
-import { useRouter } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import UserAvatar from './user-avatar';
 import type { User } from '@/lib/auth';
 import { authClient } from '@/lib/auth-client';
@@ -48,6 +46,13 @@ export function UserDropdown({ user }: UserDropdownProps) {
             </div>
             {user.name}
           </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <Link to="/dashboard" target="_blank">
+            <DropdownMenuItem>
+              <LayoutDashboard />
+              Dashboard
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <SignOutItem />
         </DropdownMenuContent>

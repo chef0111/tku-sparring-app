@@ -20,10 +20,11 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
   const player: Player = side;
   const opponent: Player = player === 'red' ? 'blue' : 'red';
 
-  const { isRunning, isBreakTime, setRoundEnded } = useTimerStore(
+  const { isRunning, isBreakTime, roundStarted, setRoundEnded } = useTimerStore(
     useShallow((s) => ({
       isRunning: s.isRunning,
       isBreakTime: s.isBreakTime,
+      roundStarted: s.roundStarted,
       setRoundEnded: s.setRoundEnded,
     }))
   );
@@ -72,17 +73,25 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
     [canScore, player, recordHit, isRunning, isBreakTime, setRoundEnded]
   );
 
-  const handlePenaltyClick = useCallback(() => {
-    if (!isBreakTime && !roundEnded) {
+  const handleAddFoul = useCallback(() => {
+    if (!isBreakTime && !roundEnded && roundStarted) {
       const disqualified = addPenalty(player);
 
       if (disqualified) {
         setRoundEnded(true);
       }
     }
-  }, [isBreakTime, roundEnded, player, addPenalty, setRoundEnded]);
+  }, [
+    isRunning,
+    isBreakTime,
+    roundEnded,
+    roundStarted,
+    player,
+    addPenalty,
+    setRoundEnded,
+  ]);
 
-  const handlePenaltyRightClick = useCallback(
+  const handleRemoveFoul = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
       if (!isBreakTime && !roundEnded) {
@@ -157,8 +166,9 @@ export const Controls = ({ side = 'red', className }: ControlsProps) => {
       <PenaltyBox
         fouls={fouls}
         side={side}
-        onClick={handlePenaltyClick}
-        onContextMenu={handlePenaltyRightClick}
+        onClick={handleAddFoul}
+        onContextMenu={handleRemoveFoul}
+        disabled={!roundStarted}
       />
     </Controller>
   );

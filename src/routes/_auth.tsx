@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { ChevronLeftIcon } from 'lucide-react';
+import { LoadingScreen } from '@/components/navigation/loading';
 import { LogoIcon } from '@/components/ui/logo';
 import { FloatingPaths } from '@/components/ui/floating-paths';
 import { authClient } from '@/lib/auth-client';
@@ -13,22 +14,7 @@ import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/_auth')({
   component: AuthLayout,
-  pendingComponent: () => (
-    <section className="flex h-dvh w-screen items-center justify-center">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <div className="flex items-center justify-center gap-2">
-          <LogoIcon className="size-28" />
-          <span className="font-esbuild text-8xl font-bold">tku.ss</span>
-        </div>
-        <div className="flex flex-col items-center justify-center gap-2 pt-8">
-          <h1 className="text-3xl font-bold">Configuring your account...</h1>
-          <p className="text-muted-foreground text-lg">
-            Please wait while we prepare everything for you
-          </p>
-        </div>
-      </div>
-    </section>
-  ),
+  pendingComponent: () => <LoadingScreen title="Configuring your account..." />,
 });
 
 function AuthLayout() {

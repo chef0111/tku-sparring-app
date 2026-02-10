@@ -1,0 +1,48 @@
+import { z } from 'zod';
+import {
+  CreateTournamentSchema,
+  UpdateTournamentSchema,
+} from './tournaments.dto';
+import {
+  create,
+  deleteTournament,
+  findById,
+  findMany,
+  update,
+} from './tournaments.dal';
+import { authedProcedure } from '@/orpc/middleware';
+
+export const listTournaments = authedProcedure
+  .input(z.object({}))
+  .handler(async () => {
+    return findMany();
+  });
+
+export const getTournament = authedProcedure
+  .input(z.object({ id: z.string() }))
+  .handler(async ({ input }) => {
+    const tournament = await findById(input.id);
+    if (!tournament) {
+      throw new Error('Tournament not found');
+    }
+    return tournament;
+  });
+
+export const createTournament = authedProcedure
+  .input(CreateTournamentSchema)
+  .handler(async ({ input }) => {
+    return create(input);
+  });
+
+export const updateTournament = authedProcedure
+  .input(UpdateTournamentSchema)
+  .handler(async ({ input }) => {
+    const { id, ...data } = input;
+    return update(id, data);
+  });
+
+export const removeTournament = authedProcedure
+  .input(z.object({ id: z.string() }))
+  .handler(async ({ input }) => {
+    return deleteTournament(input.id);
+  });

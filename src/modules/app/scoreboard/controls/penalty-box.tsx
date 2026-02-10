@@ -8,6 +8,7 @@ interface PenaltyBoxProps {
   onClick?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export const PenaltyBox = ({
@@ -16,6 +17,7 @@ export const PenaltyBox = ({
   onClick,
   onContextMenu,
   className,
+  disabled = false,
 }: PenaltyBoxProps) => {
   return (
     <Card
@@ -28,7 +30,12 @@ export const PenaltyBox = ({
         className
       )}
     >
-      <Penalty fouls={fouls} onClick={onClick} onContextMenu={onContextMenu} />
+      <Penalty
+        fouls={fouls}
+        onClick={onClick}
+        onContextMenu={onContextMenu}
+        disabled={disabled}
+      />
     </Card>
   );
 };
@@ -38,6 +45,7 @@ interface PenaltyProps {
   onClick?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export const Penalty = ({
@@ -45,6 +53,7 @@ export const Penalty = ({
   onClick,
   onContextMenu,
   className,
+  disabled = false,
 }: PenaltyProps) => {
   return (
     <div
@@ -52,6 +61,7 @@ export const Penalty = ({
       onContextMenu={onContextMenu}
       className={cn(
         'relative flex w-39 cursor-pointer flex-col items-center justify-center gap-1.5 transition-all duration-300',
+        disabled && 'cursor-not-allowed opacity-50',
         className
       )}
     >

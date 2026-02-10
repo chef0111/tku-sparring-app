@@ -120,7 +120,7 @@ export const AdvanceSettings = () => {
         ))}
       </FieldGroup>
 
-      <FieldGroup className="settings-field-group">
+      <FieldGroup className="settings-field-group items-center">
         <FieldLabel className="settings-group-label">
           ATHELETES INFORMATIONS
         </FieldLabel>

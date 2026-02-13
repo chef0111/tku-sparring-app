@@ -27,7 +27,7 @@ const UserAvatar = ({
       <AvatarImage src={image ?? ''} alt={name} className="object-cover" />
       <AvatarFallback
         className={cn(
-          'bg-foreground font-esbuild no-copy text-background font-bold tracking-wider',
+          'font-esbuild no-copy text-background bg-transparent font-bold tracking-wider',
           fallbackClassName
         )}
       >

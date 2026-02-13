@@ -1,12 +1,33 @@
-'use client';
-
 import * as React from 'react';
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover';
 
 import { cn } from '@/lib/utils';
 
+type PopoverAnchorContextValue = {
+  anchorElement: Element | null;
+  setAnchorElement: (el: Element | null) => void;
+};
+
+const PopoverAnchorContext = React.createContext<PopoverAnchorContextValue>({
+  anchorElement: null,
+  setAnchorElement: () => {},
+});
+
 function Popover({ ...props }: PopoverPrimitive.Root.Props) {
-  return <PopoverPrimitive.Root data-slot="popover" {...props} />;
+  const [anchorElement, setAnchorElement] = React.useState<Element | null>(
+    null
+  );
+
+  const contextValue = React.useMemo(
+    () => ({ anchorElement, setAnchorElement }),
+    [anchorElement]
+  );
+
+  return (
+    <PopoverAnchorContext.Provider value={contextValue}>
+      <PopoverPrimitive.Root data-slot="popover" {...props} />
+    </PopoverAnchorContext.Provider>
+  );
 }
 
 function PopoverTrigger({ ...props }: PopoverPrimitive.Trigger.Props) {
@@ -25,6 +46,8 @@ function PopoverContent({
     PopoverPrimitive.Positioner.Props,
     'align' | 'alignOffset' | 'side' | 'sideOffset'
   >) {
+  const { anchorElement } = React.useContext(PopoverAnchorContext);
+
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Positioner
@@ -33,6 +56,7 @@ function PopoverContent({
         side={side}
         sideOffset={sideOffset}
         className="isolate z-50"
+        {...(anchorElement ? { anchor: anchorElement } : {})}
       >
         <PopoverPrimitive.Popup
           data-slot="popover-content"
@@ -80,8 +104,40 @@ function PopoverDescription({
   );
 }
 
+function PopoverAnchor({
+  render,
+  children,
+  ...props
+}: React.ComponentProps<'div'> & {
+  render?: (
+    props: React.HTMLAttributes<HTMLElement> & {
+      ref: React.RefCallback<Element>;
+    }
+  ) => React.ReactElement;
+}) {
+  const { setAnchorElement } = React.useContext(PopoverAnchorContext);
+
+  const callbackRef = React.useCallback(
+    (node: Element | null) => {
+      setAnchorElement(node);
+    },
+    [setAnchorElement]
+  );
+
+  if (render) {
+    return render({ ...props, ref: callbackRef });
+  }
+
+  return (
+    <div data-slot="popover-anchor" ref={callbackRef} {...props}>
+      {children}
+    </div>
+  );
+}
+
 export {
   Popover,
+  PopoverAnchor,
   PopoverContent,
   PopoverDescription,
   PopoverHeader,

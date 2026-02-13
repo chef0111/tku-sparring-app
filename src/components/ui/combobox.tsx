@@ -158,12 +158,14 @@ export const ComboboxTrigger = ({
 };
 
 export type ComboboxContentProps = ComponentProps<typeof Command> & {
+  align?: 'start' | 'center' | 'end';
   popoverOptions?: ComponentProps<typeof PopoverContent>;
 };
 
 export const ComboboxContent = ({
   className,
   popoverOptions,
+  align,
   ...props
 }: ComboboxContentProps) => {
   const { width } = useContext(ComboboxContext);
@@ -172,6 +174,7 @@ export const ComboboxContent = ({
     <PopoverContent
       className={cn('p-0', className)}
       style={{ width }}
+      align={align}
       {...popoverOptions}
     >
       <Command {...props} />

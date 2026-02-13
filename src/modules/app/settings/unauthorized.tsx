@@ -21,9 +21,9 @@ export const Unauthorized = () => {
           Sign in to access tournament settings and athlete information.
         </EmptyDescription>
       </EmptyHeader>
-      <Link to="/login">
-        <Button>Login to Continue</Button>
-      </Link>
+      <Button className="hover:bg-white" render={<Link to="/login" />}>
+        Login to Continue
+      </Button>
     </Empty>
   );
 };

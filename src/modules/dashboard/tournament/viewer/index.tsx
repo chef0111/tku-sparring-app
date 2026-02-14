@@ -1,133 +1,43 @@
-import * as React from 'react';
 import { Link } from '@tanstack/react-router';
-import {
-  ArrowLeft,
-  Edit,
-  Layers,
-  LayoutGrid,
-  Trophy,
-  Users,
-} from 'lucide-react';
-import { Header } from '../../header';
-import type { GroupData, TournamentData } from '../../types';
+import { Trophy } from 'lucide-react';
+import { TournamentViewer } from './viewer';
+import { TournamentViewerLoading } from './loading';
 import { Button } from '@/components/ui/button';
+import { useTournament } from '@/queries/tournaments';
+import { useGroups } from '@/queries/groups';
 
-interface TournamentViewerProps {
-  tournament: TournamentData;
-  groups: Array<GroupData>;
-  tournamentId: string;
+interface TournamentPageProps {
+  id: string;
 }
 
-export function TournamentViewer({
-  tournament,
-  groups,
-  tournamentId,
-}: TournamentViewerProps) {
-  return (
-    <div className="flex h-full flex-col">
-      <Header
-        action={
-          <Button
-            variant="ghost"
-            size="sm"
-            render={<Link to="/dashboard/tournament" />}
-          >
-            <ArrowLeft className="mr-1 size-4" />
-            Tournaments
-          </Button>
-        }
-        title={tournament.name}
-      >
-        <div className="ml-auto flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            render={
-              <Link
-                to="/dashboard/tournament/$id/builder"
-                params={{ id: tournamentId }}
-              />
-            }
-          >
-            <Edit className="mr-1 size-4" />
-            Edit Tournament
-          </Button>
-        </div>
-      </Header>
+export function TournamentPage({ id }: TournamentPageProps) {
+  const tournamentQuery = useTournament(id);
+  const groupsQuery = useGroups(id);
 
-      <div className="flex-1 overflow-auto p-6">
-        <div className="mx-auto max-w-7xl space-y-6">
-          {/* Stats */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <StatCard
-              icon={Layers}
-              label="Groups"
-              value={tournament._count.groups}
-            />
-            <StatCard
-              icon={Users}
-              label="Athletes"
-              value={tournament._count.athletes}
-            />
-            <StatCard
-              icon={Trophy}
-              label="Matches"
-              value={tournament._count.matches}
-            />
-          </div>
+  if (tournamentQuery.isPending) {
+    return <TournamentViewerLoading />;
+  }
 
-          {/* Athletes per group */}
-          <div className="space-y-4">
-            {groups.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12">
-                <LayoutGrid className="text-muted-foreground mb-4 size-10" />
-                <p className="text-muted-foreground text-sm">
-                  No groups yet. Switch to builder mode to add groups.
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="mt-4"
-                  render={
-                    <Link
-                      to="/dashboard/tournament/$id/builder"
-                      params={{ id: tournamentId }}
-                    />
-                  }
-                >
-                  Open Builder
-                </Button>
-              </div>
-            ) : (
-              <div className="flex h-32 items-center justify-center rounded-lg border border-dashed">
-                <p className="text-muted-foreground text-sm">
-                  Select a group to view athletes.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
+  if (tournamentQuery.isError || !tournamentQuery.data) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4">
+        <Trophy className="text-muted-foreground size-12" />
+        <h2 className="text-lg font-semibold">Tournament not found</h2>
+        <Button variant="outline" render={<Link to="/dashboard/tournament" />}>
+          Back to tournaments
+        </Button>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: number;
-}) {
+  const tournament = tournamentQuery.data;
+  const groups = groupsQuery.data ?? [];
+
   return (
-    <div className="rounded-lg border p-4">
-      <div className="flex items-center gap-2">
-        <Icon className="text-muted-foreground size-4" />
-        <span className="text-muted-foreground text-sm">{label}</span>
-      </div>
-      <p className="mt-2 text-2xl font-bold">{value}</p>
-    </div>
+    <TournamentViewer
+      tournament={tournament}
+      groups={groups}
+      tournamentId={id}
+    />
   );
 }

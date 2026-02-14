@@ -1,43 +1,85 @@
-import { Link } from '@tanstack/react-router';
-import { Trophy } from 'lucide-react';
-import { TournamentViewer } from './viewer';
-import { TournamentViewerLoading } from './viewer/loading';
+import { useMemo, useState } from 'react';
+import { Plus, Search, Trophy } from 'lucide-react';
+import { Header } from '../header';
+import { TournamentCard } from './tournament-card';
 import { Button } from '@/components/ui/button';
-import { useTournament } from '@/queries/tournaments';
-import { useGroups } from '@/queries/groups';
+import { Input } from '@/components/ui/input';
+import { CreateTournamentDialog } from '@/modules/dashboard/tournament/create-tournament-dialog';
+import { useTournaments } from '@/queries/tournaments';
 
-interface TournamentPageProps {
-  id: string;
-}
+export function TournamentListPage() {
+  const [search, setSearch] = useState('');
+  const tournamentsQuery = useTournaments();
+  const tournaments = tournamentsQuery.data ?? [];
 
-export function TournamentPage({ id }: TournamentPageProps) {
-  const tournamentQuery = useTournament(id);
-  const groupsQuery = useGroups(id);
-
-  if (tournamentQuery.isPending) {
-    return <TournamentViewerLoading />;
-  }
-
-  if (tournamentQuery.isError || !tournamentQuery.data) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <Trophy className="text-muted-foreground size-12" />
-        <h2 className="text-lg font-semibold">Tournament not found</h2>
-        <Button variant="outline" render={<Link to="/dashboard/tournament" />}>
-          Back to tournaments
-        </Button>
-      </div>
-    );
-  }
-
-  const tournament = tournamentQuery.data;
-  const groups = groupsQuery.data ?? [];
+  const filtered = useMemo(() => {
+    if (!search.trim()) return tournaments;
+    const q = search.toLowerCase();
+    return tournaments.filter((t) => t.name.toLowerCase().includes(q));
+  }, [tournaments, search]);
 
   return (
-    <TournamentViewer
-      tournament={tournament}
-      groups={groups}
-      tournamentId={id}
-    />
+    <div className="flex h-full flex-col">
+      <Header title="Tournaments" />
+
+      <div className="flex-1 overflow-auto p-6">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <div className="flex items-center gap-4">
+            <div className="relative flex-1">
+              <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+              <Input
+                placeholder="Search tournaments..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <CreateTournamentDialog>
+              <Button>
+                <Plus className="size-4" />
+                Create Tournament
+              </Button>
+            </CreateTournamentDialog>
+          </div>
+
+          {tournamentsQuery.isPending ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-muted/50 h-36 animate-pulse rounded-lg border"
+                />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16">
+              <Trophy className="text-muted-foreground mb-4 size-12" />
+              <h3 className="text-lg font-semibold">
+                {search ? 'No tournaments found' : 'No tournaments yet'}
+              </h3>
+              <p className="text-muted-foreground mb-4 text-sm">
+                {search
+                  ? 'Try a different search term.'
+                  : 'Create your first tournament to get started.'}
+              </p>
+              {!search && (
+                <CreateTournamentDialog>
+                  <Button variant="outline">
+                    <Plus className="mr-2 size-4" />
+                    Create Tournament
+                  </Button>
+                </CreateTournamentDialog>
+              )}
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((tournament) => (
+                <TournamentCard key={tournament.id} tournament={tournament} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

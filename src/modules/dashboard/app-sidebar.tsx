@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from '@tanstack/react-router';
-import { Home, Trophy } from 'lucide-react';
+import { Home, Trophy, User } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/logo';
 import { NavMain } from '@/modules/dashboard/nav-main';
 import { UserNav } from '@/components/user/user-nav';
@@ -17,6 +17,7 @@ import {
 const navItems = [
   { title: 'Home', icon: Home, to: '/dashboard' },
   { title: 'Tournaments', icon: Trophy, to: '/dashboard/tournament' },
+  { title: 'Athletes', icon: User, to: '/dashboard/athlete' },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

@@ -123,6 +123,7 @@ model Match {
 
 model Athlete {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  code         String
   name         String
   beltLevel    String
   weight       Float

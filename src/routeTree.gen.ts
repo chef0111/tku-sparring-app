@@ -13,10 +13,10 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardTournamentRouteImport } from './routes/dashboard/tournament'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardTournamentIndexRouteImport } from './routes/dashboard/tournament/index'
+import { Route as DashboardAthleteIndexRouteImport } from './routes/dashboard/athlete/index'
 import { Route as DashboardTournamentIdRouteImport } from './routes/dashboard/tournament/$id'
 import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -41,11 +41,6 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardTournamentRoute = DashboardTournamentRouteImport.update({
-  id: '/tournament',
-  path: '/tournament',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
@@ -58,14 +53,19 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 } as any)
 const DashboardTournamentIndexRoute =
   DashboardTournamentIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => DashboardTournamentRoute,
+    id: '/tournament/',
+    path: '/tournament/',
+    getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardAthleteIndexRoute = DashboardAthleteIndexRouteImport.update({
+  id: '/athlete/',
+  path: '/athlete/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardTournamentIdRoute = DashboardTournamentIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => DashboardTournamentRoute,
+  id: '/tournament/$id',
+  path: '/tournament/$id',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
@@ -89,12 +89,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/api/$': typeof ApiSplatRoute
-  '/dashboard/tournament': typeof DashboardTournamentRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/dashboard/tournament/$id': typeof DashboardTournamentIdRoute
-  '/dashboard/tournament/': typeof DashboardTournamentIndexRoute
+  '/dashboard/athlete': typeof DashboardAthleteIndexRoute
+  '/dashboard/tournament': typeof DashboardTournamentIndexRoute
   '/dashboard/tournament/$id/builder': typeof DashboardTournamentIdBuilderRoute
 }
 export interface FileRoutesByTo {
@@ -105,6 +105,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/dashboard/tournament/$id': typeof DashboardTournamentIdRoute
+  '/dashboard/athlete': typeof DashboardAthleteIndexRoute
   '/dashboard/tournament': typeof DashboardTournamentIndexRoute
   '/dashboard/tournament/$id/builder': typeof DashboardTournamentIdBuilderRoute
 }
@@ -115,11 +116,11 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/api/$': typeof ApiSplatRoute
-  '/dashboard/tournament': typeof DashboardTournamentRouteWithChildren
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/dashboard/tournament/$id': typeof DashboardTournamentIdRoute
+  '/dashboard/athlete/': typeof DashboardAthleteIndexRoute
   '/dashboard/tournament/': typeof DashboardTournamentIndexRoute
   '/dashboard_/tournament/$id/builder': typeof DashboardTournamentIdBuilderRoute
 }
@@ -130,12 +131,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/api/$'
-    | '/dashboard/tournament'
     | '/dashboard/'
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/dashboard/tournament/$id'
-    | '/dashboard/tournament/'
+    | '/dashboard/athlete'
+    | '/dashboard/tournament'
     | '/dashboard/tournament/$id/builder'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -146,6 +147,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/dashboard/tournament/$id'
+    | '/dashboard/athlete'
     | '/dashboard/tournament'
     | '/dashboard/tournament/$id/builder'
   id:
@@ -155,11 +157,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/_auth/login'
     | '/api/$'
-    | '/dashboard/tournament'
     | '/dashboard/'
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/dashboard/tournament/$id'
+    | '/dashboard/athlete/'
     | '/dashboard/tournament/'
     | '/dashboard_/tournament/$id/builder'
   fileRoutesById: FileRoutesById
@@ -204,13 +206,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/dashboard/tournament': {
-      id: '/dashboard/tournament'
-      path: '/tournament'
-      fullPath: '/dashboard/tournament'
-      preLoaderRoute: typeof DashboardTournamentRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -227,17 +222,24 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/tournament/': {
       id: '/dashboard/tournament/'
-      path: '/'
-      fullPath: '/dashboard/tournament/'
+      path: '/tournament'
+      fullPath: '/dashboard/tournament'
       preLoaderRoute: typeof DashboardTournamentIndexRouteImport
-      parentRoute: typeof DashboardTournamentRoute
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/athlete/': {
+      id: '/dashboard/athlete/'
+      path: '/athlete'
+      fullPath: '/dashboard/athlete'
+      preLoaderRoute: typeof DashboardAthleteIndexRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/dashboard/tournament/$id': {
       id: '/dashboard/tournament/$id'
-      path: '/$id'
+      path: '/tournament/$id'
       fullPath: '/dashboard/tournament/$id'
       preLoaderRoute: typeof DashboardTournamentIdRouteImport
-      parentRoute: typeof DashboardTournamentRoute
+      parentRoute: typeof DashboardRoute
     }
     '/api/rpc/$': {
       id: '/api/rpc/$'
@@ -273,27 +275,18 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface DashboardTournamentRouteChildren {
+interface DashboardRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardTournamentIdRoute: typeof DashboardTournamentIdRoute
+  DashboardAthleteIndexRoute: typeof DashboardAthleteIndexRoute
   DashboardTournamentIndexRoute: typeof DashboardTournamentIndexRoute
 }
 
-const DashboardTournamentRouteChildren: DashboardTournamentRouteChildren = {
-  DashboardTournamentIdRoute: DashboardTournamentIdRoute,
-  DashboardTournamentIndexRoute: DashboardTournamentIndexRoute,
-}
-
-const DashboardTournamentRouteWithChildren =
-  DashboardTournamentRoute._addFileChildren(DashboardTournamentRouteChildren)
-
-interface DashboardRouteChildren {
-  DashboardTournamentRoute: typeof DashboardTournamentRouteWithChildren
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
 const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardTournamentRoute: DashboardTournamentRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardTournamentIdRoute: DashboardTournamentIdRoute,
+  DashboardAthleteIndexRoute: DashboardAthleteIndexRoute,
+  DashboardTournamentIndexRoute: DashboardTournamentIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

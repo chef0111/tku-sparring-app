@@ -17,11 +17,11 @@ import { cn } from '@/lib/utils';
 import { SettingsProvider } from '@/features/app/contexts/settings';
 import { useResolvedTheme } from '@/contexts/themes/use-theme';
 
-interface MyRouterContext {
+interface RouterContext {
   queryClient: QueryClient;
 }
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {

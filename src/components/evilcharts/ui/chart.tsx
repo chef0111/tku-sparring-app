@@ -174,9 +174,7 @@ function distributeColors(
 }
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.colors
-  );
+  const colorConfig = Object.entries(config).filter(([, item]) => item.colors);
 
   if (!colorConfig.length) {
     return null;

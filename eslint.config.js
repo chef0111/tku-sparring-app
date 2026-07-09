@@ -1,8 +1,8 @@
 import { tanstackConfig } from '@tanstack/eslint-config';
+import tseslint from 'typescript-eslint';
 
 export default [
   ...tanstackConfig,
-
   {
     ignores: [
       '.output/**',
@@ -14,6 +14,10 @@ export default [
     ],
   },
   {
+    files: ['**/*.{js,ts,tsx}'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     rules: {
       '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'off',

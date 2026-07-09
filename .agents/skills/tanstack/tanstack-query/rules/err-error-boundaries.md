@@ -35,7 +35,7 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 
-function QueryErrorBoundary({ children }: { children: React.ReactNode }) {
+function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -57,11 +57,11 @@ function QueryErrorBoundary({ children }: { children: React.ReactNode }) {
 // Usage with Suspense
 function App() {
   return (
-    <QueryErrorBoundary>
+    <ErrorBoundary>
       <Suspense fallback={<Loading />}>
         <Posts />
       </Suspense>
-    </QueryErrorBoundary>
+    </ErrorBoundary>
   );
 }
 
@@ -117,23 +117,23 @@ function Dashboard() {
   return (
     <div className="dashboard">
       {/* Each section can fail independently */}
-      <QueryErrorBoundary>
+      <ErrorBoundary>
         <Suspense fallback={<Skeleton />}>
           <RecentActivity />
         </Suspense>
-      </QueryErrorBoundary>
+      </ErrorBoundary>
 
-      <QueryErrorBoundary>
+      <ErrorBoundary>
         <Suspense fallback={<Skeleton />}>
           <Statistics />
         </Suspense>
-      </QueryErrorBoundary>
+      </ErrorBoundary>
 
-      <QueryErrorBoundary>
+      <ErrorBoundary>
         <Suspense fallback={<Skeleton />}>
           <Notifications />
         </Suspense>
-      </QueryErrorBoundary>
+      </ErrorBoundary>
     </div>
   );
 }

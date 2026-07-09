@@ -15,6 +15,7 @@ import { AthleteImportDialog } from '@/features/dashboard/components/athlete/dia
 import { DeleteAthleteDialog } from '@/features/dashboard/components/athlete/dialogs/delete-athlete-dialog';
 import { athleteProfileToRow } from '@/features/dashboard/lib/athlete/athlete-profile-to-row';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { Button } from '@/components/ui/button';
 
 export function AthletesPage() {
@@ -68,19 +69,21 @@ export function AthletesPage() {
 
       <div className="mx-auto w-full max-w-7xl p-6">
         <FeatureFlagsProvider>
-          <AthleteTable
-            columns={columns}
-            className="pt-6"
-            onAdd={openCreateDrawer}
-            onImport={() => setImportOpen(true)}
-            enableQueryFilter={enableQueryFilter}
-            onBulkEdit={(profiles, onComplete) => {
-              setDrawerSeedRows(profiles.map(athleteProfileToRow));
-              setDrawerMode('bulk-edit');
-              bulkEditCompleteRef.current = onComplete;
-              setDrawerOpen(true);
-            }}
-          />
+          <ErrorBoundary title="Failed to load athletes">
+            <AthleteTable
+              columns={columns}
+              className="pt-6"
+              onAdd={openCreateDrawer}
+              onImport={() => setImportOpen(true)}
+              enableQueryFilter={enableQueryFilter}
+              onBulkEdit={(profiles, onComplete) => {
+                setDrawerSeedRows(profiles.map(athleteProfileToRow));
+                setDrawerMode('bulk-edit');
+                bulkEditCompleteRef.current = onComplete;
+                setDrawerOpen(true);
+              }}
+            />
+          </ErrorBoundary>
         </FeatureFlagsProvider>
       </div>
 

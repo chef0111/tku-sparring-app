@@ -12,10 +12,10 @@ import { RecentTournamentsSection } from '@/features/dashboard/components/home/r
 import { StatusPipeline } from '@/features/dashboard/components/home/status-pipeline';
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { Button } from '@/components/ui/button';
 
 export function DashboardHome() {
-  const { isPending, stats } = useDashboardStats();
   const [createOpen, setCreateOpen] = useState(false);
   const [rowAction, setRowAction] =
     useState<DataTableRowAction<TournamentListItem> | null>(null);
@@ -41,23 +41,9 @@ export function DashboardHome() {
             </Button>
           </div>
 
-          {isPending ? (
-            <DashboardHomeSkeleton />
-          ) : (
-            <>
-              <KpiStrip stats={stats.kpis} />
-              <HubChartsSection chartData={stats.chartData} />
-              <StatusPipeline
-                pipeline={stats.pipeline}
-                statusCounts={stats.kpis.byStatus}
-              />
-              <RecentTournamentsSection
-                tournaments={stats.recentTournaments}
-                pending={isPending}
-                onRowAction={setRowAction}
-              />
-            </>
-          )}
+          <ErrorBoundary title="Failed to load dashboard">
+            <DashboardHomeContent onRowAction={setRowAction} />
+          </ErrorBoundary>
         </main>
       </div>
 
@@ -75,5 +61,32 @@ export function DashboardHome() {
         onClose={() => setRowAction(null)}
       />
     </div>
+  );
+}
+
+function DashboardHomeContent({
+  onRowAction,
+}: {
+  onRowAction: (action: DataTableRowAction<TournamentListItem> | null) => void;
+}) {
+  const { stats, isPending, data } = useDashboardStats();
+
+  if (isPending && !data) {
+    return <DashboardHomeSkeleton />;
+  }
+
+  return (
+    <>
+      <KpiStrip stats={stats.kpis} />
+      <HubChartsSection chartData={stats.chartData} />
+      <StatusPipeline
+        pipeline={stats.pipeline}
+        statusCounts={stats.kpis.byStatus}
+      />
+      <RecentTournamentsSection
+        tournaments={stats.recentTournaments}
+        onRowAction={onRowAction}
+      />
+    </>
   );
 }

@@ -29,7 +29,7 @@ export function HeaderControlsSkeleton() {
 
 export function TournamentKpiRowSkeleton() {
   return (
-    <section className="flex flex-col gap-3 px-6">
+    <section className="flex flex-col gap-3">
       <div className="grid items-stretch gap-4 overflow-visible sm:grid-cols-2 xl:grid-cols-3">
         {kpiTiles.map((tile) => (
           <HubMetricCard
@@ -95,7 +95,7 @@ export function DivisionsOverviewSkeleton() {
     <HubSection
       title="Divisions"
       description="Divisions and arena assignments for this tournament"
-      className="mt-6 ml-6 bg-transparent p-0"
+      className="bg-transparent p-0"
     >
       <HubSectionContent className="grid items-stretch gap-4 p-0 sm:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -118,7 +118,7 @@ export function ActivityPanelSkeleton() {
     <HubSection
       title="Recent activity"
       description="Latest tournament events"
-      className="bg-popover ring-border/10 mt-6 mr-6 rounded-xl p-4 ring-1"
+      className="bg-popover ring-border/10 rounded-xl p-4 ring-1"
       action={<Skeleton className="h-8 w-24 rounded-md" />}
     >
       <HubSectionContent padded={false}>

@@ -8,6 +8,7 @@ import { athleteProfilesQueryOptions } from '@/queries/athlete-profile/athlete-p
 import { athleteProfileKeys } from '@/queries/keys';
 import { listAthleteProfiles } from '@/queries/api/athlete-profile-api';
 
+/** keepPreviousData: sort/filter keep prior rows (dimmed) instead of suspending to a skeleton. */
 export function useAthleteProfiles(input: AthleteProfilesDTO) {
   return useQuery({
     ...athleteProfilesQueryOptions(input),

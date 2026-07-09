@@ -39,19 +39,8 @@ export function BulkAddAthletesDialog({
   athleteProfileIds,
   onSuccess,
 }: BulkAddAthletesDialogProps) {
-  const { data: tournaments = [] } = useTournaments();
   const [tournamentId, setTournamentId] = React.useState<string>('');
   const [autoAssign, setAutoAssign] = React.useState(false);
-
-  // Restore last-used tournament
-  React.useEffect(() => {
-    if (open) {
-      const lastUsed = localStorage.getItem(LAST_USED_TOURNAMENT_KEY);
-      if (lastUsed && tournaments.some((t) => t.id === lastUsed)) {
-        setTournamentId(lastUsed);
-      }
-    }
-  }, [open, tournaments]);
 
   const bulkAdd = useBulkAddAthletes({
     onSuccess: (result) => {
@@ -92,24 +81,11 @@ export function BulkAddAthletesDialog({
         <div className="grid gap-4 py-2">
           <div className="grid gap-1.5">
             <Label>Tournament</Label>
-            <Select value={tournamentId} onValueChange={setTournamentId}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a tournament..." />
-              </SelectTrigger>
-              <SelectContent>
-                {tournaments.length === 0 ? (
-                  <div className="text-muted-foreground px-2 py-4 text-center text-sm">
-                    No tournaments found
-                  </div>
-                ) : (
-                  tournaments.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>
-                      {t.name}
-                    </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
+            <TournamentSelect
+              open={open}
+              tournamentId={tournamentId}
+              onTournamentIdChange={setTournamentId}
+            />
           </div>
 
           <div className="flex items-center gap-2">
@@ -155,5 +131,57 @@ export function BulkAddAthletesDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function TournamentSelect({
+  open,
+  tournamentId,
+  onTournamentIdChange,
+}: {
+  open: boolean;
+  tournamentId: string;
+  onTournamentIdChange: (id: string) => void;
+}) {
+  const { data: tournaments, isPending } = useTournaments();
+
+  React.useEffect(() => {
+    if (!open || !tournaments) return;
+    const lastUsed = localStorage.getItem(LAST_USED_TOURNAMENT_KEY);
+    if (lastUsed && tournaments.some((t) => t.id === lastUsed)) {
+      onTournamentIdChange(lastUsed);
+    }
+  }, [open, tournaments, onTournamentIdChange]);
+
+  if (isPending && !tournaments) {
+    return (
+      <div className="text-muted-foreground flex h-9 items-center gap-2 text-sm">
+        <Spinner className="size-4" />
+        Loading tournaments…
+      </div>
+    );
+  }
+
+  const items = tournaments ?? [];
+
+  return (
+    <Select value={tournamentId} onValueChange={onTournamentIdChange}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select a tournament..." />
+      </SelectTrigger>
+      <SelectContent>
+        {items.length === 0 ? (
+          <div className="text-muted-foreground px-2 py-4 text-center text-sm">
+            No tournaments found
+          </div>
+        ) : (
+          items.map((t) => (
+            <SelectItem key={t.id} value={t.id}>
+              {t.name}
+            </SelectItem>
+          ))
+        )}
+      </SelectContent>
+    </Select>
   );
 }

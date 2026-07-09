@@ -1,6 +1,4 @@
-import { Link } from '@tanstack/react-router';
 import * as React from 'react';
-import { ArrowLeft, Trophy } from 'lucide-react';
 import { TournamentActivitySheet } from '../tournament-activity-sheet';
 import { BuilderShell } from './builder-shell';
 import { BuilderHeader } from './builder-shell/builder-header';
@@ -13,6 +11,8 @@ import { DivisionsTab } from './divisions-tab';
 import { BracketsTab } from './brackets-tab';
 import type { DivisionData } from '@/contracts/tournament/division';
 import type { TournamentData } from '@/contracts/tournament/list';
+import LoadingScreen from '@/components/navigation/loading';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { TournamentBracketProvider } from '@/features/dashboard/contexts/tournament-bracket';
 import { useTournamentBuilder } from '@/features/dashboard/hooks/use-tournament-builder';
 import { BuilderWorkspaceProvider } from '@/features/dashboard/contexts/builder-workspace';
@@ -20,8 +20,6 @@ import {
   BracketChromeProvider,
   useBracketChrome,
 } from '@/features/dashboard/contexts/bracket-chrome';
-import LoadingScreen from '@/components/navigation/loading';
-import { Button } from '@/components/ui/button';
 import { useTournamentRealtimeStream } from '@/hooks/use-tournament-realtime-stream';
 import { useSetTournamentStatus, useTournament } from '@/queries/tournament';
 import { useDivisions } from '@/queries/division';
@@ -33,36 +31,44 @@ interface TournamentBuilderProps {
 export function TournamentBuilder({ id }: TournamentBuilderProps) {
   useTournamentRealtimeStream(id);
 
-  const tournamentQuery = useTournament(id);
-  const divisionsQuery = useDivisions(id);
+  const { data } = useTournament(id);
+  const tournament = data as TournamentData;
 
-  if (tournamentQuery.isPending) {
-    return <LoadingScreen title="Loading workspace..." />;
-  }
+  return (
+    <ErrorBoundary title="Failed to load divisions">
+      <React.Suspense fallback={<LoadingScreen title="Loading workspace..." />}>
+        <TournamentBuilderDivisions tournament={tournament} tournamentId={id} />
+      </React.Suspense>
+    </ErrorBoundary>
+  );
+}
 
-  if (tournamentQuery.isError || !tournamentQuery.data) {
-    return (
-      <div className="flex h-dvh flex-col items-center justify-center gap-4">
-        <Trophy className="text-muted-foreground size-12" />
-        <h2 className="text-lg font-semibold">Tournament not found</h2>
-        <Button variant="outline" asChild>
-          <Link to="/dashboard/tournaments">
-            <ArrowLeft />
-            Back to tournaments
-          </Link>
-        </Button>
-      </div>
-    );
-  }
+function BracketsTabIsland() {
+  return (
+    <ErrorBoundary title="Failed to load brackets">
+      <React.Suspense fallback={<LoadingScreen title="Loading brackets..." />}>
+        <TournamentBracketProvider>
+          <BracketsTab />
+        </TournamentBracketProvider>
+      </React.Suspense>
+    </ErrorBoundary>
+  );
+}
 
-  const tournament = tournamentQuery.data as TournamentData;
-  const divisions = divisionsQuery.data ?? [];
+function TournamentBuilderDivisions({
+  tournament,
+  tournamentId,
+}: {
+  tournament: TournamentData;
+  tournamentId: string;
+}) {
+  const { data: divisions } = useDivisions(tournamentId);
 
   return (
     <TournamentBuilderActive
       tournament={tournament}
-      divisions={divisions as Array<DivisionData>}
-      tournamentId={id}
+      divisions={divisions}
+      tournamentId={tournamentId}
     />
   );
 }
@@ -153,9 +159,7 @@ function TournamentBuilderActiveBody({
               readOnly={b.isReadOnly}
             />
           ) : (
-            <TournamentBracketProvider>
-              <BracketsTab />
-            </TournamentBracketProvider>
+            <BracketsTabIsland />
           )}
         </div>
       </BuilderWorkspaceProvider>

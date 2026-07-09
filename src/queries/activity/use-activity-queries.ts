@@ -1,4 +1,7 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
 import type { TournamentActivityEventType } from '@/contracts/activity/event-types';
 import { activityListInfiniteQueryOptions } from '@/queries/activity/activity-list-query-options';
 
@@ -11,4 +14,12 @@ export function useTournamentActivityInfinite(input: {
     ...activityListInfiniteQueryOptions(input),
     enabled: input.enabled ?? true,
   });
+}
+
+export function useTournamentActivitySuspenseInfinite(input: {
+  tournamentId: string;
+  eventTypes?: Array<TournamentActivityEventType>;
+  limit?: number;
+}) {
+  return useSuspenseInfiniteQuery(activityListInfiniteQueryOptions(input));
 }

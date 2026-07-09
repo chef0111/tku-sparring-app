@@ -27,6 +27,7 @@ interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   };
   pagination?: boolean;
   selectedRows?: boolean;
+  isFetching?: boolean;
 }
 
 export function DataTable<TData>({
@@ -38,6 +39,7 @@ export function DataTable<TData>({
   className,
   pagination = true,
   selectedRows = true,
+  isFetching = false,
   ...props
 }: DataTableProps<TData>) {
   const selectedRowCount = Object.keys(state.rowSelection).length;
@@ -79,7 +81,12 @@ export function DataTable<TData>({
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody
+            className={cn(
+              isFetching && 'pointer-events-none opacity-50 transition-opacity'
+            )}
+            aria-busy={isFetching || undefined}
+          >
             {renderedRows?.length ? (
               renderedRows.map((row) => (
                 <TableRow

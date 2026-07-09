@@ -10,6 +10,8 @@ import type {
 import { useTournamentList } from '@/queries/tournament';
 import { cn } from '@/lib/utils';
 
+const GRID_SKELETON_COUNT = 8;
+
 interface TournamentsGridProps {
   query: TournamentsManagerQuery;
   onRowAction: TournamentRowActionOptions['onRowAction'];
@@ -25,7 +27,7 @@ export function TournamentsGrid({
   onClearFilters,
   className,
 }: TournamentsGridProps) {
-  const { isPending, data } = useTournamentList({
+  const { data, isPending, isPlaceholderData } = useTournamentList({
     page: query.page,
     perPage: query.perPage,
     query: query.queryFilter ?? undefined,
@@ -38,8 +40,6 @@ export function TournamentsGrid({
     sortDir: query.sort?.[0]?.desc ? 'desc' : 'asc',
   });
 
-  const tournaments = data?.items ?? [];
-
   if (isPending && !data) {
     return (
       <div
@@ -48,12 +48,14 @@ export function TournamentsGrid({
           className
         )}
       >
-        {Array.from({ length: 12 }).map((_, index) => (
-          <TournamentCardSkeleton key={index} />
+        {Array.from({ length: GRID_SKELETON_COUNT }, (_, i) => (
+          <TournamentCardSkeleton key={i} />
         ))}
       </div>
     );
   }
+
+  const tournaments = data?.items ?? [];
 
   if ((data?.total ?? 0) === 0) {
     const hasActiveFilters =
@@ -74,8 +76,11 @@ export function TournamentsGrid({
     <div
       className={cn(
         'grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+        isPlaceholderData &&
+          'pointer-events-none opacity-50 transition-opacity',
         className
       )}
+      aria-busy={isPlaceholderData || undefined}
     >
       {tournaments.map((tournament) => (
         <TournamentCard

@@ -13,6 +13,7 @@ import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { DataTableRowAction } from '@/types/data-table';
 import { useTournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 export function TournamentsOverview() {
   const [createOpen, setCreateOpen] = React.useState(false);
@@ -42,17 +43,23 @@ export function TournamentsOverview() {
 
       <div className="mx-auto w-full max-w-7xl flex-1 overflow-auto p-6">
         <TournamentsToolbar onCreate={onCreate} />
-        {viewMode === 'grid' ? (
-          <TournamentsGrid
-            query={query}
-            onRowAction={setRowAction}
-            onCreate={onCreate}
-            onClearFilters={onClearFilters}
-            className="pt-2"
-          />
-        ) : (
-          <TournamentsTable columns={columns} query={query} className="pt-2" />
-        )}
+        <ErrorBoundary title="Failed to load tournaments">
+          {viewMode === 'grid' ? (
+            <TournamentsGrid
+              query={query}
+              onRowAction={setRowAction}
+              onCreate={onCreate}
+              onClearFilters={onClearFilters}
+              className="pt-2"
+            />
+          ) : (
+            <TournamentsTable
+              columns={columns}
+              query={query}
+              className="pt-2"
+            />
+          )}
+        </ErrorBoundary>
       </div>
 
       <CreateTournamentDialog open={createOpen} onOpenChange={setCreateOpen} />

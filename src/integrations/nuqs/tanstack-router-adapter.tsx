@@ -6,6 +6,8 @@
  * 1) Array elements must become strings for `URLSearchParams` (no `[object Object]`).
  * 2) Keys like `sort` / `filters` must be a *single* JSON array string so `param.get()`
  *    matches what `getSortingStateParser` / `getFiltersStateParser` expect from `serialize`.
+ * 3) Primitive arrays (`status`, `gender`, …) must be one comma-joined value — `parseAsArrayOf`
+ *    uses `.get()`, not `.getAll()`.
  *
  * @see https://github.com/47ng/nuqs/issues (upstream fix when available)
  */
@@ -38,7 +40,8 @@ export function searchValueToParamPairs(
     if (value.some((item) => item !== null && typeof item === 'object')) {
       return [[key, JSON.stringify(value)]];
     }
-    return value.map((item) => [key, String(item)]);
+    // parseAsArrayOf reads one comma-joined value via `.get()`, not repeated keys.
+    return [[key, value.map(String).join(',')]];
   }
 
   if (typeof value === 'object') {
@@ -46,6 +49,17 @@ export function searchValueToParamPairs(
   }
 
   return [[key, String(value)]];
+}
+
+/** Rebuild `URLSearchParams` from TanStack Router JSON-parsed `location.search`. */
+export function searchRecordToURLSearchParams(
+  search: Record<string, unknown>
+): URLSearchParams {
+  return new URLSearchParams(
+    Object.entries(search).flatMap(([key, value]) =>
+      searchValueToParamPairs(key, value)
+    )
+  );
 }
 
 function useNuqsTanstackRouterAdapter(watchKeys: Array<string>) {
@@ -62,12 +76,7 @@ function useNuqsTanstackRouterAdapter(watchKeys: Array<string>) {
 
   return {
     searchParams: useMemo(
-      () =>
-        new URLSearchParams(
-          Object.entries(search).flatMap(([key, value]) =>
-            searchValueToParamPairs(key, value)
-          )
-        ),
+      () => searchRecordToURLSearchParams(search),
       [search, watchKeys.join(',')]
     ),
     updateUrl: useCallback(

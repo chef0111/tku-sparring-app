@@ -60,9 +60,9 @@ export function ArenaDivisionOrdersPanel({
   const ensureSlot = useEnsureArenaSlot();
   const retireArena = useRetireArena();
 
-  const tournament = tournamentQuery.data as TournamentData | undefined;
-  const arenaOrderRaw = tournament?.arenaDivisionOrder;
-  const isDraft = tournament?.status === 'draft';
+  const tournament = tournamentQuery.data as TournamentData;
+  const arenaOrderRaw = tournament.arenaDivisionOrder;
+  const isDraft = tournament.status === 'draft';
   const dndDisabled = readOnly || !isDraft;
 
   const arenaIndices = React.useMemo(

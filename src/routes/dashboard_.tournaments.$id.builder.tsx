@@ -1,17 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { NotFound } from '@/components/not-found';
+import { TournamentRouteError } from '@/features/dashboard/components/dashboard-route-error';
 import { TournamentBuilder } from '@/features/dashboard/components/tournament/builder';
 import LoadingScreen from '@/components/navigation/loading';
 import { divisionListQueryOptions } from '@/queries/division/division-list-query-options';
+import { tournamentMatchesQueryOptions } from '@/queries/match';
 import { tournamentQueryOptions } from '@/queries/tournament';
+import { requireSession } from '@/queries/session';
 import { ThemeProvider } from '@/contexts/themes';
 
 export const Route = createFileRoute('/dashboard_/tournaments/$id/builder')({
-  loader: ({ params, context: { queryClient } }) => {
-    void queryClient.prefetchQuery(tournamentQueryOptions(params.id));
+  beforeLoad: ({ context: { queryClient } }) => requireSession(queryClient),
+  loader: async ({ params, context: { queryClient } }) => {
+    await queryClient.ensureQueryData(tournamentQueryOptions(params.id));
     void queryClient.prefetchQuery(divisionListQueryOptions(params.id));
+    void queryClient.prefetchQuery(tournamentMatchesQueryOptions(params.id));
   },
   pendingComponent: () => <LoadingScreen title="Loading workspace..." />,
   component: TournamentBuilderPage,
+  errorComponent: TournamentRouteError,
+  notFoundComponent: NotFound,
 });
 
 function TournamentBuilderPage() {

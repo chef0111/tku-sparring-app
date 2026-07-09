@@ -43,12 +43,11 @@ export function useBracketsTabQueries({
   });
 
   const matches = matchesQuery.data ?? [];
-  const tournamentMatches = (tournamentMatchesQuery.data ??
-    []) as Array<MatchData>;
+  const tournamentMatches = tournamentMatchesQuery.data as Array<MatchData>;
   const athletes = athletesQuery.data?.items ?? [];
   const selectedDivision = divisions.find((d) => d.id === selectedDivisionId);
 
-  const arenaDivisionOrder = tournamentQuery.data?.arenaDivisionOrder;
+  const arenaDivisionOrder = tournamentQuery.data.arenaDivisionOrder;
 
   const matchLabel = React.useMemo(() => {
     if (!selectedDivision) return new Map<string, number | null>();

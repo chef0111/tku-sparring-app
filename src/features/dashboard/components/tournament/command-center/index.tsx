@@ -5,13 +5,17 @@ import { TournamentActivitySheet } from '../tournament-activity-sheet';
 import { TournamentStatusPill } from '../tournament-status-pill';
 import { ActivityPanel } from './activity-panel';
 import { DivisionsOverview } from './divisions-overview';
+import {
+  ActivityPanelSkeleton,
+  DivisionsOverviewSkeleton,
+  SetupChecklistSkeleton,
+  TournamentKpiRowSkeleton,
+} from './loading';
 import { SetupChecklist } from './setup-checklist';
 import { TournamentKpiRow } from './tournament-kpi-row';
 import { TournamentStatusDialog } from './tournament-status-dialog';
 import type { TournamentStatus } from './tournament-status-dialog';
-import type { DivisionData } from '@/contracts/tournament/division';
-import type { MatchData } from '@/contracts/tournament/match';
-import type { TournamentData } from '@/contracts/tournament/list';
+import { QueryErrorBoundary } from '@/components/query-error-boundary';
 import { useTournamentCommandCenter } from '@/features/dashboard/hooks/use-tournament-command-center';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -27,22 +31,11 @@ interface TournamentCommandCenterProps {
 export function TournamentCommandCenter({
   tournamentId,
 }: TournamentCommandCenterProps) {
-  const tournamentQuery = useTournament(tournamentId);
-  const divisionsQuery = useDivisions(tournamentId);
-  const matchesQuery = useTournamentMatches(tournamentId);
-
-  const tournament = tournamentQuery.data as TournamentData;
-  const divisions = divisionsQuery.data as Array<DivisionData>;
-  const matches = matchesQuery.data as Array<MatchData>;
+  const { data: tournament } = useTournament(tournamentId);
 
   const [activityOpen, setActivityOpen] = React.useState(false);
   const [confirmStatus, setConfirmStatus] =
     React.useState<TournamentStatus | null>(null);
-
-  const commandCenter = useTournamentCommandCenter({
-    tournament,
-    matches,
-  });
 
   const transitionAction =
     tournament.status === 'draft'
@@ -64,8 +57,6 @@ export function TournamentCommandCenter({
         : null;
 
   const isDraft = tournament.status === 'draft';
-
-  const showSetupChecklist = isDraft && commandCenter.setupSteps.length > 0;
 
   return (
     <div className="flex h-full flex-col">
@@ -128,32 +119,37 @@ export function TournamentCommandCenter({
               </Alert>
             )}
 
-          {showSetupChecklist ? (
-            <SetupChecklist
-              steps={commandCenter.setupSteps}
-              tournamentId={tournamentId}
-            />
+          {isDraft ? (
+            <QueryErrorBoundary title="Failed to load setup checklist">
+              <React.Suspense fallback={<SetupChecklistSkeleton />}>
+                <SetupChecklistIsland tournamentId={tournamentId} />
+              </React.Suspense>
+            </QueryErrorBoundary>
           ) : null}
 
-          <TournamentKpiRow
-            tournament={tournament}
-            divisions={divisions}
-            matches={matches}
-          />
+          <QueryErrorBoundary title="Failed to load tournament stats">
+            <React.Suspense fallback={<TournamentKpiRowSkeleton />}>
+              <TournamentKpiRowIsland tournamentId={tournamentId} />
+            </React.Suspense>
+          </QueryErrorBoundary>
 
           <div className="grid gap-6 lg:grid-cols-5">
             <div className="flex flex-col gap-4 lg:col-span-3">
-              <DivisionsOverview
-                divisions={divisions}
-                matches={matches}
-                tournamentId={tournamentId}
-              />
+              <QueryErrorBoundary title="Failed to load divisions">
+                <React.Suspense fallback={<DivisionsOverviewSkeleton />}>
+                  <DivisionsOverviewIsland tournamentId={tournamentId} />
+                </React.Suspense>
+              </QueryErrorBoundary>
             </div>
             <div className="lg:col-span-2">
-              <ActivityPanel
-                tournamentId={tournamentId}
-                onViewAll={() => setActivityOpen(true)}
-              />
+              <QueryErrorBoundary title="Failed to load activity">
+                <React.Suspense fallback={<ActivityPanelSkeleton />}>
+                  <ActivityPanel
+                    tournamentId={tournamentId}
+                    onViewAll={() => setActivityOpen(true)}
+                  />
+                </React.Suspense>
+              </QueryErrorBoundary>
             </div>
           </div>
         </main>
@@ -172,5 +168,52 @@ export function TournamentCommandCenter({
         transitionAction={transitionAction}
       />
     </div>
+  );
+}
+
+function SetupChecklistIsland({ tournamentId }: { tournamentId: string }) {
+  const { data: tournament } = useTournament(tournamentId);
+  const { data: matches } = useTournamentMatches(tournamentId);
+  const commandCenter = useTournamentCommandCenter({
+    tournament,
+    matches,
+  });
+
+  if (commandCenter.setupSteps.length === 0) {
+    return null;
+  }
+
+  return (
+    <SetupChecklist
+      steps={commandCenter.setupSteps}
+      tournamentId={tournamentId}
+    />
+  );
+}
+
+function TournamentKpiRowIsland({ tournamentId }: { tournamentId: string }) {
+  const { data: tournament } = useTournament(tournamentId);
+  const { data: divisions } = useDivisions(tournamentId);
+  const { data: matches } = useTournamentMatches(tournamentId);
+
+  return (
+    <TournamentKpiRow
+      tournament={tournament}
+      divisions={divisions}
+      matches={matches}
+    />
+  );
+}
+
+function DivisionsOverviewIsland({ tournamentId }: { tournamentId: string }) {
+  const { data: divisions } = useDivisions(tournamentId);
+  const { data: matches } = useTournamentMatches(tournamentId);
+
+  return (
+    <DivisionsOverview
+      divisions={divisions}
+      matches={matches}
+      tournamentId={tournamentId}
+    />
   );
 }

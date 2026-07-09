@@ -16,6 +16,7 @@ interface ActivityPanelProps {
 export function ActivityPanel({ tournamentId, onViewAll }: ActivityPanelProps) {
   const query = useTournamentActivitySuspenseInfinite({
     tournamentId,
+    limit: 8,
   });
 
   const rows = React.useMemo(

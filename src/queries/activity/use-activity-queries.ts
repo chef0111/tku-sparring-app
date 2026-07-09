@@ -19,6 +19,7 @@ export function useTournamentActivityInfinite(input: {
 export function useTournamentActivitySuspenseInfinite(input: {
   tournamentId: string;
   eventTypes?: Array<TournamentActivityEventType>;
+  limit?: number;
 }) {
   return useSuspenseInfiniteQuery(activityListInfiniteQueryOptions(input));
 }

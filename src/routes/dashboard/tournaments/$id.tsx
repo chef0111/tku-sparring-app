@@ -7,8 +7,8 @@ import { tournamentMatchesQueryOptions } from '@/queries/match';
 import { tournamentQueryOptions } from '@/queries/tournament';
 
 export const Route = createFileRoute('/dashboard/tournaments/$id')({
-  loader: ({ params, context: { queryClient } }) => {
-    void queryClient.prefetchQuery(tournamentQueryOptions(params.id));
+  loader: async ({ params, context: { queryClient } }) => {
+    await queryClient.ensureQueryData(tournamentQueryOptions(params.id));
     void queryClient.prefetchQuery(divisionListQueryOptions(params.id));
     void queryClient.prefetchQuery(tournamentMatchesQueryOptions(params.id));
     void queryClient.prefetchInfiniteQuery({

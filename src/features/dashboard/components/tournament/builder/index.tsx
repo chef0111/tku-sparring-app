@@ -11,6 +11,8 @@ import { DivisionsTab } from './divisions-tab';
 import { BracketsTab } from './brackets-tab';
 import type { DivisionData } from '@/contracts/tournament/division';
 import type { TournamentData } from '@/contracts/tournament/list';
+import LoadingScreen from '@/components/navigation/loading';
+import { QueryErrorBoundary } from '@/components/query-error-boundary';
 import { TournamentBracketProvider } from '@/features/dashboard/contexts/tournament-bracket';
 import { useTournamentBuilder } from '@/features/dashboard/hooks/use-tournament-builder';
 import { BuilderWorkspaceProvider } from '@/features/dashboard/contexts/builder-workspace';
@@ -29,17 +31,31 @@ interface TournamentBuilderProps {
 export function TournamentBuilder({ id }: TournamentBuilderProps) {
   useTournamentRealtimeStream(id);
 
-  const tournamentQuery = useTournament(id);
-  const divisionsQuery = useDivisions(id);
+  const { data: tournament } = useTournament(id);
 
-  const tournament = tournamentQuery.data as TournamentData;
-  const divisions = divisionsQuery.data as Array<DivisionData>;
+  return (
+    <QueryErrorBoundary title="Failed to load divisions">
+      <React.Suspense fallback={<LoadingScreen title="Loading workspace..." />}>
+        <TournamentBuilderDivisions tournament={tournament} tournamentId={id} />
+      </React.Suspense>
+    </QueryErrorBoundary>
+  );
+}
+
+function TournamentBuilderDivisions({
+  tournament,
+  tournamentId,
+}: {
+  tournament: TournamentData;
+  tournamentId: string;
+}) {
+  const { data: divisions } = useDivisions(tournamentId);
 
   return (
     <TournamentBuilderActive
       tournament={tournament}
       divisions={divisions}
-      tournamentId={id}
+      tournamentId={tournamentId}
     />
   );
 }

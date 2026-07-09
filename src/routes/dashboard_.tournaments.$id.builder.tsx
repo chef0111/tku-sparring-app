@@ -1,13 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { TournamentBuilder } from '@/features/dashboard/components/tournament/builder';
 import LoadingScreen from '@/components/navigation/loading';
 import { divisionListQueryOptions } from '@/queries/division/division-list-query-options';
 import { tournamentQueryOptions } from '@/queries/tournament';
+import { sessionQueryOptions } from '@/queries/session';
 import { ThemeProvider } from '@/contexts/themes';
 
 export const Route = createFileRoute('/dashboard_/tournaments/$id/builder')({
-  loader: ({ params, context: { queryClient } }) => {
-    void queryClient.prefetchQuery(tournamentQueryOptions(params.id));
+  beforeLoad: async ({ context: { queryClient } }) => {
+    const session = await queryClient.ensureQueryData(sessionQueryOptions());
+    if (!session) {
+      throw redirect({ to: '/login' });
+    }
+    return { user: session.user };
+  },
+  loader: async ({ params, context: { queryClient } }) => {
+    await queryClient.ensureQueryData(tournamentQueryOptions(params.id));
     void queryClient.prefetchQuery(divisionListQueryOptions(params.id));
   },
   pendingComponent: () => <LoadingScreen title="Loading workspace..." />,

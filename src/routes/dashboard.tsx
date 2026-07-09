@@ -1,19 +1,12 @@
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
+import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { AppSidebar } from '@/features/dashboard/components/sidebar/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import LoadingScreen from '@/components/navigation/loading';
-import { sessionQueryOptions } from '@/queries/session';
+import { requireSession } from '@/queries/session';
 import { ThemeProvider } from '@/contexts/themes';
 
 export const Route = createFileRoute('/dashboard')({
-  beforeLoad: async ({ context: { queryClient } }) => {
-    const session = await queryClient.ensureQueryData(sessionQueryOptions());
-
-    if (!session) {
-      throw redirect({ to: '/login' });
-    }
-    return { user: session.user };
-  },
+  beforeLoad: ({ context: { queryClient } }) => requireSession(queryClient),
   pendingComponent: () => <LoadingScreen title="Loading your dashboard..." />,
   component: DashboardLayout,
 });

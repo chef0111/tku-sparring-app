@@ -6,7 +6,7 @@ export function useDashboardStats() {
   const query = useTournaments();
 
   const stats = useMemo(() => {
-    return computeDashboardStats(query.data);
+    return computeDashboardStats(query.data ?? []);
   }, [query.data]);
 
   return { ...query, stats };

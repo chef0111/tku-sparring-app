@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { DataTableRowAction } from '@/types/data-table';
@@ -42,9 +42,7 @@ export function DashboardHome() {
           </div>
 
           <ErrorBoundary title="Failed to load dashboard">
-            <Suspense fallback={<DashboardHomeSkeleton />}>
-              <DashboardHomeContent onRowAction={setRowAction} />
-            </Suspense>
+            <DashboardHomeContent onRowAction={setRowAction} />
           </ErrorBoundary>
         </main>
       </div>
@@ -71,7 +69,11 @@ function DashboardHomeContent({
 }: {
   onRowAction: (action: DataTableRowAction<TournamentListItem> | null) => void;
 }) {
-  const { stats } = useDashboardStats();
+  const { stats, isPending, data } = useDashboardStats();
+
+  if (isPending && !data) {
+    return <DashboardHomeSkeleton />;
+  }
 
   return (
     <>

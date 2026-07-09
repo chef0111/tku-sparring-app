@@ -1,4 +1,5 @@
 import { TournamentsEmptyState } from '../tournaments-empty-state';
+import { TournamentCardSkeleton } from './tournament-card-skeleton';
 import { TournamentCard } from './tournament-card';
 import type { TournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
@@ -8,6 +9,8 @@ import type {
 } from '@/contracts/tournament/list';
 import { useTournamentList } from '@/queries/tournament';
 import { cn } from '@/lib/utils';
+
+const GRID_SKELETON_COUNT = 8;
 
 interface TournamentsGridProps {
   query: TournamentsManagerQuery;
@@ -24,7 +27,7 @@ export function TournamentsGrid({
   onClearFilters,
   className,
 }: TournamentsGridProps) {
-  const { data } = useTournamentList({
+  const { data, isPending, isPlaceholderData } = useTournamentList({
     page: query.page,
     perPage: query.perPage,
     query: query.queryFilter ?? undefined,
@@ -37,9 +40,24 @@ export function TournamentsGrid({
     sortDir: query.sort?.[0]?.desc ? 'desc' : 'asc',
   });
 
-  const tournaments = data.items;
+  if (isPending && !data) {
+    return (
+      <div
+        className={cn(
+          'grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+          className
+        )}
+      >
+        {Array.from({ length: GRID_SKELETON_COUNT }, (_, i) => (
+          <TournamentCardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
 
-  if (data.total === 0) {
+  const tournaments = data?.items ?? [];
+
+  if ((data?.total ?? 0) === 0) {
     const hasActiveFilters =
       (query.queryFilter ?? '').trim().length > 0 ||
       (query.statusFilter?.length ?? 0) > 0;
@@ -58,8 +76,11 @@ export function TournamentsGrid({
     <div
       className={cn(
         'grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+        isPlaceholderData &&
+          'pointer-events-none opacity-50 transition-opacity',
         className
       )}
+      aria-busy={isPlaceholderData || undefined}
     >
       {tournaments.map((tournament) => (
         <TournamentCard

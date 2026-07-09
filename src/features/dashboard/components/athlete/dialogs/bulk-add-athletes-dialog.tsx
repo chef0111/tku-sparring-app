@@ -81,20 +81,11 @@ export function BulkAddAthletesDialog({
         <div className="grid gap-4 py-2">
           <div className="grid gap-1.5">
             <Label>Tournament</Label>
-            <React.Suspense
-              fallback={
-                <div className="text-muted-foreground flex h-9 items-center gap-2 text-sm">
-                  <Spinner className="size-4" />
-                  Loading tournaments…
-                </div>
-              }
-            >
-              <TournamentSelect
-                open={open}
-                tournamentId={tournamentId}
-                onTournamentIdChange={setTournamentId}
-              />
-            </React.Suspense>
+            <TournamentSelect
+              open={open}
+              tournamentId={tournamentId}
+              onTournamentIdChange={setTournamentId}
+            />
           </div>
 
           <div className="flex items-center gap-2">
@@ -152,15 +143,26 @@ function TournamentSelect({
   tournamentId: string;
   onTournamentIdChange: (id: string) => void;
 }) {
-  const { data: tournaments } = useTournaments();
+  const { data: tournaments, isPending } = useTournaments();
 
   React.useEffect(() => {
-    if (!open) return;
+    if (!open || !tournaments) return;
     const lastUsed = localStorage.getItem(LAST_USED_TOURNAMENT_KEY);
     if (lastUsed && tournaments.some((t) => t.id === lastUsed)) {
       onTournamentIdChange(lastUsed);
     }
   }, [open, tournaments, onTournamentIdChange]);
+
+  if (isPending && !tournaments) {
+    return (
+      <div className="text-muted-foreground flex h-9 items-center gap-2 text-sm">
+        <Spinner className="size-4" />
+        Loading tournaments…
+      </div>
+    );
+  }
+
+  const items = tournaments ?? [];
 
   return (
     <Select value={tournamentId} onValueChange={onTournamentIdChange}>
@@ -168,12 +170,12 @@ function TournamentSelect({
         <SelectValue placeholder="Select a tournament..." />
       </SelectTrigger>
       <SelectContent>
-        {tournaments.length === 0 ? (
+        {items.length === 0 ? (
           <div className="text-muted-foreground px-2 py-4 text-center text-sm">
             No tournaments found
           </div>
         ) : (
-          tournaments.map((t) => (
+          items.map((t) => (
             <SelectItem key={t.id} value={t.id}>
               {t.name}
             </SelectItem>

@@ -188,18 +188,10 @@ export default function AthletesActionMenu({
               Add to tournaments
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <React.Suspense
-              fallback={
-                <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                  Loading…
-                </div>
-              }
-            >
-              <TournamentQuickAddItems
-                disabled={bulkAddToTournament.isPending}
-                onPick={onQuickAddToTournament}
-              />
-            </React.Suspense>
+            <TournamentQuickAddItems
+              disabled={bulkAddToTournament.isPending}
+              onPick={onQuickAddToTournament}
+            />
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
@@ -222,9 +214,15 @@ function TournamentQuickAddItems({
   disabled: boolean;
   onPick: (tournamentId: string) => void;
 }) {
-  const { data: tournaments } = useTournaments();
+  const { data: tournaments, isPending } = useTournaments();
 
-  if (tournaments.length === 0) {
+  if (isPending && !tournaments) {
+    return (
+      <div className="text-muted-foreground px-2 py-1.5 text-sm">Loading…</div>
+    );
+  }
+
+  if (!tournaments || tournaments.length === 0) {
     return (
       <div className="text-muted-foreground px-2 py-1.5 text-sm">
         No tournaments

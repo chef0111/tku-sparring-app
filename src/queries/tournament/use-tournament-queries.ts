@@ -1,4 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import type { ListTournamentsDTO } from '@/orpc/tournaments/dto';
 import {
   tournamentQueryOptions,
@@ -6,17 +10,23 @@ import {
   tournamentsListQueryOptions,
 } from '@/queries/tournament/tournament-query-options';
 
+/** Non-suspense: list/home navigations must commit immediately under Router transitions. */
 export function useTournaments() {
-  return useSuspenseQuery({
+  return useQuery({
     ...tournamentsAllQueryOptions(),
     select: (data) => data.items,
   });
 }
 
+/** Non-suspense: filter/page changes keep prior rows; route shell paints before data. */
 export function useTournamentList(input: ListTournamentsDTO) {
-  return useSuspenseQuery(tournamentsListQueryOptions(input));
+  return useQuery({
+    ...tournamentsListQueryOptions(input),
+    placeholderData: keepPreviousData,
+  });
 }
 
+/** Suspense: detail routes await this in the loader, then stream deferred islands. */
 export function useTournament(id: string) {
   return useSuspenseQuery(tournamentQueryOptions(id));
 }

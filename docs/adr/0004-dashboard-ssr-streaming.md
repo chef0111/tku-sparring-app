@@ -10,12 +10,14 @@ Dashboard routes mixed `ensureQueryData` and fire-and-forget prefetch without a 
 
 Adopt a consistent SSR streaming model for dashboard (home, tournaments list, command center, athletes, builder):
 
-- **Critical await + deferred prefetch** — loaders `await ensureQueryData` only for route-identity data that the chrome needs before paint (e.g. tournament detail on `$id` / builder). List/home page bodies use `void prefetchQuery` so client navigations stay instant and Suspense streams the table/grid/hub content
-- **`useSuspenseQuery`** for always-on dashboard reads that participate in streaming
-- **Suspense islands** in `features/dashboard` with existing skeletons; isolate failures with `ErrorBoundary`
+- **Critical await + deferred prefetch** — loaders `await ensureQueryData` for route-identity data (`$id` / builder tournament) and for **athletes / tournaments enter** (so `pendingComponent` can replace the previous outlet). Home uses `void prefetchQuery` + `useQuery` skeletons
+- **`useSuspenseQuery`** for detail routes; **`useQuery` + `keepPreviousData`** for athletes / tournaments / home list bodies
+- **Suspense islands** where the loader already awaited critical data (command center deferred panels, builder tabs); list bodies use inline skeletons or dimmed previous rows
+- **List `pendingComponent`s** — `AthletesPending` / `TournamentsPending` on route enter; sort/filter keep prior rows at 50% opacity via `isPlaceholderData` (no skeleton flash)
 - **`loaderDeps` + nuqs parse helpers** — shared parse functions feed both loaders and table state; no `validateSearch` on these routes
 - **Route `errorComponent`s** for loader / route failures; tournament missing → clear not-found UI with link back
-- **Builder session gate** — `beforeLoad` ensures session and redirects to login when unauthenticated
+- **Cache-first session gate** — `requireSession` uses `getQueryData` on warm cache (sync `beforeLoad` for sibling nav); `ensureQueryData` only on cache miss. Shared by `/dashboard` and builder
+- **RSC** — not required for interactive nuqs list tables; do not enable unless product asks
 
 ## Alternatives considered
 
@@ -25,9 +27,11 @@ Adopt a consistent SSR streaming model for dashboard (home, tournaments list, co
 
 ## Consequences
 
-- Client navigations to home / tournaments / athletes paint the shell immediately; list bodies show skeletons then fill
-- Hard-refresh still starts server prefetch; deferred panels / lists stream via Suspense
-- One failing deferred island does not blank the whole command center / home / list page
+- Client navigations to home paint the shell immediately; body shows `useQuery` skeletons then fill
+- Navigations to athletes / tournaments show route `pendingComponent` until the list query is ready; sort/filter keep prior rows dimmed (`keepPreviousData` + `isPlaceholderData`)
+- Warm-session sibling hops do not re-await session in layout `beforeLoad`, so the outlet is not held on an async parent gate
+- Hard-refresh still starts server prefetch; detail deferred panels and athletes filter changes stream via Suspense
+- One failing deferred island does not blank the whole command center
 - Filtered tournament/athlete URLs prefetch the same query key the table reads
-- Unauthenticated builder visits redirect to `/login`
+- Unauthenticated dashboard / builder visits redirect to `/login`
 - Orphaned pathless `dashboard/_tournaments` layout removed; route tree no longer nests under a no-op Outlet

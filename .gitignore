@@ -22,3 +22,6 @@ scripts/migration-id-map.json
 
 # Local Netlify folder
 .netlify
+
+# eslint
+.eslintcache

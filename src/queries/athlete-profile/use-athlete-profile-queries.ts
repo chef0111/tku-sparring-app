@@ -2,15 +2,18 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  useSuspenseQuery,
 } from '@tanstack/react-query';
 import type { AthleteProfilesDTO } from '@/orpc/athlete-profiles/dto';
 import { athleteProfilesQueryOptions } from '@/queries/athlete-profile/athlete-profile-query-options';
 import { athleteProfileKeys } from '@/queries/keys';
 import { listAthleteProfiles } from '@/queries/api/athlete-profile-api';
 
+/** keepPreviousData: sort/filter keep prior rows (dimmed) instead of suspending to a skeleton. */
 export function useAthleteProfiles(input: AthleteProfilesDTO) {
-  return useSuspenseQuery(athleteProfilesQueryOptions(input));
+  return useQuery({
+    ...athleteProfilesQueryOptions(input),
+    placeholderData: keepPreviousData,
+  });
 }
 
 export function useAthleteProfilesInfinite(

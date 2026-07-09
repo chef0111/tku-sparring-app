@@ -31,7 +31,8 @@ interface TournamentBuilderProps {
 export function TournamentBuilder({ id }: TournamentBuilderProps) {
   useTournamentRealtimeStream(id);
 
-  const { data: tournament } = useTournament(id);
+  const { data } = useTournament(id);
+  const tournament = data as TournamentData;
 
   return (
     <QueryErrorBoundary title="Failed to load divisions">

@@ -15,6 +15,9 @@ import { SetupChecklist } from './setup-checklist';
 import { TournamentKpiRow } from './tournament-kpi-row';
 import { TournamentStatusDialog } from './tournament-status-dialog';
 import type { TournamentStatus } from './tournament-status-dialog';
+import type { DivisionData } from '@/contracts/tournament/division';
+import type { MatchData } from '@/contracts/tournament/match';
+import type { TournamentData } from '@/contracts/tournament/list';
 import { QueryErrorBoundary } from '@/components/query-error-boundary';
 import { useTournamentCommandCenter } from '@/features/dashboard/hooks/use-tournament-command-center';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
@@ -31,7 +34,8 @@ interface TournamentCommandCenterProps {
 export function TournamentCommandCenter({
   tournamentId,
 }: TournamentCommandCenterProps) {
-  const { data: tournament } = useTournament(tournamentId);
+  const { data } = useTournament(tournamentId);
+  const tournament = data as TournamentData;
 
   const [activityOpen, setActivityOpen] = React.useState(false);
   const [confirmStatus, setConfirmStatus] =
@@ -172,8 +176,10 @@ export function TournamentCommandCenter({
 }
 
 function SetupChecklistIsland({ tournamentId }: { tournamentId: string }) {
-  const { data: tournament } = useTournament(tournamentId);
-  const { data: matches } = useTournamentMatches(tournamentId);
+  const { data: tournamentData } = useTournament(tournamentId);
+  const { data: matchesData } = useTournamentMatches(tournamentId);
+  const tournament = tournamentData as TournamentData;
+  const matches = matchesData as Array<MatchData>;
   const commandCenter = useTournamentCommandCenter({
     tournament,
     matches,
@@ -192,27 +198,27 @@ function SetupChecklistIsland({ tournamentId }: { tournamentId: string }) {
 }
 
 function TournamentKpiRowIsland({ tournamentId }: { tournamentId: string }) {
-  const { data: tournament } = useTournament(tournamentId);
-  const { data: divisions } = useDivisions(tournamentId);
-  const { data: matches } = useTournamentMatches(tournamentId);
+  const { data: tournamentData } = useTournament(tournamentId);
+  const { data: divisionsData } = useDivisions(tournamentId);
+  const { data: matchesData } = useTournamentMatches(tournamentId);
 
   return (
     <TournamentKpiRow
-      tournament={tournament}
-      divisions={divisions}
-      matches={matches}
+      tournament={tournamentData as TournamentData}
+      divisions={divisionsData as Array<DivisionData>}
+      matches={matchesData as Array<MatchData>}
     />
   );
 }
 
 function DivisionsOverviewIsland({ tournamentId }: { tournamentId: string }) {
-  const { data: divisions } = useDivisions(tournamentId);
-  const { data: matches } = useTournamentMatches(tournamentId);
+  const { data: divisionsData } = useDivisions(tournamentId);
+  const { data: matchesData } = useTournamentMatches(tournamentId);
 
   return (
     <DivisionsOverview
-      divisions={divisions}
-      matches={matches}
+      divisions={divisionsData as Array<DivisionData>}
+      matches={matchesData as Array<MatchData>}
       tournamentId={tournamentId}
     />
   );

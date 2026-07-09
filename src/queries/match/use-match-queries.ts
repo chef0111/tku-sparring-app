@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import {
   matchesByDivisionQueryOptions,
   tournamentMatchesQueryOptions,
@@ -12,5 +12,5 @@ export function useMatches(divisionId: string | null) {
 }
 
 export function useTournamentMatches(tournamentId: string) {
-  return useQuery(tournamentMatchesQueryOptions(tournamentId));
+  return useSuspenseQuery(tournamentMatchesQueryOptions(tournamentId));
 }

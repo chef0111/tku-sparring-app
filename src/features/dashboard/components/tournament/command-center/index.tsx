@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { Link } from '@tanstack/react-router';
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Edit,
-  History,
-  Trophy,
-  ZapIcon,
-} from 'lucide-react';
+import { CheckCircle2, Edit, History, ZapIcon } from 'lucide-react';
 import { TournamentActivitySheet } from '../tournament-activity-sheet';
 import { TournamentStatusPill } from '../tournament-status-pill';
 import { ActivityPanel } from './activity-panel';
@@ -15,13 +8,6 @@ import { DivisionsOverview } from './divisions-overview';
 import { SetupChecklist } from './setup-checklist';
 import { TournamentKpiRow } from './tournament-kpi-row';
 import { TournamentStatusDialog } from './tournament-status-dialog';
-import {
-  DivisionsOverviewSkeleton,
-  HeaderControlsSkeleton,
-  SetupChecklistSkeleton,
-  TournamentCommandCenterHeaderActionSkeleton,
-  TournamentKpiRowSkeleton,
-} from './loading';
 import type { TournamentStatus } from './tournament-status-dialog';
 import type { DivisionData } from '@/contracts/tournament/division';
 import type { MatchData } from '@/contracts/tournament/match';
@@ -45,13 +31,9 @@ export function TournamentCommandCenter({
   const divisionsQuery = useDivisions(tournamentId);
   const matchesQuery = useTournamentMatches(tournamentId);
 
-  const tournament = tournamentQuery.data as TournamentData | undefined;
-  const divisions = (divisionsQuery.data ?? []) as Array<DivisionData>;
-  const matches = (matchesQuery.data ?? []) as Array<MatchData>;
-
-  const isTournamentPending = tournamentQuery.isPending;
-  const isDivisionsPending = divisionsQuery.isPending;
-  const isMatchesPending = matchesQuery.isPending;
+  const tournament = tournamentQuery.data as TournamentData;
+  const divisions = divisionsQuery.data as Array<DivisionData>;
+  const matches = matchesQuery.data as Array<MatchData>;
 
   const [activityOpen, setActivityOpen] = React.useState(false);
   const [confirmStatus, setConfirmStatus] =
@@ -62,23 +44,8 @@ export function TournamentCommandCenter({
     matches,
   });
 
-  if (tournamentQuery.isError) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center gap-4">
-        <Trophy className="text-muted-foreground size-12" />
-        <h2 className="text-lg font-semibold">Tournament not found</h2>
-        <Button variant="outline" asChild>
-          <Link to="/dashboard/tournaments">
-            <ArrowLeft />
-            Back to tournaments
-          </Link>
-        </Button>
-      </div>
-    );
-  }
-
   const transitionAction =
-    tournament?.status === 'draft'
+    tournament.status === 'draft'
       ? {
           status: 'active' as const,
           label: 'Activate',
@@ -86,7 +53,7 @@ export function TournamentCommandCenter({
           description:
             'This will move the tournament into the active state so live results can begin.',
         }
-      : tournament?.status === 'active' && tournament.lifecycle.canComplete
+      : tournament.status === 'active' && tournament.lifecycle.canComplete
         ? {
             status: 'completed' as const,
             label: 'Complete tournament',
@@ -96,16 +63,9 @@ export function TournamentCommandCenter({
           }
         : null;
 
-  const isDraft = tournament?.status === 'draft';
+  const isDraft = tournament.status === 'draft';
 
-  const showSetupChecklistSkeleton =
-    isTournamentPending || (isDraft && isMatchesPending);
-
-  const showSetupChecklist =
-    !isTournamentPending &&
-    !isMatchesPending &&
-    isDraft &&
-    commandCenter.setupSteps.length > 0;
+  const showSetupChecklist = isDraft && commandCenter.setupSteps.length > 0;
 
   return (
     <div className="flex h-full flex-col">
@@ -118,58 +78,45 @@ export function TournamentCommandCenter({
             Tournaments
           </Link>
         }
-        action={
-          isTournamentPending ? (
-            <TournamentCommandCenterHeaderActionSkeleton />
-          ) : (
-            tournament!.name
-          )
-        }
+        action={tournament.name}
       >
-        {isTournamentPending ? (
-          <HeaderControlsSkeleton />
-        ) : (
-          <div className="ml-auto flex items-center gap-2">
-            <TournamentStatusPill status={tournament!.status} />
-            <Button
-              variant="outline"
-              size="sm"
-              type="button"
-              onClick={() => setActivityOpen(true)}
+        <div className="ml-auto flex items-center gap-2">
+          <TournamentStatusPill status={tournament.status} />
+          <Button
+            variant="outline"
+            size="sm"
+            type="button"
+            onClick={() => setActivityOpen(true)}
+          >
+            <History data-icon="inline-start" />
+            Activity
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link
+              to="/dashboard/tournaments/$id/builder"
+              params={{ id: tournamentId }}
             >
-              <History data-icon="inline-start" />
-              Activity
+              <Edit data-icon="inline-start" />
+              Open Builder
+            </Link>
+          </Button>
+          {transitionAction && (
+            <Button
+              size="sm"
+              onClick={() => setConfirmStatus(transitionAction.status)}
+            >
+              <ZapIcon aria-hidden="true" />
+              {transitionAction.label}
             </Button>
-            <Button variant="outline" size="sm" asChild>
-              <Link
-                to="/dashboard/tournaments/$id/builder"
-                params={{ id: tournamentId }}
-              >
-                <Edit data-icon="inline-start" />
-                Open Builder
-              </Link>
-            </Button>
-            {transitionAction && (
-              <Button
-                size="sm"
-                onClick={() => setConfirmStatus(transitionAction.status)}
-              >
-                <ZapIcon aria-hidden="true" />
-                {transitionAction.label}
-              </Button>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </SiteHeader>
 
       <div className="flex-1 overflow-auto p-6">
         <main className="mx-auto flex max-w-7xl flex-col gap-6">
-          {!isTournamentPending && tournament && (
-            <h1 className="sr-only">{tournament.name} command center</h1>
-          )}
+          <h1 className="sr-only">{tournament.name} command center</h1>
 
-          {!isTournamentPending &&
-            tournament?.status === 'active' &&
+          {tournament.status === 'active' &&
             tournament.lifecycle.canComplete && (
               <Alert>
                 <CheckCircle2 aria-hidden="true" />
@@ -181,36 +128,26 @@ export function TournamentCommandCenter({
               </Alert>
             )}
 
-          {showSetupChecklistSkeleton ? (
-            <SetupChecklistSkeleton />
-          ) : showSetupChecklist ? (
+          {showSetupChecklist ? (
             <SetupChecklist
               steps={commandCenter.setupSteps}
               tournamentId={tournamentId}
             />
           ) : null}
 
-          {isTournamentPending ? (
-            <TournamentKpiRowSkeleton />
-          ) : (
-            <TournamentKpiRow
-              tournament={tournament!}
-              divisions={divisions}
-              matches={matches}
-            />
-          )}
+          <TournamentKpiRow
+            tournament={tournament}
+            divisions={divisions}
+            matches={matches}
+          />
 
           <div className="grid gap-6 lg:grid-cols-5">
             <div className="flex flex-col gap-4 lg:col-span-3">
-              {isDivisionsPending ? (
-                <DivisionsOverviewSkeleton />
-              ) : (
-                <DivisionsOverview
-                  divisions={divisions}
-                  matches={matches}
-                  tournamentId={tournamentId}
-                />
-              )}
+              <DivisionsOverview
+                divisions={divisions}
+                matches={matches}
+                tournamentId={tournamentId}
+              />
             </div>
             <div className="lg:col-span-2">
               <ActivityPanel
@@ -228,14 +165,12 @@ export function TournamentCommandCenter({
         onOpenChange={setActivityOpen}
       />
 
-      {!isTournamentPending && tournament && (
-        <TournamentStatusDialog
-          tournamentId={tournamentId}
-          confirmStatus={confirmStatus}
-          onConfirmStatusChange={setConfirmStatus}
-          transitionAction={transitionAction}
-        />
-      )}
+      <TournamentStatusDialog
+        tournamentId={tournamentId}
+        confirmStatus={confirmStatus}
+        onConfirmStatusChange={setConfirmStatus}
+        transitionAction={transitionAction}
+      />
     </div>
   );
 }

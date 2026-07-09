@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { History } from 'lucide-react';
-import { ActivityPanelSkeleton } from './loading';
 import { ActivityEventRow } from './activity-event-row';
 import {
   HubSection,
   HubSectionContent,
 } from '@/features/dashboard/components/home/hub-panel';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { useTournamentActivityInfinite } from '@/queries/activity';
+import { useTournamentActivitySuspenseInfinite } from '@/queries/activity';
 
 interface ActivityPanelProps {
   tournamentId: string;
@@ -16,19 +14,14 @@ interface ActivityPanelProps {
 }
 
 export function ActivityPanel({ tournamentId, onViewAll }: ActivityPanelProps) {
-  const query = useTournamentActivityInfinite({
+  const query = useTournamentActivitySuspenseInfinite({
     tournamentId,
-    enabled: true,
   });
 
   const rows = React.useMemo(
-    () => query.data?.pages.flatMap((page) => page.items).slice(0, 8) ?? [],
+    () => query.data.pages.flatMap((page) => page.items).slice(0, 8),
     [query.data]
   );
-
-  if (query.isLoading) {
-    return <ActivityPanelSkeleton />;
-  }
 
   return (
     <HubSection
@@ -43,13 +36,7 @@ export function ActivityPanel({ tournamentId, onViewAll }: ActivityPanelProps) {
       }
     >
       <HubSectionContent padded={false}>
-        {query.isError ? (
-          <Alert variant="destructive">
-            <AlertDescription>
-              {query.error?.message ?? 'Failed to load activity.'}
-            </AlertDescription>
-          </Alert>
-        ) : rows.length === 0 ? (
+        {rows.length === 0 ? (
           <p className="text-muted-foreground text-sm">No activity yet.</p>
         ) : (
           <ul className="flex flex-col gap-3">

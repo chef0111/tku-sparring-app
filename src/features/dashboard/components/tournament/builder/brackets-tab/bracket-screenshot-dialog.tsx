@@ -75,7 +75,7 @@ export function BracketScreenshotDialog() {
   }, [blob]);
 
   const filename = bracketScreenshotFilename(
-    tournamentQuery.data?.name ?? 'tournament',
+    tournamentQuery.data.name ?? 'tournament',
     selectedDivision?.name ?? 'division'
   );
 

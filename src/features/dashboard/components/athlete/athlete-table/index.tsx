@@ -18,7 +18,6 @@ import { cn } from '@/lib/utils';
 import { DataTable } from '@/components/data-table/data-table';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
 import { Button } from '@/components/ui/button';
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableSortList } from '@/components/data-table/data-table-sort-list';
 import { DataTableFilterList } from '@/components/data-table/data-table-filter-list';
 import { DataTableFilterMenu } from '@/components/data-table/data-table-filter-menu';
@@ -56,7 +55,7 @@ export function AthleteTable({
     name: string;
   }> | null>(null);
 
-  const { data, isFetching } = useAthleteProfiles({
+  const { data } = useAthleteProfiles({
     page: query.page,
     perPage: query.perPage,
     query: enableQueryFilter ? (query.queryFilter ?? undefined) : undefined,
@@ -76,7 +75,7 @@ export function AthleteTable({
     joinOperator: query.joinOperator,
   });
 
-  const tableData = data?.items ?? [];
+  const tableData = data.items;
 
   const {
     table,
@@ -87,8 +86,8 @@ export function AthleteTable({
   } = useDataTable({
     data: tableData,
     columns,
-    pageCount: Math.ceil((data?.total ?? 0) / query.perPage),
-    filteredRowCount: data?.total,
+    pageCount: Math.ceil(data.total / query.perPage),
+    filteredRowCount: data.total,
     initialState: {
       sorting: DEFAULT_SORTING,
       columnPinning: { right: ['actions'] },
@@ -132,70 +131,62 @@ export function AthleteTable({
   return (
     <>
       <div className={cn('flex-1 overflow-auto', className)}>
-        {isFetching && !data ? (
-          <DataTableSkeleton columnCount={7} filterCount={4} rowCount={10} />
-        ) : (
-          <DataTable
-            table={table}
-            state={tableState}
-            actionBar={
-              <AthletesActionBar
+        <DataTable
+          table={table}
+          state={tableState}
+          actionBar={
+            <AthletesActionBar
+              table={table}
+              state={tableState}
+              onBulkAdd={handleBulkAddToTournament}
+              onBulkEdit={onBulkEdit ? handleBulkEditClick : undefined}
+              onDelete={handleBulkDeleteClick}
+            />
+          }
+          addRow={{
+            label: 'Add athlete',
+            onClick: onAdd,
+          }}
+        >
+          {enableAdvancedFilter ? (
+            <DataTableAdvancedToolbar table={table} state={tableState}>
+              <DataTableSortList
                 table={table}
                 state={tableState}
-                onBulkAdd={handleBulkAddToTournament}
-                onBulkEdit={onBulkEdit ? handleBulkEditClick : undefined}
-                onDelete={handleBulkDeleteClick}
+                align="start"
               />
-            }
-            addRow={{
-              label: 'Add athlete',
-              onClick: onAdd,
-            }}
-          >
-            {enableAdvancedFilter ? (
-              <DataTableAdvancedToolbar table={table} state={tableState}>
-                <DataTableSortList
+              {filterFlag === 'advancedFilters' ? (
+                <DataTableFilterList
                   table={table}
-                  state={tableState}
+                  shallow={shallow}
+                  debounceMs={debounceMs}
+                  throttleMs={throttleMs}
                   align="start"
                 />
-                {filterFlag === 'advancedFilters' ? (
-                  <DataTableFilterList
-                    table={table}
-                    shallow={shallow}
-                    debounceMs={debounceMs}
-                    throttleMs={throttleMs}
-                    align="start"
-                  />
-                ) : (
-                  <DataTableFilterMenu
-                    table={table}
-                    shallow={shallow}
-                    debounceMs={debounceMs}
-                    throttleMs={throttleMs}
-                    align="start"
-                  />
-                )}
-              </DataTableAdvancedToolbar>
-            ) : (
-              <DataTableToolbar table={table} state={tableState}>
-                <Button variant="outline" size="sm" onClick={onImport}>
-                  <Upload className="mr-1 size-4" />
-                  Import
-                </Button>
-                <Button variant="outline" size="sm" onClick={handleExportAll}>
-                  <Download className="mr-1 size-4" />
-                  Export
-                </Button>
-                <DataTableSortList
+              ) : (
+                <DataTableFilterMenu
                   table={table}
-                  state={tableState}
-                  align="end"
+                  shallow={shallow}
+                  debounceMs={debounceMs}
+                  throttleMs={throttleMs}
+                  align="start"
                 />
-              </DataTableToolbar>
-            )}
-          </DataTable>
-        )}
+              )}
+            </DataTableAdvancedToolbar>
+          ) : (
+            <DataTableToolbar table={table} state={tableState}>
+              <Button variant="outline" size="sm" onClick={onImport}>
+                <Upload className="mr-1 size-4" />
+                Import
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleExportAll}>
+                <Download className="mr-1 size-4" />
+                Export
+              </Button>
+              <DataTableSortList table={table} state={tableState} align="end" />
+            </DataTableToolbar>
+          )}
+        </DataTable>
       </div>
 
       <BulkDeleteAthletesDialog

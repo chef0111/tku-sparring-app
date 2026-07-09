@@ -1,6 +1,4 @@
-import { Link } from '@tanstack/react-router';
 import * as React from 'react';
-import { ArrowLeft, Trophy } from 'lucide-react';
 import { TournamentActivitySheet } from '../tournament-activity-sheet';
 import { BuilderShell } from './builder-shell';
 import { BuilderHeader } from './builder-shell/builder-header';
@@ -20,8 +18,6 @@ import {
   BracketChromeProvider,
   useBracketChrome,
 } from '@/features/dashboard/contexts/bracket-chrome';
-import LoadingScreen from '@/components/navigation/loading';
-import { Button } from '@/components/ui/button';
 import { useTournamentRealtimeStream } from '@/hooks/use-tournament-realtime-stream';
 import { useSetTournamentStatus, useTournament } from '@/queries/tournament';
 import { useDivisions } from '@/queries/division';
@@ -36,32 +32,13 @@ export function TournamentBuilder({ id }: TournamentBuilderProps) {
   const tournamentQuery = useTournament(id);
   const divisionsQuery = useDivisions(id);
 
-  if (tournamentQuery.isPending) {
-    return <LoadingScreen title="Loading workspace..." />;
-  }
-
-  if (tournamentQuery.isError || !tournamentQuery.data) {
-    return (
-      <div className="flex h-dvh flex-col items-center justify-center gap-4">
-        <Trophy className="text-muted-foreground size-12" />
-        <h2 className="text-lg font-semibold">Tournament not found</h2>
-        <Button variant="outline" asChild>
-          <Link to="/dashboard/tournaments">
-            <ArrowLeft />
-            Back to tournaments
-          </Link>
-        </Button>
-      </div>
-    );
-  }
-
   const tournament = tournamentQuery.data as TournamentData;
-  const divisions = divisionsQuery.data ?? [];
+  const divisions = divisionsQuery.data as Array<DivisionData>;
 
   return (
     <TournamentBuilderActive
       tournament={tournament}
-      divisions={divisions as Array<DivisionData>}
+      divisions={divisions}
       tournamentId={id}
     />
   );

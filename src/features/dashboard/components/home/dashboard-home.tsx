@@ -5,7 +5,6 @@ import type { DataTableRowAction } from '@/types/data-table';
 import { CreateTournamentDialog } from '@/features/dashboard/components/tournament/create-tournament-dialog';
 import { DeleteTournamentDialog } from '@/features/dashboard/components/tournament/overview/dialogs/delete-tournament-dialog';
 import { RenameTournamentDialog } from '@/features/dashboard/components/tournament/overview/dialogs/rename-tournament-dialog';
-import { DashboardHomeSkeleton } from '@/features/dashboard/components/home/dashboard-home-skeleton';
 import { HubChartsSection } from '@/features/dashboard/components/home/hub-charts-section';
 import { KpiStrip } from '@/features/dashboard/components/home/kpi-strip';
 import { RecentTournamentsSection } from '@/features/dashboard/components/home/recent-tournaments-section';
@@ -15,7 +14,7 @@ import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header'
 import { Button } from '@/components/ui/button';
 
 export function DashboardHome() {
-  const { isPending, stats } = useDashboardStats();
+  const { stats } = useDashboardStats();
   const [createOpen, setCreateOpen] = useState(false);
   const [rowAction, setRowAction] =
     useState<DataTableRowAction<TournamentListItem> | null>(null);
@@ -41,23 +40,16 @@ export function DashboardHome() {
             </Button>
           </div>
 
-          {isPending ? (
-            <DashboardHomeSkeleton />
-          ) : (
-            <>
-              <KpiStrip stats={stats.kpis} />
-              <HubChartsSection chartData={stats.chartData} />
-              <StatusPipeline
-                pipeline={stats.pipeline}
-                statusCounts={stats.kpis.byStatus}
-              />
-              <RecentTournamentsSection
-                tournaments={stats.recentTournaments}
-                pending={isPending}
-                onRowAction={setRowAction}
-              />
-            </>
-          )}
+          <KpiStrip stats={stats.kpis} />
+          <HubChartsSection chartData={stats.chartData} />
+          <StatusPipeline
+            pipeline={stats.pipeline}
+            statusCounts={stats.kpis.byStatus}
+          />
+          <RecentTournamentsSection
+            tournaments={stats.recentTournaments}
+            onRowAction={setRowAction}
+          />
         </main>
       </div>
 

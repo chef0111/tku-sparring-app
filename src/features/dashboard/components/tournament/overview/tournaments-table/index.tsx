@@ -10,7 +10,6 @@ import { useDataTable } from '@/hooks/use-data-table';
 import { cn } from '@/lib/utils';
 
 import { DataTable } from '@/components/data-table/data-table';
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 
 interface TournamentsTableProps {
   columns: Array<ColumnDef<TournamentListItem>>;
@@ -23,7 +22,7 @@ export function TournamentsTable({
   query,
   className,
 }: TournamentsTableProps) {
-  const { isFetching, isPending, data } = useTournamentList({
+  const { data } = useTournamentList({
     page: query.page,
     perPage: query.perPage,
     query: query.queryFilter ?? undefined,
@@ -37,10 +36,10 @@ export function TournamentsTable({
   });
 
   const { table, state: tableState } = useDataTable({
-    data: data?.items ?? [],
+    data: data.items,
     columns,
-    pageCount: Math.max(1, Math.ceil((data?.total ?? 0) / query.perPage)),
-    filteredRowCount: data?.total,
+    pageCount: Math.max(1, Math.ceil(data.total / query.perPage)),
+    filteredRowCount: data.total,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
       columnPinning: { right: ['actions'] },
@@ -49,25 +48,9 @@ export function TournamentsTable({
     clearOnDefault: true,
   });
 
-  if (isPending && !data) {
-    return (
-      <div className={cn('flex-1 overflow-auto', className)}>
-        <DataTableSkeleton
-          columnCount={6}
-          withViewOptions={false}
-          rowCount={10}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className={cn('flex-1 overflow-auto', className)}>
-      {isFetching && !data ? (
-        <DataTableSkeleton columnCount={6} rowCount={10} />
-      ) : (
-        <DataTable table={table} state={tableState} selectedRows={false} />
-      )}
+      <DataTable table={table} state={tableState} selectedRows={false} />
     </div>
   );
 }

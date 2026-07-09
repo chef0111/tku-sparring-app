@@ -39,7 +39,7 @@ export function BulkAddAthletesDialog({
   athleteProfileIds,
   onSuccess,
 }: BulkAddAthletesDialogProps) {
-  const { data: tournaments = [] } = useTournaments();
+  const { data: tournaments } = useTournaments();
   const [tournamentId, setTournamentId] = React.useState<string>('');
   const [autoAssign, setAutoAssign] = React.useState(false);
 

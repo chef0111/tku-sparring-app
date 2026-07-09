@@ -47,8 +47,7 @@ export default function AthletesActionMenu({
 }: AthletesActionMenuProps) {
   const [isUpdatePending, startUpdateTransition] = React.useTransition();
   const updateMutation = useUpdateAthleteProfile({ suppressToast: true });
-  const { data: tournaments = [], isPending: tournamentsLoading } =
-    useTournaments();
+  const { data: tournaments } = useTournaments();
   const bulkAddToTournament = useBulkAddAthletes({
     onSuccess: (result) => {
       bulkAddAthleteResult(result);
@@ -190,11 +189,7 @@ export default function AthletesActionMenu({
               Add to tournaments
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {tournamentsLoading ? (
-              <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                Loading tournaments…
-              </div>
-            ) : tournaments.length === 0 ? (
+            {tournaments.length === 0 ? (
               <div className="text-muted-foreground px-2 py-1.5 text-sm">
                 No tournaments
               </div>

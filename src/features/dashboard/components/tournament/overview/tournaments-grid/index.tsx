@@ -1,5 +1,4 @@
 import { TournamentsEmptyState } from '../tournaments-empty-state';
-import { TournamentCardSkeleton } from './tournament-card-skeleton';
 import { TournamentCard } from './tournament-card';
 import type { TournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
@@ -25,7 +24,7 @@ export function TournamentsGrid({
   onClearFilters,
   className,
 }: TournamentsGridProps) {
-  const { isPending, data } = useTournamentList({
+  const { data } = useTournamentList({
     page: query.page,
     perPage: query.perPage,
     query: query.queryFilter ?? undefined,
@@ -38,24 +37,9 @@ export function TournamentsGrid({
     sortDir: query.sort?.[0]?.desc ? 'desc' : 'asc',
   });
 
-  const tournaments = data?.items ?? [];
+  const tournaments = data.items;
 
-  if (isPending && !data) {
-    return (
-      <div
-        className={cn(
-          'grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-          className
-        )}
-      >
-        {Array.from({ length: 12 }).map((_, index) => (
-          <TournamentCardSkeleton key={index} />
-        ))}
-      </div>
-    );
-  }
-
-  if ((data?.total ?? 0) === 0) {
+  if (data.total === 0) {
     const hasActiveFilters =
       (query.queryFilter ?? '').trim().length > 0 ||
       (query.statusFilter?.length ?? 0) > 0;

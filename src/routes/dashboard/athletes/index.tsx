@@ -10,9 +10,9 @@ export const Route = createFileRoute('/dashboard/athletes/')({
   loaderDeps: ({ search }) => ({
     input: parseAthletesListInput(search as Record<string, unknown>),
   }),
-  loader: async ({ context: { queryClient }, deps }) => {
-    await queryClient.ensureQueryData(athleteProfilesQueryOptions(deps.input));
-    // Menu / bulk-add use useTournaments — defer so athletes TTFB stays on the table.
+  loader: ({ context: { queryClient }, deps }) => {
+    // Defer table + menu data — header paints immediately; Suspense streams the table.
+    void queryClient.prefetchQuery(athleteProfilesQueryOptions(deps.input));
     void queryClient.prefetchQuery(tournamentsAllQueryOptions());
   },
   pendingMs: 0,

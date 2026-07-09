@@ -10,7 +10,7 @@ Dashboard routes mixed `ensureQueryData` and fire-and-forget prefetch without a 
 
 Adopt a consistent SSR streaming model for dashboard (home, tournaments list, command center, athletes, builder):
 
-- **Critical await + deferred prefetch** — loaders `await ensureQueryData` only for above-the-fold / route-identity data (e.g. tournament detail); start non-critical queries with `void prefetchQuery` / `prefetchInfiniteQuery`
+- **Critical await + deferred prefetch** — loaders `await ensureQueryData` only for route-identity data that the chrome needs before paint (e.g. tournament detail on `$id` / builder). List/home page bodies use `void prefetchQuery` so client navigations stay instant and Suspense streams the table/grid/hub content
 - **`useSuspenseQuery`** for always-on dashboard reads that participate in streaming
 - **Suspense islands** in `features/dashboard` with existing skeletons; isolate failures with `QueryErrorBoundary`
 - **`loaderDeps` + nuqs parse helpers** — shared parse functions feed both loaders and table state; no `validateSearch` on these routes
@@ -25,7 +25,8 @@ Adopt a consistent SSR streaming model for dashboard (home, tournaments list, co
 
 ## Consequences
 
-- Hard-refresh hits dehydrated critical cache; deferred panels show skeletons then fill
+- Client navigations to home / tournaments / athletes paint the shell immediately; list bodies show skeletons then fill
+- Hard-refresh still starts server prefetch; deferred panels / lists stream via Suspense
 - One failing deferred island does not blank the whole command center / home / list page
 - Filtered tournament/athlete URLs prefetch the same query key the table reads
 - Unauthenticated builder visits redirect to `/login`

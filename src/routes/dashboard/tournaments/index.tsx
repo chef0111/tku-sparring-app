@@ -9,9 +9,12 @@ export const Route = createFileRoute('/dashboard/tournaments/')({
   loaderDeps: ({ search }) => ({
     input: parseTournamentsListInput(search as Record<string, unknown>),
   }),
-  loader: async ({ context: { queryClient }, deps }) => {
-    await queryClient.ensureQueryData(tournamentsListQueryOptions(deps.input));
+  loader: ({ context: { queryClient }, deps }) => {
+    // Defer list data — toolbar paints immediately; Suspense streams the grid/table.
+    void queryClient.prefetchQuery(tournamentsListQueryOptions(deps.input));
   },
+  pendingMs: 0,
+  pendingMinMs: 0,
   component: TournamentsOverview,
   errorComponent: DashboardRouteError,
   notFoundComponent: NotFound,

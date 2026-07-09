@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { AthletesPage } from '@/features/dashboard/components/athlete/athletes-page';
+import { DashboardRouteError } from '@/features/dashboard/components/dashboard-route-error';
 import { parseAthletesListInput } from '@/features/dashboard/lib/athlete/parse-athletes-list-input';
 import { athleteProfilesQueryOptions } from '@/queries/athlete-profile';
 import { tournamentsAllQueryOptions } from '@/queries/tournament';
@@ -19,5 +20,6 @@ export const Route = createFileRoute('/dashboard/athletes/')({
   pendingMs: 0,
   pendingMinMs: 0,
   component: AthletesPage,
+  errorComponent: DashboardRouteError,
   notFoundComponent: NotFound,
 });

@@ -1,4 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { NotFound } from '@/components/not-found';
+import { DashboardRouteError } from '@/features/dashboard/components/dashboard-route-error';
 import { TournamentBuilder } from '@/features/dashboard/components/tournament/builder';
 import LoadingScreen from '@/components/navigation/loading';
 import { divisionListQueryOptions } from '@/queries/division/division-list-query-options';
@@ -20,6 +22,8 @@ export const Route = createFileRoute('/dashboard_/tournaments/$id/builder')({
   },
   pendingComponent: () => <LoadingScreen title="Loading workspace..." />,
   component: TournamentBuilderPage,
+  errorComponent: DashboardRouteError,
+  notFoundComponent: NotFound,
 });
 
 function TournamentBuilderPage() {

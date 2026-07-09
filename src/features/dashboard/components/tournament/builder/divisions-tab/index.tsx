@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DndContext } from '@dnd-kit/core';
 import { toast } from 'sonner';
+import { useRouterState } from '@tanstack/react-router';
 import { AddDivisionDialog } from '../dialogs/add-division-dialog';
 import { DivisionSettingsSheet } from '../dialogs/division-settings-sheet';
 import { AddAthletesSheet } from './add-athletes-sheet';
@@ -33,6 +34,9 @@ export function DivisionsTab({
     addAthletes,
     setAddAthletes,
   } = useBuilderManagerQuery();
+  const isOnBuilder = useRouterState({
+    select: (s) => s.location.pathname.endsWith('/builder'),
+  });
 
   const assignAthlete = useAssignAthlete({ suppressErrorToast: true });
 
@@ -43,10 +47,12 @@ export function DivisionsTab({
     React.useState<DivisionData | null>(null);
 
   React.useEffect(() => {
+    // Only write while still on the builder
+    if (!isOnBuilder) return;
     if (!selectedDivisionId && divisions.length > 0) {
       void setSelectedDivision(divisions[0]!.id);
     }
-  }, [selectedDivisionId, divisions, setSelectedDivision]);
+  }, [isOnBuilder, selectedDivisionId, divisions, setSelectedDivision]);
 
   React.useEffect(() => {
     if (readOnly) {

@@ -63,27 +63,28 @@ export function SetupChecklistSkeleton() {
           </div>
           <Skeleton className="h-2 w-full rounded-full" />
         </div>
-        <li className="relative flex gap-3">
-          <div className="flex flex-col gap-3">
-            {Array.from({ length: 3 }).map((_, i) => {
-              const isLast = i === 2;
-              return (
-                <li className={cn('relative flex gap-3', !isLast && 'pb-3')}>
-                  <div className="relative flex w-5 shrink-0 translate-y-[25px] flex-col items-center">
-                    <Skeleton className="size-5 rounded-full border" />
-                    {!isLast && (
-                      <div
-                        aria-hidden
-                        className="bg-border absolute top-5 -bottom-3 left-1/2 w-px -translate-x-1/2"
-                      />
-                    )}
-                  </div>
-                  <Skeleton key={i} className="h-20 w-full rounded-lg border" />
-                </li>
-              );
-            })}
-          </div>
-        </li>
+        <ol className="flex flex-col" role="list">
+          {Array.from({ length: 3 }).map((_, i) => {
+            const isLast = i === 2;
+            return (
+              <li
+                key={i}
+                className={cn('relative flex gap-3', !isLast && 'pb-3')}
+              >
+                <div className="relative flex w-5 shrink-0 translate-y-[25px] flex-col items-center">
+                  <Skeleton className="size-5 rounded-full border" />
+                  {!isLast && (
+                    <div
+                      aria-hidden
+                      className="bg-border absolute top-5 -bottom-3 left-1/2 w-px -translate-x-1/2"
+                    />
+                  )}
+                </div>
+                <Skeleton className="h-20 w-full rounded-lg border" />
+              </li>
+            );
+          })}
+        </ol>
       </HubSectionContent>
     </HubSection>
   );

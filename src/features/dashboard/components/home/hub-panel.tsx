@@ -99,9 +99,9 @@ export function HubMetricCard({
           'flex flex-1 flex-col justify-between gap-2 p-4'
         )}
       >
-        <p className="relative z-1 text-3xl font-semibold tracking-tight tabular-nums">
+        <div className="relative z-1 text-3xl font-semibold tracking-tight tabular-nums">
           {value}
-        </p>
+        </div>
         <div className="relative z-1 mt-4 flex min-h-6 min-w-0 items-end">
           {footer}
         </div>

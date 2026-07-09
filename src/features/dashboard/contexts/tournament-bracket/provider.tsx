@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouterState } from '@tanstack/react-router';
 import { useBuilderWorkspace } from '../builder-workspace/use-builder-workspace';
 import { TournamentBracketContext } from './context';
 import type { MatchData } from '@/contracts/tournament/match';
@@ -18,6 +19,9 @@ export function TournamentBracketProvider({
     useBuilderWorkspace();
   const { selectedDivisionId, setSelectedDivision: setSelectedDivisionId } =
     useBuilderManagerQuery();
+  const isOnBuilder = useRouterState({
+    select: (s) => s.location.pathname.endsWith('/builder'),
+  });
 
   const [selectedMatch, setSelectedMatch] = React.useState<MatchData | null>(
     null
@@ -26,6 +30,9 @@ export function TournamentBracketProvider({
   const [arenaOrderSheetOpen, setArenaOrderSheetOpen] = React.useState(false);
 
   React.useEffect(() => {
+    // Only write while still on the builder. During exit, Link clears search
+    // first; writing here would reattach ?division= onto Command Center.
+    if (!isOnBuilder) return;
     if (!selectedDivisionId && divisions.length > 0) {
       void setSelectedDivisionId(divisions[0]!.id);
     }
@@ -35,7 +42,7 @@ export function TournamentBracketProvider({
     ) {
       void setSelectedDivisionId(divisions[0]?.id ?? null);
     }
-  }, [divisions, selectedDivisionId, setSelectedDivisionId]);
+  }, [isOnBuilder, divisions, selectedDivisionId, setSelectedDivisionId]);
 
   const data = useBracketsTabQueries({
     tournamentId,

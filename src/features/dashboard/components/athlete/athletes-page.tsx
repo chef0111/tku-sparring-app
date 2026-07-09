@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react';
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { AthleteDrawerMode } from '@/features/dashboard/components/athlete/athlete-drawer';
 import type {
   AthleteProfileData,
@@ -15,7 +15,11 @@ import { AthleteImportDialog } from '@/features/dashboard/components/athlete/dia
 import { DeleteAthleteDialog } from '@/features/dashboard/components/athlete/dialogs/delete-athlete-dialog';
 import { athleteProfileToRow } from '@/features/dashboard/lib/athlete/athlete-profile-to-row';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
+import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { Button } from '@/components/ui/button';
+
+const ATHLETE_TABLE_COLUMN_COUNT = 8;
 
 export function AthletesPage() {
   const enableQueryFilter = true;
@@ -68,19 +72,31 @@ export function AthletesPage() {
 
       <div className="mx-auto w-full max-w-7xl p-6">
         <FeatureFlagsProvider>
-          <AthleteTable
-            columns={columns}
-            className="pt-6"
-            onAdd={openCreateDrawer}
-            onImport={() => setImportOpen(true)}
-            enableQueryFilter={enableQueryFilter}
-            onBulkEdit={(profiles, onComplete) => {
-              setDrawerSeedRows(profiles.map(athleteProfileToRow));
-              setDrawerMode('bulk-edit');
-              bulkEditCompleteRef.current = onComplete;
-              setDrawerOpen(true);
-            }}
-          />
+          <QueryErrorBoundary title="Failed to load athletes">
+            <Suspense
+              fallback={
+                <DataTableSkeleton
+                  className="pt-6"
+                  columnCount={ATHLETE_TABLE_COLUMN_COUNT}
+                  filterCount={2}
+                />
+              }
+            >
+              <AthleteTable
+                columns={columns}
+                className="pt-6"
+                onAdd={openCreateDrawer}
+                onImport={() => setImportOpen(true)}
+                enableQueryFilter={enableQueryFilter}
+                onBulkEdit={(profiles, onComplete) => {
+                  setDrawerSeedRows(profiles.map(athleteProfileToRow));
+                  setDrawerMode('bulk-edit');
+                  bulkEditCompleteRef.current = onComplete;
+                  setDrawerOpen(true);
+                }}
+              />
+            </Suspense>
+          </QueryErrorBoundary>
         </FeatureFlagsProvider>
       </div>
 

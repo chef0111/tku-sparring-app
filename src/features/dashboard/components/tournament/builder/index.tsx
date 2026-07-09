@@ -12,7 +12,7 @@ import { BracketsTab } from './brackets-tab';
 import type { DivisionData } from '@/contracts/tournament/division';
 import type { TournamentData } from '@/contracts/tournament/list';
 import LoadingScreen from '@/components/navigation/loading';
-import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { TournamentBracketProvider } from '@/features/dashboard/contexts/tournament-bracket';
 import { useTournamentBuilder } from '@/features/dashboard/hooks/use-tournament-builder';
 import { BuilderWorkspaceProvider } from '@/features/dashboard/contexts/builder-workspace';
@@ -35,23 +35,23 @@ export function TournamentBuilder({ id }: TournamentBuilderProps) {
   const tournament = data as TournamentData;
 
   return (
-    <QueryErrorBoundary title="Failed to load divisions">
+    <ErrorBoundary title="Failed to load divisions">
       <React.Suspense fallback={<LoadingScreen title="Loading workspace..." />}>
         <TournamentBuilderDivisions tournament={tournament} tournamentId={id} />
       </React.Suspense>
-    </QueryErrorBoundary>
+    </ErrorBoundary>
   );
 }
 
 function BracketsTabIsland() {
   return (
-    <QueryErrorBoundary title="Failed to load brackets">
+    <ErrorBoundary title="Failed to load brackets">
       <React.Suspense fallback={<LoadingScreen title="Loading brackets..." />}>
         <TournamentBracketProvider>
           <BracketsTab />
         </TournamentBracketProvider>
       </React.Suspense>
-    </QueryErrorBoundary>
+    </ErrorBoundary>
   );
 }
 

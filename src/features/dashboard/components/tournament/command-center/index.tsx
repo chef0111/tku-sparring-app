@@ -18,7 +18,7 @@ import type { TournamentStatus } from './tournament-status-dialog';
 import type { DivisionData } from '@/contracts/tournament/division';
 import type { MatchData } from '@/contracts/tournament/match';
 import type { TournamentData } from '@/contracts/tournament/list';
-import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { useTournamentCommandCenter } from '@/features/dashboard/hooks/use-tournament-command-center';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -124,36 +124,36 @@ export function TournamentCommandCenter({
             )}
 
           {isDraft ? (
-            <QueryErrorBoundary title="Failed to load setup checklist">
+            <ErrorBoundary title="Failed to load setup checklist">
               <React.Suspense fallback={<SetupChecklistSkeleton />}>
                 <SetupChecklistIsland tournamentId={tournamentId} />
               </React.Suspense>
-            </QueryErrorBoundary>
+            </ErrorBoundary>
           ) : null}
 
-          <QueryErrorBoundary title="Failed to load tournament stats">
+          <ErrorBoundary title="Failed to load tournament stats">
             <React.Suspense fallback={<TournamentKpiRowSkeleton />}>
               <TournamentKpiRowIsland tournamentId={tournamentId} />
             </React.Suspense>
-          </QueryErrorBoundary>
+          </ErrorBoundary>
 
           <div className="grid gap-6 lg:grid-cols-5">
             <div className="flex flex-col gap-4 lg:col-span-3">
-              <QueryErrorBoundary title="Failed to load divisions">
+              <ErrorBoundary title="Failed to load divisions">
                 <React.Suspense fallback={<DivisionsOverviewSkeleton />}>
                   <DivisionsOverviewIsland tournamentId={tournamentId} />
                 </React.Suspense>
-              </QueryErrorBoundary>
+              </ErrorBoundary>
             </div>
             <div className="lg:col-span-2">
-              <QueryErrorBoundary title="Failed to load activity">
+              <ErrorBoundary title="Failed to load activity">
                 <React.Suspense fallback={<ActivityPanelSkeleton />}>
                   <ActivityPanel
                     tournamentId={tournamentId}
                     onViewAll={() => setActivityOpen(true)}
                   />
                 </React.Suspense>
-              </QueryErrorBoundary>
+              </ErrorBoundary>
             </div>
           </div>
         </main>

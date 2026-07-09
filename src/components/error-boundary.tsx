@@ -3,7 +3,7 @@ import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface QueryErrorBoundaryProps {
+interface ErrorBoundaryProps {
   children: React.ReactNode;
   title?: string;
 }
@@ -69,10 +69,10 @@ class ErrorBoundaryClass extends React.Component<
   }
 }
 
-export function QueryErrorBoundary({
+export function ErrorBoundary({
   children,
   title = 'Failed to load this section',
-}: QueryErrorBoundaryProps) {
+}: ErrorBoundaryProps) {
   const { reset } = useQueryErrorResetBoundary();
 
   return (

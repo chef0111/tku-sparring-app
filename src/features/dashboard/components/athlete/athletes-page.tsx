@@ -15,7 +15,7 @@ import { AthleteImportDialog } from '@/features/dashboard/components/athlete/dia
 import { DeleteAthleteDialog } from '@/features/dashboard/components/athlete/dialogs/delete-athlete-dialog';
 import { athleteProfileToRow } from '@/features/dashboard/lib/athlete/athlete-profile-to-row';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
-import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { Button } from '@/components/ui/button';
 
@@ -72,7 +72,7 @@ export function AthletesPage() {
 
       <div className="mx-auto w-full max-w-7xl p-6">
         <FeatureFlagsProvider>
-          <QueryErrorBoundary title="Failed to load athletes">
+          <ErrorBoundary title="Failed to load athletes">
             <Suspense
               fallback={
                 <DataTableSkeleton
@@ -96,7 +96,7 @@ export function AthletesPage() {
                 }}
               />
             </Suspense>
-          </QueryErrorBoundary>
+          </ErrorBoundary>
         </FeatureFlagsProvider>
       </div>
 

@@ -12,7 +12,7 @@ import { RecentTournamentsSection } from '@/features/dashboard/components/home/r
 import { StatusPipeline } from '@/features/dashboard/components/home/status-pipeline';
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
-import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { Button } from '@/components/ui/button';
 
 export function DashboardHome() {
@@ -41,11 +41,11 @@ export function DashboardHome() {
             </Button>
           </div>
 
-          <QueryErrorBoundary title="Failed to load dashboard">
+          <ErrorBoundary title="Failed to load dashboard">
             <Suspense fallback={<DashboardHomeSkeleton />}>
               <DashboardHomeContent onRowAction={setRowAction} />
             </Suspense>
-          </QueryErrorBoundary>
+          </ErrorBoundary>
         </main>
       </div>
 

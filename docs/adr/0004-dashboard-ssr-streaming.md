@@ -12,7 +12,7 @@ Adopt a consistent SSR streaming model for dashboard (home, tournaments list, co
 
 - **Critical await + deferred prefetch** — loaders `await ensureQueryData` only for route-identity data that the chrome needs before paint (e.g. tournament detail on `$id` / builder). List/home page bodies use `void prefetchQuery` so client navigations stay instant and Suspense streams the table/grid/hub content
 - **`useSuspenseQuery`** for always-on dashboard reads that participate in streaming
-- **Suspense islands** in `features/dashboard` with existing skeletons; isolate failures with `QueryErrorBoundary`
+- **Suspense islands** in `features/dashboard` with existing skeletons; isolate failures with `ErrorBoundary`
 - **`loaderDeps` + nuqs parse helpers** — shared parse functions feed both loaders and table state; no `validateSearch` on these routes
 - **Route `errorComponent`s** for loader / route failures; tournament missing → clear not-found UI with link back
 - **Builder session gate** — `beforeLoad` ensures session and redirects to login when unauthenticated

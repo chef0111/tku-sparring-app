@@ -14,7 +14,7 @@ import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { DataTableRowAction } from '@/types/data-table';
 import { useTournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
-import { QueryErrorBoundary } from '@/components/query-error-boundary';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { cn } from '@/lib/utils';
 
@@ -64,7 +64,7 @@ export function TournamentsOverview() {
 
       <div className="mx-auto w-full max-w-7xl flex-1 overflow-auto p-6">
         <TournamentsToolbar onCreate={onCreate} />
-        <QueryErrorBoundary title="Failed to load tournaments">
+        <ErrorBoundary title="Failed to load tournaments">
           <React.Suspense
             fallback={
               viewMode === 'grid' ? (
@@ -95,7 +95,7 @@ export function TournamentsOverview() {
               />
             )}
           </React.Suspense>
-        </QueryErrorBoundary>
+        </ErrorBoundary>
       </div>
 
       <CreateTournamentDialog open={createOpen} onOpenChange={setCreateOpen} />

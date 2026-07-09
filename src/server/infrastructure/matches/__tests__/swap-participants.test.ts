@@ -49,7 +49,7 @@ function upperMatch(over: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.mocked(prisma.$transaction).mockImplementation(async (arg: unknown) => {
+  vi.mocked(prisma.$transaction).mockImplementation((arg: unknown) => {
     if (typeof arg === 'function') return arg(prisma as never);
     return arg;
   });

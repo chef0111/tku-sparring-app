@@ -119,7 +119,7 @@ describe('swapParticipants store validation', () => {
     const fixture = fakeStore();
     const store: MatchParticipantStore = {
       ...fixture.store,
-      async swap() {
+      swap() {
         throw new BadRequestError('Swap must transpose red and blue corners');
       },
     };

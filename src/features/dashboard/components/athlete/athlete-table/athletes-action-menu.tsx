@@ -47,7 +47,6 @@ export default function AthletesActionMenu({
 }: AthletesActionMenuProps) {
   const [isUpdatePending, startUpdateTransition] = React.useTransition();
   const updateMutation = useUpdateAthleteProfile({ suppressToast: true });
-  const { data: tournaments } = useTournaments();
   const bulkAddToTournament = useBulkAddAthletes({
     onSuccess: (result) => {
       bulkAddAthleteResult(result);
@@ -189,22 +188,18 @@ export default function AthletesActionMenu({
               Add to tournaments
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {tournaments.length === 0 ? (
-              <div className="text-muted-foreground px-2 py-1.5 text-sm">
-                No tournaments
-              </div>
-            ) : (
-              tournaments.map((t) => (
-                <DropdownMenuItem
-                  key={t.id}
-                  disabled={bulkAddToTournament.isPending}
-                  className="cursor-pointer"
-                  onClick={() => onQuickAddToTournament(t.id)}
-                >
-                  <span className="truncate">{t.name}</span>
-                </DropdownMenuItem>
-              ))
-            )}
+            <React.Suspense
+              fallback={
+                <div className="text-muted-foreground px-2 py-1.5 text-sm">
+                  Loading…
+                </div>
+              }
+            >
+              <TournamentQuickAddItems
+                disabled={bulkAddToTournament.isPending}
+                onPick={onQuickAddToTournament}
+              />
+            </React.Suspense>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
@@ -218,4 +213,33 @@ export default function AthletesActionMenu({
       </DropdownMenuContent>
     </DropdownMenu>
   );
+}
+
+function TournamentQuickAddItems({
+  disabled,
+  onPick,
+}: {
+  disabled: boolean;
+  onPick: (tournamentId: string) => void;
+}) {
+  const { data: tournaments } = useTournaments();
+
+  if (tournaments.length === 0) {
+    return (
+      <div className="text-muted-foreground px-2 py-1.5 text-sm">
+        No tournaments
+      </div>
+    );
+  }
+
+  return tournaments.map((t) => (
+    <DropdownMenuItem
+      key={t.id}
+      disabled={disabled}
+      className="cursor-pointer"
+      onClick={() => onPick(t.id)}
+    >
+      <span className="truncate">{t.name}</span>
+    </DropdownMenuItem>
+  ));
 }

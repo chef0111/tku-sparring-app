@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { NotFound } from '@/components/not-found';
-import { DashboardRouteError } from '@/features/dashboard/components/dashboard-route-error';
+import { TournamentRouteError } from '@/features/dashboard/components/dashboard-route-error';
 import { TournamentCommandCenter } from '@/features/dashboard/components/tournament/command-center';
 import { useTournamentRealtimeStream } from '@/hooks/use-tournament-realtime-stream';
 import { divisionListQueryOptions } from '@/queries/division/division-list-query-options';
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/dashboard/tournaments/$id')({
     });
   },
   component: TournamentPage,
-  errorComponent: DashboardRouteError,
+  errorComponent: TournamentRouteError,
   notFoundComponent: NotFound,
 });
 

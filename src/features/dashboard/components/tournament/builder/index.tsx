@@ -42,6 +42,18 @@ export function TournamentBuilder({ id }: TournamentBuilderProps) {
   );
 }
 
+function BracketsTabIsland() {
+  return (
+    <QueryErrorBoundary title="Failed to load brackets">
+      <React.Suspense fallback={<LoadingScreen title="Loading brackets..." />}>
+        <TournamentBracketProvider>
+          <BracketsTab />
+        </TournamentBracketProvider>
+      </React.Suspense>
+    </QueryErrorBoundary>
+  );
+}
+
 function TournamentBuilderDivisions({
   tournament,
   tournamentId,
@@ -146,9 +158,7 @@ function TournamentBuilderActiveBody({
               readOnly={b.isReadOnly}
             />
           ) : (
-            <TournamentBracketProvider>
-              <BracketsTab />
-            </TournamentBracketProvider>
+            <BracketsTabIsland />
           )}
         </div>
       </BuilderWorkspaceProvider>

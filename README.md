@@ -4,7 +4,7 @@ A tournament operations platform for Taekwondo UIT: an admin CRM for taekwondo t
 
 ## 🚀 Installation Guide
 
-### Option 1: Direct access
+### Option 1: Direct access (limited features)
 
 Simply visit [TKU Sparring App](https://tku-sparring.vercel.app/) in your web browser to start using the application immediately. Due to the scope of the project, we currently cannot allow users to create accounts on production, apologies for the inconvenience.
 

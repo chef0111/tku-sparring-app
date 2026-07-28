@@ -82,7 +82,7 @@
     "dotenv": "^17.2.3",
     "export-to-csv": "^1.4.0",
     "html-to-image": "^1.11.13",
-    "jose": "^6.2.3",
+    "jose": "^6.2.4",
     "lucide-react": "^1.18.0",
     "motion": "^12.40.0",
     "nanoid": "^5.1.11",

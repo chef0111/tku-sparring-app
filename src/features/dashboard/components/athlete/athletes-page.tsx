@@ -67,7 +67,7 @@ export function AthletesPage() {
         </div>
       </SiteHeader>
 
-      <div className="mx-auto w-full max-w-7xl p-6">
+      <div className="mx-auto w-full max-w-7xl overflow-auto p-6">
         <FeatureFlagsProvider>
           <ErrorBoundary title="Failed to load athletes">
             <AthleteTable

@@ -14,12 +14,14 @@ export const Route = createFileRoute('/dashboard')({
 function DashboardLayout() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="start-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <Outlet />
-        </SidebarInset>
-      </SidebarProvider>
+      <div className="overflow-hidden">
+        <SidebarProvider className="relative h-svh">
+          <AppSidebar />
+          <SidebarInset>
+            <Outlet />
+          </SidebarInset>
+        </SidebarProvider>
+      </div>
     </ThemeProvider>
   );
 }

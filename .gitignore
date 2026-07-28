@@ -14,8 +14,11 @@ count.txt
 todos.json
 *.log
 
+# Generated files
 /generated/prisma
 /generated
+routeTree.gen.ts
+
 docs/plans
 
 scripts/migration-id-map.json

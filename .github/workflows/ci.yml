@@ -20,6 +20,7 @@ jobs:
           bun-version: latest
       - run: bun install --frozen-lockfile
       - run: bun run db:generate
+      - run: bun run routes:generate
       - run: bun run test
       - run: bun run typecheck
       - run: bun run lint

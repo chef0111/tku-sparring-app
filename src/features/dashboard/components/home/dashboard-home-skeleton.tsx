@@ -1,14 +1,37 @@
-import { Layers, LayoutGrid, Trophy, Users } from 'lucide-react';
-import { HubMetricCard } from './hub-panel';
+import {
+  BarChart3,
+  Layers,
+  LayoutGrid,
+  PieChart,
+  Trophy,
+  Users,
+} from 'lucide-react';
+import { HubChartPanel, HubMetricCard } from './hub-panel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/spinner';
 
 const kpiTiles = [
   { key: 'tournaments', label: 'Tournaments', icon: Trophy, withAction: true },
   { key: 'athletes', label: 'Athletes', icon: Users },
   { key: 'divisions', label: 'Divisions', icon: Layers },
   { key: 'matches', label: 'Matches', icon: LayoutGrid },
+] as const;
+
+const chartTiles = [
+  {
+    key: 'tournament-status',
+    label: 'Tournament mix',
+    description: 'Share of tournaments by lifecycle status',
+    icon: PieChart,
+  },
+  {
+    key: 'top-tournaments',
+    label: 'Largest events',
+    description: 'Top tournaments by registered athletes',
+    icon: BarChart3,
+  },
 ] as const;
 
 function KpiStripSkeleton() {
@@ -79,8 +102,23 @@ export function DashboardHomeSkeleton() {
     <div className="flex flex-col gap-6">
       <KpiStripSkeleton />
       <div className="grid gap-4 lg:grid-cols-2">
-        {Array.from({ length: 2 }).map((_, i) => (
-          <Skeleton key={i} className="min-h-70 rounded-xl" />
+        {chartTiles.map((tile) => (
+          <HubChartPanel
+            key={tile.key}
+            label={tile.label}
+            description={tile.description}
+            icon={tile.icon}
+            footer={<Skeleton className="h-4 w-48" />}
+          >
+            <div className="flex h-77 w-full items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Spinner className="text-muted-foreground size-8" />
+                <p className="text-muted-foreground text-sm">
+                  Crunching the latest data...
+                </p>
+              </div>
+            </div>
+          </HubChartPanel>
         ))}
       </div>
       <PipelineSkeleton />

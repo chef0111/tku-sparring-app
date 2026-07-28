@@ -17,9 +17,9 @@
   },
   "scripts": {
     "dev": "portless tss vite dev --port 3000",
-    "build": "bun run db:generate && vite build",
     "preview": "portless tss vite preview",
-    "start": "vite build && portless tss vite preview",
+    "build": "bun run db:generate && vite build",
+    "start": "bun run build && portless tss vite preview",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",

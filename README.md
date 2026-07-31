@@ -1,127 +1,96 @@
-# TKU Sparring System • ![License](https://img.shields.io/badge/License-MIT-blue)
+<p align="center">
+  <img src="./public/images/banner.png" alt="TKU Sparring App — Taekwondo Tournament Manager" width="100%" />
+</p>
 
-A tournament operations platform for Taekwondo UIT: an admin CRM for taekwondo tournaments, plus an arena client for live match scoring.
+<div align="center">
 
-## 🚀 Installation Guide
+[![TanStack Start](https://shieldcn.dev/badge/TanStack_Start-0092B8.svg?logo=tanstack&logoColor=white&variant=branded)](https://tanstack.com/start)
+[![Tailwind CSS](https://shieldcn.dev/badge/Tailwind_CSS-38BDF8.svg?logo=tailwindcss&logoColor=white&variant=branded)](https://tailwindcss.com)
+[![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-000000.svg?logo=shadcnui&logoColor=white&variant=branded)](https://ui.shadcn.com)
+[![PostgreSQL](https://shieldcn.dev/badge/PostgreSQL-316192.svg?logo=postgresql&logoColor=white&variant=branded)](https://www.postgresql.org)
+[![MIT License](https://shieldcn.dev/github/license/chef0111/tku-sparring-app.svg?variant=secondary)](./LICENSE)
 
-### Option 1: Direct access (limited features)
+</div>
 
-Simply visit [TKU Sparring App](https://tku-sparring.vercel.app/) in your web browser to start using the application immediately. Due to the scope of the project, we currently cannot allow users to create accounts on production, apologies for the inconvenience.
+<p align="center">
+  <a href="https://tku-sparring.vercel.app/"><strong>Live demo</strong></a>
+  ·
+  <a href="./DEVELOPMENT.md"><strong>Local setup</strong></a>
+  ·
+  <a href="./LICENSE"><strong>License</strong></a>
+</p>
 
-### Option 2: Setup the project locally (Recommended)
+---
 
-Refer to [DEVELOPMENT.md](./DEVELOPMENT.md) for detailed instructions on how to set up the project locally. With this option, you will be able to create accounts and use the application locally.
+## Overview
 
-## 🔋 Features
+TKU Sparring is a tournament operations platform for Taekwondo UIT. It combines an admin CRM for managing tournaments, athletes, divisions, and brackets with an arena client for live match scoring on the floor.
+
+---
+
+## Getting started
+
+### Option 1: Direct access (limited)
+
+Open [TKU Sparring App](https://tku-sparring.vercel.app/) in a browser. Production account creation is disabled for now — apologies for the inconvenience.
+
+### Option 2: Run locally (recommended)
+
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for full setup. Local installs support account creation and the full feature set.
+
+---
+
+## Features
 
 ### Admin CRM
 
-<table>
-  <tr>
-    <th>Feature</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>Operations hub</td>
-    <td>Cross-tournament KPIs, status pipeline, and recent tournaments at <code>/dashboard</code></td>
-  </tr>
-  <tr>
-    <td>Command center</td>
-    <td>Per-tournament monitoring, setup checklist, and lifecycle actions; editing stays in the builder</td>
-  </tr>
-  <tr>
-    <td>Global athlete registry</td>
-    <td>CRUD for <strong>AthleteProfile</strong> records, de-dup validation, filters, and bulk add to tournaments</td>
-  </tr>
-  <tr>
-    <td>Tournament builder — Groups</td>
-    <td>Constraint-based auto-assign, manual drag-and-drop, out-of-range warnings, per-division third-place toggle, arena assignment</td>
-  </tr>
-  <tr>
-    <td>Tournament builder — Brackets</td>
-    <td>Single-elimination bracket canvas, shuffle, seed locks, custom matches, corner swap, match detail panel</td>
-  </tr>
-  <tr>
-    <td>Bracket export & fullscreen</td>
-    <td>Fit-to-content PNG screenshot and immersive fullscreen view of the bracket canvas</td>
-  </tr>
-  <tr>
-    <td>Match results & lifecycle</td>
-    <td>Best-of-three round wins, Draft → Active → Completed transitions, manual winner overrides with audit trail</td>
-  </tr>
-  <tr>
-    <td>Audit log</td>
-    <td>Per-tournament activity for score edits, reseeds, division changes, and manual overrides</td>
-  </tr>
-</table>
+| Feature                        | Description                                                                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Operations hub                 | Cross-tournament KPIs, status pipeline, and recent tournaments at `/dashboard`                                               |
+| Command center                 | Per-tournament monitoring, setup checklist, and lifecycle actions; editing stays in the builder                              |
+| Global athlete registry        | CRUD for **AthleteProfile** records, de-dup validation, filters, and bulk add to tournaments                                 |
+| Tournament builder — Divisions | Constraint-based auto-assign, manual drag-and-drop, out-of-range warnings, per-division third-place toggle, arena assignment |
+| Tournament builder — Brackets  | Single-elimination bracket canvas, shuffle, seed locks, custom matches, corner swap, match detail panel                      |
+| Bracket export & fullscreen    | Fit-to-content PNG screenshot and immersive fullscreen view of the bracket canvas                                            |
+| Match results & lifecycle      | Best-of-three round wins, Draft → Active → Completed transitions, manual winner overrides with audit trail                   |
+| Audit log                      | Per-tournament activity for score edits, reseeds, division changes, and manual overrides                                     |
 
 ### Arena client
 
-<table>
-  <tr>
-    <th>Feature</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>Advance Settings</td>
-    <td>Select tournament, division, and match before a bout; per-device restore of last selection</td>
-  </tr>
-  <tr>
-    <td>Arena match claim</td>
-    <td>One device per match at a time (30-minute claim TTL); other devices see matches as in use</td>
-  </tr>
-  <tr>
-    <td>Tournament realtime</td>
-    <td>Socket.io invalidation keeps Advance Settings and bracket views in sync across devices</td>
-  </tr>
-  <tr>
-    <td>Live scoring</td>
-    <td>Full-screen scoreboard with round timer, technique scoring, health and mana, and gam-jeom penalties</td>
-  </tr>
-  <tr>
-    <td>Round & match flow</td>
-    <td>Automatic round-end submission, Finish Match to finalize, then return to Advance Settings (no auto-advance)</td>
-  </tr>
-  <tr>
-    <td>Offline tolerance</td>
-    <td>Scoring continues locally when connectivity drops; syncs on reconnect</td>
-  </tr>
-</table>
+| Feature             | Description                                                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Advance Settings    | Select tournament, division, and match before a bout; per-device restore of last selection                  |
+| Arena match claim   | One device per match at a time (30-minute claim TTL); other devices see matches as in use                   |
+| Tournament realtime | Socket.io invalidation keeps Advance Settings and bracket views in sync across devices                      |
+| Live scoring        | Full-screen scoreboard with round timer, technique scoring, health and mana, and gam-jeom penalties         |
+| Round & match flow  | Automatic round-end submission, Finish Match to finalize, then return to Advance Settings (no auto-advance) |
+| Offline tolerance   | Scoring continues locally when connectivity drops; syncs on reconnect                                       |
 
-## 📋 Restrictions
+---
 
-<table>
-  <tr>
-    <th>Restriction</th>
-    <th>Details</th>
-  </tr>
-  <tr>
-    <td>Scoring Disabled</td>
-    <td>Match not started, timer paused, break time active, player health = 0, time expired, max rounds reached</td>
-  </tr>
-  <tr>
-    <td>Penalty Rules</td>
-    <td>Max 5 penalties per player, penalties reduce mana, match ends if mana = 0</td>
-  </tr>
-  <tr>
-    <td>Winner Determined</td>
-    <td>Health depletion (KO) → Mana depletion → Remaining health → Fewer penalties → Technique points</td>
-  </tr>
-</table>
+## Restrictions
 
-<br />
+| Restriction       | Details                                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------------- |
+| Scoring disabled  | Match not started, timer paused, break time active, player health = 0, time expired, max rounds reached |
+| Penalty rules     | Max 5 penalties per player, penalties reduce mana, match ends if mana = 0                               |
+| Winner determined | Health depletion (KO) → Mana depletion → Remaining health → Fewer penalties → Technique points          |
 
 > [!NOTE]
 >
-> - User can still operate a match without configuration
-> - Timer must be started before using any feature
-> - User cannot reset the previous round's stat during break time
-> - The system is web-base and **only supports PC resolution**.
+> - You can still operate a match without configuration
+> - The timer must be started before using scoring features
+> - You cannot reset the previous round's stats during break time
+> - The system is web-based and **only supports PC resolution**
 
-## 📊 Stats
+---
 
-![Stats](https://repobeats.axiom.co/api/embed/bab8fc528b5de608bc6d757a16fbef110695eead.svg 'Repobeats analytics image')
+## Stats
 
-## 📃 License
+![Repo stats](https://repobeats.axiom.co/api/embed/bab8fc528b5de608bc6d757a16fbef110695eead.svg 'Repobeats analytics image')
+
+---
+
+## License
 
 Licensed under the [MIT License](./LICENSE).

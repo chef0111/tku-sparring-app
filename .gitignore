@@ -19,7 +19,8 @@ todos.json
 /generated
 routeTree.gen.ts
 
-docs/plans
+# docs
+.cursor/docs
 
 scripts/migration-id-map.json
 

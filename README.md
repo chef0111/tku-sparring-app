@@ -6,7 +6,8 @@
 
 [![TanStack Start](https://shieldcn.dev/badge/TanStack_Start-0092B8.svg?logo=tanstack&logoColor=white&variant=branded)](https://tanstack.com/start)
 [![Tailwind CSS](https://shieldcn.dev/badge/Tailwind_CSS-38BDF8.svg?logo=tailwindcss&logoColor=white&variant=branded)](https://tailwindcss.com)
-[![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-000000.svg?logo=shadcnui&logoColor=white&variant=branded)](https://ui.shadcn.com)
+[![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-000000.svg?logo=shadcnui&logoColor=white&variant=branded)](https://ui.shadcn.com#gh-light-mode-only)
+[![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-ffffff.svg?logo=shadcnui&logoColor=black&variant=branded)](https://ui.shadcn.com#gh-dark-mode-only)
 [![PostgreSQL](https://shieldcn.dev/badge/PostgreSQL-316192.svg?logo=postgresql&logoColor=white&variant=branded)](https://www.postgresql.org)
 [![MIT License](https://shieldcn.dev/github/license/chef0111/tku-sparring-app.svg?variant=secondary)](./LICENSE)
 

@@ -1,6 +1,6 @@
-<p align="center">
-  <img src="./public/images/banner.png" alt="TKU Sparring App — Taekwondo Tournament Manager" width="100%" />
-</p>
+<div align="center">
+  <img width="100%" alt="banner" src="https://github.com/user-attachments/assets/101ccebc-d5b7-41ee-9a94-5fbf09e92a27" />
+</div>
 
 <div align="center">
 

@@ -110,7 +110,7 @@
     "zustand": "^5.0.13"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
+    "@babel/core": "^8.0.1",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.2",
     "@prisma/adapter-pg": "^7.9.1",

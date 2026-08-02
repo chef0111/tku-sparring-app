@@ -130,7 +130,7 @@
     "@vitejs/plugin-react": "^6.0.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "husky": "^9.1.7",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "lint-staged": "^17.2.0",
     "mongodb": "^6.16.0",
     "pg": "^8.22.0",

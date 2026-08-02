@@ -15,9 +15,9 @@
 
 <p align="center">
   <a href="https://tku-sparring.vercel.app/"><strong>Live demo</strong></a>
-  ·
+  &nbsp;•&nbsp;
   <a href="./DEVELOPMENT.md"><strong>Local setup</strong></a>
-  ·
+  &nbsp;•&nbsp;
   <a href="./LICENSE"><strong>License</strong></a>
 </p>
 

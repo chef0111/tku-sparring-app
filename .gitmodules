@@ -1,0 +1,3 @@
+[submodule "realtime"]
+	path = realtime
+	url = https://github.com/chef0111/tss-realtime.git

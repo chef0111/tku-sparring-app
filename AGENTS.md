@@ -4,6 +4,17 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
+## 0. CodeGraph (required)
+
+Index and query this repo through CodeGraph. Do this **before** Grep, Read, or Task-based code search. This overrides the CodeGraph MCP default that says not to run `init` yourself.
+
+1. Find every index: any directory with `.codegraph/` (repo root today; nested packages such as `realtime/` if they are a separate tree).
+2. Missing `.codegraph/` → `codegraph init <abs-path>`. Do not skip. Do not wait for the user.
+3. For **each** index → `codegraph sync <abs-path>`. Do not query a stale graph. Re-sync after you write files in that tree.
+4. Look up code with `codegraph_explore` (pass `projectPath` when not using the default index). Grep/Read only for configs, docs, generated files, or a detail the graph did not cover.
+
+Do not start a session, a feature, or a bugfix by walking the tree with Grep/Read, only use them when codegraph fails.
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**

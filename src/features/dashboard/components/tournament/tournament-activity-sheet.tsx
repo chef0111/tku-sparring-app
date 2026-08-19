@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { ListFilter, ScrollText, X } from 'lucide-react';
+import React from 'react';
+import { CircleAlert, ListFilter, ScrollText, X } from 'lucide-react';
 import { ActivityEventRow } from './command-center/activity-event-row';
+import type { ActivityEventRowData } from './command-center/activity-event-row';
 import type { TournamentActivityEventType } from '@/contracts/activity/event-types';
 import type { ActivityEventFilterOption } from '@/features/dashboard/lib/tournament/activity-filter-options';
 import { getNormalizedEvents } from '@/features/dashboard/lib/tournament/activity-filter-options';
@@ -26,6 +27,62 @@ import {
 } from '@/components/ui/sheet';
 import { useTournamentActivityInfinite } from '@/queries/activity';
 import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/spinner';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
+
+function activityView(isLoading: boolean, isError: boolean, rowCount: number) {
+  if (isLoading) return 'loading';
+  if (isError) return 'error';
+  if (rowCount === 0) return 'empty';
+  return 'list';
+}
+
+function ActivityPending() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <Spinner />
+    </div>
+  );
+}
+
+function ActivityError({ message }: { message: string }) {
+  return (
+    <Alert variant="destructive">
+      <CircleAlert />
+      <AlertTitle>Could not load activity</AlertTitle>
+      <AlertDescription>{message}</AlertDescription>
+    </Alert>
+  );
+}
+
+function ActivityEmpty() {
+  return (
+    <Empty className="border-none p-6">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <ScrollText />
+        </EmptyMedia>
+        <EmptyTitle>No activity yet</EmptyTitle>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+function ActivityRows({ rows }: { rows: Array<ActivityEventRowData> }) {
+  return (
+    <ul className="flex flex-col gap-3">
+      {rows.map((row) => (
+        <ActivityEventRow key={row.id} row={row} />
+      ))}
+    </ul>
+  );
+}
 
 export function TournamentActivitySheet({
   tournamentId,
@@ -78,6 +135,17 @@ export function TournamentActivitySheet({
     setSelectedTypes([]);
     setFilterOpen(false);
   }, []);
+
+  const listBody = {
+    loading: <ActivityPending />,
+    error: (
+      <ActivityError
+        message={query.error?.message ?? 'Failed to load activity.'}
+      />
+    ),
+    empty: <ActivityEmpty />,
+    list: <ActivityRows rows={rows} />,
+  }[activityView(query.isLoading, query.isError, rows.length)];
 
   return (
     <Sheet modal={false} open={open} onOpenChange={onOpenChange}>
@@ -194,21 +262,7 @@ export function TournamentActivitySheet({
         </SheetHeader>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
-          {query.isLoading ? (
-            <p className="text-muted-foreground text-sm">Loading…</p>
-          ) : query.isError ? (
-            <p className="text-destructive text-sm">
-              {query.error?.message ?? 'Failed to load activity.'}
-            </p>
-          ) : rows.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No activity yet.</p>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {rows.map((row) => (
-                <ActivityEventRow key={row.id} row={row} />
-              ))}
-            </ul>
-          )}
+          {listBody}
         </div>
 
         {query.hasNextPage && (

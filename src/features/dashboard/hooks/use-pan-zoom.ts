@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 const SCALE_MIN = 0.25;
 const SCALE_MAX = 2.5;

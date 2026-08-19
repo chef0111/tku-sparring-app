@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BracketChromeContext } from './context';
 import type { BracketCaptureTarget } from './context';
 import { hasBlockingOverlay } from '@/features/dashboard/lib/tournament/has-blocking-overlay';

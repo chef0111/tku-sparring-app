@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';

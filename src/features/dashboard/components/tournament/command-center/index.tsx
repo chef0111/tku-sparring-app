@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from '@tanstack/react-router';
 import { CheckCircle2, Edit, History, ZapIcon } from 'lucide-react';
 import { TournamentActivitySheet } from '../tournament-activity-sheet';

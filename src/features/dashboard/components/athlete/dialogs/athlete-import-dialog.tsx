@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { UserPlus } from 'lucide-react';

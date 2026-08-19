@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TournamentActivitySheet } from '../tournament-activity-sheet';
 import { BuilderShell } from './builder-shell';
 import { BuilderHeader } from './builder-shell/builder-header';

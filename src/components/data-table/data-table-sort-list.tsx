@@ -1,5 +1,5 @@
 import { ArrowDownUp, GripVertical, Trash2 } from 'lucide-react';
-import * as React from 'react';
+import React from 'react';
 import type { ColumnSort, SortDirection, Table } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';

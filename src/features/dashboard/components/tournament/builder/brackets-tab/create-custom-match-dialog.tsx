@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { PlusIcon } from 'lucide-react';
 import type { CreateCustomMatchDTO } from '@/orpc/matches/dto';
 import type { CreateCustomMatchFormValues } from '@/lib/validations';

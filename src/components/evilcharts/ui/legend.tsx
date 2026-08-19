@@ -1,5 +1,5 @@
 import * as RechartsPrimitive from 'recharts';
-import * as React from 'react';
+import React from 'react';
 import {
   getColorsCount,
   getPayloadConfigFromPayload,

@@ -1,6 +1,6 @@
 import { flexRender } from '@tanstack/react-table';
 import { PlusIcon } from 'lucide-react';
-import * as React from 'react';
+import React from 'react';
 import type { Table as TanstackTable } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';

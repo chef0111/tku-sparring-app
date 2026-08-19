@@ -10,7 +10,6 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 import type { QueryClient } from '@tanstack/react-query';
 import { NuqsAdapter } from '@/integrations/nuqs/tanstack-router-adapter';
-import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { NotFound } from '@/components/not-found';
 import { cn } from '@/lib/utils';
@@ -93,7 +92,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <SettingsProvider>{children}</SettingsProvider>
           </TooltipProvider>
         </NuqsAdapter>
-        <Toaster richColors closeButton />
         <TanStackDevtools
           config={{
             position: 'bottom-right',

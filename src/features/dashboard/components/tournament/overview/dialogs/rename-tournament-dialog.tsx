@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { SaveIcon } from 'lucide-react';
 import type { TournamentListItem } from '@/contracts/tournament/list';

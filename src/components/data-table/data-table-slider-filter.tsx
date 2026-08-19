@@ -1,5 +1,5 @@
 import { PlusCircle, XCircle } from 'lucide-react';
-import * as React from 'react';
+import React from 'react';
 import type { Column } from '@tanstack/react-table';
 import type { DataTableControlledState } from '@/hooks/use-data-table';
 import { NumberInput } from '@/components/input/number-input';

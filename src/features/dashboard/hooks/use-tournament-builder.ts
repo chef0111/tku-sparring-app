@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useBuilderManagerQuery } from './use-builder-manager-query';
 import type { DivisionData } from '@/contracts/tournament/division';

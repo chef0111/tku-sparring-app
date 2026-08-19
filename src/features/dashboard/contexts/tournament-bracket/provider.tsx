@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useRouterState } from '@tanstack/react-router';
 import { useBuilderWorkspace } from '../builder-workspace/use-builder-workspace';
 import { TournamentBracketContext } from './context';

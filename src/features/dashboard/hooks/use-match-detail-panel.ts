@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import type { MatchStatus } from '@/contracts/tournament/match';
 import type { TournamentAthleteData } from '@/contracts/tournament/division';
 import { useTournamentBracket } from '@/features/dashboard/contexts/tournament-bracket/use-tournament-bracket';

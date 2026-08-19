@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 const DEVICE_ID_STORAGE_KEY = 'tku-device-id';
 

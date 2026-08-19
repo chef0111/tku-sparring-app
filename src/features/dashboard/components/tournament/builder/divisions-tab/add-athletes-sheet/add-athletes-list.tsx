@@ -14,7 +14,16 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty';
 
-function AthletesLoading({ className }: { className?: string }) {
+type ListView = 'pending' | 'emptyLibrary' | 'noResults' | 'ready';
+
+function listView(list: AddAthletesSheetState['list']): ListView {
+  if (list.isPending) return 'pending';
+  if (list.emptyLibrary) return 'emptyLibrary';
+  if (list.total === 0) return 'noResults';
+  return 'ready';
+}
+
+function AthletesPending({ className }: { className?: string }) {
   return (
     <div
       className={cn(
@@ -23,70 +32,6 @@ function AthletesLoading({ className }: { className?: string }) {
       )}
     >
       <Spinner />
-    </div>
-  );
-}
-
-interface AddAthletesListProps {
-  list: AddAthletesSheetState['list'];
-  virtual: AddAthletesSheetState['virtual'];
-  selectedIds: Set<string>;
-  onToggleProfile: (id: string) => void;
-}
-
-export function AddAthletesList({
-  list,
-  virtual,
-  selectedIds,
-  onToggleProfile,
-}: AddAthletesListProps) {
-  const { scrollRef, rowVirtualizer, virtualItems } = virtual;
-  const { isPending, items, total, hasFilters, emptyLibrary, allInTournament } =
-    list;
-
-  return (
-    <div
-      ref={scrollRef}
-      className="min-h-0 flex-1 overflow-y-auto rounded-md border"
-    >
-      {isPending ? (
-        <AthletesLoading />
-      ) : emptyLibrary ? (
-        <EmptyAthleteLibrary />
-      ) : total === 0 ? (
-        <NoAthletesFound
-          allInTournament={allInTournament}
-          hasFilters={hasFilters}
-        />
-      ) : (
-        <div
-          className="relative w-full"
-          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-        >
-          {virtualItems.map((virtualRow) => {
-            const profile = items[virtualRow.index];
-            return (
-              <div
-                key={virtualRow.key}
-                data-index={virtualRow.index}
-                ref={rowVirtualizer.measureElement}
-                className="absolute top-0 left-0 w-full border-b"
-                style={{ transform: `translateY(${virtualRow.start}px)` }}
-              >
-                {profile ? (
-                  <AddAthleteProfileRow
-                    profile={profile}
-                    checked={selectedIds.has(profile.id)}
-                    onToggle={() => onToggleProfile(profile.id)}
-                  />
-                ) : (
-                  <AthletesLoading className="h-15 p-0" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
@@ -102,39 +47,106 @@ function EmptyAthleteLibrary() {
         <EmptyDescription>
           Add athletes to your library to get started.
         </EmptyDescription>
-        <EmptyContent>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/dashboard/athletes">
-              Go to Athletes
-              <ArrowRight data-icon="inline-end" />
-            </Link>
-          </Button>
-        </EmptyContent>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/dashboard/athletes">
+            Go to Athletes
+            <ArrowRight data-icon="inline-end" />
+          </Link>
+        </Button>
+      </EmptyContent>
+    </Empty>
+  );
+}
+
+interface AddAthletesListProps {
+  list: AddAthletesSheetState['list'];
+  virtual: AddAthletesSheetState['virtual'];
+  selectedIds: Set<string>;
+  onToggleProfile: (id: string) => void;
+}
+
+function NoAthletesFound({ description }: { description: string }) {
+  return (
+    <Empty className="gap-2 p-8">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <UserX />
+        </EmptyMedia>
+        <EmptyTitle>No results found</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>
     </Empty>
   );
 }
 
-function NoAthletesFound({
-  allInTournament,
-  hasFilters,
-}: {
-  allInTournament: boolean;
-  hasFilters: boolean;
-}) {
+function AthletesRows({
+  list,
+  virtual,
+  selectedIds,
+  onToggleProfile,
+}: AddAthletesListProps) {
+  const { rowVirtualizer, virtualItems } = virtual;
+
   return (
-    <Empty className="gap-2 p-8">
-      <EmptyMedia variant="icon">
-        <UserX />
-      </EmptyMedia>
-      <EmptyTitle>No results found</EmptyTitle>
-      <EmptyDescription>
-        {allInTournament
-          ? 'Everyone in your library is already in this tournament.'
-          : hasFilters
-            ? 'No athletes match for your filters.'
-            : 'No athletes available to add.'}
-      </EmptyDescription>
-    </Empty>
+    <div
+      className="relative w-full"
+      style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+    >
+      {virtualItems.map((virtualRow) => {
+        const profile = list.items[virtualRow.index];
+        return (
+          <div
+            key={virtualRow.key}
+            data-index={virtualRow.index}
+            ref={rowVirtualizer.measureElement}
+            className="absolute top-0 left-0 w-full border-b"
+            style={{ transform: `translateY(${virtualRow.start}px)` }}
+          >
+            {profile ? (
+              <AddAthleteProfileRow
+                profile={profile}
+                checked={selectedIds.has(profile.id)}
+                onToggle={() => onToggleProfile(profile.id)}
+              />
+            ) : (
+              <AthletesPending className="h-15 p-0" />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function noResultsCopy(list: AddAthletesSheetState['list']) {
+  if (list.allInTournament) {
+    return 'Everyone in your library is already in this tournament.';
+  }
+  if (list.hasFilters) {
+    return 'No athletes match for your filters.';
+  }
+  return 'No athletes available to add.';
+}
+
+export function AddAthletesList(props: AddAthletesListProps) {
+  const { list, virtual } = props;
+  const view = listView(list);
+
+  return (
+    <div
+      ref={virtual.scrollRef}
+      className="min-h-0 flex-1 overflow-y-auto rounded-md border"
+    >
+      {
+        {
+          pending: <AthletesPending />,
+          emptyLibrary: <EmptyAthleteLibrary />,
+          noResults: <NoAthletesFound description={noResultsCopy(list)} />,
+          ready: <AthletesRows {...props} />,
+        }[view]
+      }
+    </div>
   );
 }

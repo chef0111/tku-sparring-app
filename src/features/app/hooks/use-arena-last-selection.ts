@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { authClient } from '@/lib/auth-client';
 import { client } from '@/orpc/client';

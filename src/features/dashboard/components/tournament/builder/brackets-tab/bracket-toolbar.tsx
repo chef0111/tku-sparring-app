@@ -1,6 +1,6 @@
 import { Eraser, Plus, RefreshCw, Shuffle } from 'lucide-react';
 import { toast } from 'sonner';
-import * as React from 'react';
+import React from 'react';
 import { CreateCustomMatchDialog } from './create-custom-match-dialog';
 import { useTournamentBracket } from '@/features/dashboard/contexts/tournament-bracket/use-tournament-bracket';
 import {

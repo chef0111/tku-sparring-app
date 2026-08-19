@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { UserPlus, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

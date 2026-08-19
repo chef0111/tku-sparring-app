@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { DndContext } from '@dnd-kit/core';
 import { toast } from 'sonner';
 import { useRouterState } from '@tanstack/react-router';

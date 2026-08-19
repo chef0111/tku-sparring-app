@@ -1,5 +1,5 @@
 import { useQueryState } from 'nuqs';
-import * as React from 'react';
+import React from 'react';
 
 import { FeatureFlagsContext } from './context';
 import type { FeatureFlagsContextValue, FilterFlag } from './context';

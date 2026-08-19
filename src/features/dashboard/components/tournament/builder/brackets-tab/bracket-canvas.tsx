@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BracketLayoutToggle } from './bracket-layout-toggle';
 import { BracketViewToolbar } from './bracket-view-toolbar';
 import type { MatchData } from '@/contracts/tournament/match';

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import type { BracketCanvasLayout } from '@/lib/tournament/bracket/bracket-layout';
 

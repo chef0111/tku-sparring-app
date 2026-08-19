@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { LayoutGrid, List } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
 import { useRouterState } from '@tanstack/react-router';

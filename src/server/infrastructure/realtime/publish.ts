@@ -7,10 +7,26 @@ export type TournamentRealtimeEvent = TournamentInvalidateEvent;
 
 let loggedMissingRealtime = false;
 
+function describeFetchError(err: unknown): string {
+  const message = err instanceof Error ? err.message : String(err);
+  const cause = err instanceof Error ? err.cause : undefined;
+  if (!cause || typeof cause !== 'object') {
+    return message;
+  }
+  const rec = cause as { code?: unknown; hostname?: unknown };
+  const extra = [rec.code, rec.hostname]
+    .filter((value) => typeof value === 'string' && value.length > 0)
+    .join(' ');
+  return extra ? `${message} (${extra})` : message;
+}
+
 function getBroadcastConfig() {
   const url = process.env.REALTIME_INTERNAL_BROADCAST_URL?.trim();
   const secret = process.env.REALTIME_INTERNAL_BROADCAST_SECRET?.trim();
-  return url && secret ? { url, secret } : null;
+  if (!url || !secret) {
+    return null;
+  }
+  return { url, secret };
 }
 
 async function postInternalBroadcast(
@@ -22,7 +38,7 @@ async function postInternalBroadcast(
     if (!loggedMissingRealtime && process.env.NODE_ENV !== 'test') {
       loggedMissingRealtime = true;
       console.warn(
-        '[tournament-realtime] REALTIME_INTERNAL_BROADCAST_URL / REALTIME_INTERNAL_BROADCAST_SECRET unset — cross-instance invalidation disabled.'
+        '[tournament-realtime] REALTIME_INTERNAL_BROADCAST_URL or REALTIME_INTERNAL_BROADCAST_SECRET unset. Cross-instance invalidation disabled.'
       );
     }
     return;
@@ -30,7 +46,7 @@ async function postInternalBroadcast(
   try {
     const ac = new AbortController();
     const t = setTimeout(() => ac.abort(), 5000);
-    await fetch(cfg.url, {
+    const res = await fetch(cfg.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,8 +56,15 @@ async function postInternalBroadcast(
       signal: ac.signal,
     });
     clearTimeout(t);
-  } catch {
-    // fire-and-forget
+    if (!res.ok) {
+      console.warn(
+        `[tournament-realtime] broadcast failed: HTTP ${res.status}`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      `[tournament-realtime] broadcast failed: ${describeFetchError(err)}`
+    );
   }
 }
 

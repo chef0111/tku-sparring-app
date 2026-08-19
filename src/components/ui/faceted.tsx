@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown } from 'lucide-react';
-import * as React from 'react';
+import React from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BracketConnectors } from './bracket-connectors';
 import { BracketFinalMatchNode } from './bracket-final-match-node';
 import { BracketMatchNode } from './bracket-match-node';

@@ -15,6 +15,12 @@ import { useBuilderWorkspace } from '@/features/dashboard/contexts/builder-works
 import { useTournamentBracket } from '@/features/dashboard/contexts/tournament-bracket';
 import { getBeltLabel } from '@/config/athlete';
 
+function canvasView(isPending: boolean, matchCount: number) {
+  if (isPending) return 'loading';
+  if (matchCount === 0) return 'empty';
+  return 'bracket';
+}
+
 export function BracketsTab() {
   const {
     tournamentId,
@@ -40,6 +46,19 @@ export function BracketsTab() {
     return <EmptyDivisionsPlaceholder />;
   }
 
+  const canvas = {
+    loading: <LoadingBracketState />,
+    empty: (
+      <EmptyBracketState
+        divisionId={selectedDivisionId}
+        readOnly={readOnly}
+        tournamentStatus={tournamentStatus}
+        athleteCount={athleteCount}
+      />
+    ),
+    bracket: <BracketCanvas />,
+  }[canvasView(matchesQuery.isPending, matches.length)];
+
   return (
     <DndContext
       sensors={sensors}
@@ -48,18 +67,7 @@ export function BracketsTab() {
     >
       <div className="canvas-background flex h-full min-h-0 w-full">
         <div className="relative min-h-0 min-w-0 flex-1">
-          {matchesQuery.isPending ? (
-            <LoadingBracketState />
-          ) : matches.length === 0 ? (
-            <EmptyBracketState
-              divisionId={selectedDivisionId}
-              readOnly={readOnly}
-              tournamentStatus={tournamentStatus}
-              athleteCount={athleteCount}
-            />
-          ) : (
-            <BracketCanvas />
-          )}
+          {canvas}
           <BracketToolbar />
         </div>
 

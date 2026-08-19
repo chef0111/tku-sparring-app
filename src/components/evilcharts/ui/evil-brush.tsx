@@ -16,8 +16,7 @@ import {
   LineChart,
   ResponsiveContainer,
 } from 'recharts';
-import { useCallback, useEffect } from 'react';
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import type { ComponentProps } from 'react';
 import type { MotionValue } from 'motion/react';
 import type { ChartConfig } from '@/components/evilcharts/ui/chart';

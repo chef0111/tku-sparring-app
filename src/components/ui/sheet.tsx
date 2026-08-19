@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
 import { Dialog as SheetPrimitive } from 'radix-ui';
 
 import { IconX } from '@tabler/icons-react';

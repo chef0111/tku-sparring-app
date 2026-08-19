@@ -1,6 +1,7 @@
 import { LogInIcon, MenuIcon } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { UserDropdown } from '../user/user-dropdown';
+import type { ComponentProps } from 'react';
+import { UserDropdown } from '@/components/user/user-dropdown';
 import { Button } from '@/components/ui/button';
 import { authClient } from '@/lib/auth-client';
 import { useSettings } from '@/features/app/contexts/settings';
@@ -33,15 +34,7 @@ export const Navbar = () => {
         <h1 className="text-4xl font-bold select-none!">TKU Sparring System</h1>
       </div>
       <div className="flex w-[13vw] shrink-0 items-center justify-end gap-1 px-2.5">
-        {isPending ? null : user ? (
-          <UserDropdown user={user} />
-        ) : (
-          <Link to="/login">
-            <Button variant="outline" size="lg" className="mx-1 text-lg">
-              <LogInIcon className="size-5" /> Login
-            </Button>
-          </Link>
-        )}
+        {isPending ? null : <SessionActions user={user} />}
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
@@ -58,3 +51,21 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+function LoginLink() {
+  return (
+    <Link to="/login">
+      <Button variant="outline" size="lg" className="mx-1 text-lg">
+        <LogInIcon data-icon="inline-start" /> Login
+      </Button>
+    </Link>
+  );
+}
+
+function SessionActions({
+  user,
+}: {
+  user: ComponentProps<typeof UserDropdown>['user'] | undefined;
+}) {
+  return user ? <UserDropdown user={user} /> : <LoginLink />;
+}

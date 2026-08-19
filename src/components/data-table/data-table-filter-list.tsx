@@ -1,6 +1,6 @@
 import { CalendarIcon, GripVertical, ListFilter, Trash2 } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
-import * as React from 'react';
+import React from 'react';
 import type { Column, ColumnMeta, Table } from '@tanstack/react-table';
 
 import type {

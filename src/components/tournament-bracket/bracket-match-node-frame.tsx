@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Circle } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { BracketSlot } from './bracket-slot';

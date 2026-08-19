@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { History } from 'lucide-react';
 import { ActivityEventRow } from './activity-event-row';
 import {

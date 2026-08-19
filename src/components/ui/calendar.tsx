@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { DayPicker, getDefaultClassNames } from 'react-day-picker';
 import {
   IconChevronDown,

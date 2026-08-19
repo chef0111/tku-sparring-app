@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { UserPlus } from 'lucide-react';
+import React from 'react';
+import { SearchX, UserPlus } from 'lucide-react';
 import {
   parseAsInteger,
   parseAsString,
@@ -13,12 +13,20 @@ import {
   PoolWeightFilter,
 } from './filters';
 import { AthletePoolRow } from './athlete-pool-row';
+import type { TournamentAthleteData } from '@/contracts/tournament/division';
 import { useBuilderManagerQuery } from '@/features/dashboard/hooks/use-builder-manager-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTournamentAthletesInfinite } from '@/queries/tournament-athlete';
 import { SheetTrigger } from '@/components/ui/sheet';
+import {
+  Empty,
+  EmptyContent,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 
 interface AthletePoolProps {
   tournamentId: string;
@@ -142,59 +150,145 @@ export function AthletePool({
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {query.isPending ? (
-          <div className="space-y-2 p-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
-            ))}
-          </div>
-        ) : items.length === 0 ? (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-3 p-6 text-center text-sm">
-            <UserPlus className="size-8 opacity-50" aria-hidden="true" />
-            {hasFilters ? (
-              <p>No matches</p>
-            ) : (
-              <>
-                <p className="text-foreground text-sm font-medium">
-                  No unassigned athletes
-                </p>
-                {!readOnly && (
-                  <SheetTrigger
-                    data-slot="button"
-                    data-variant="default"
-                    asChild
-                  >
-                    <Button size="sm">
-                      <UserPlus aria-hidden="true" />
-                      Add from library
-                    </Button>
-                  </SheetTrigger>
-                )}
-              </>
-            )}
-          </div>
-        ) : (
-          <>
-            <div className="divide-y">
-              {items.map((athlete) => (
-                <AthletePoolRow
-                  key={athlete.id}
-                  athlete={athlete}
-                  selectedDivisionId={selectedDivisionId}
-                  readOnly={readOnly}
-                />
-              ))}
-            </div>
-            <div ref={sentinelRef} className="h-6">
-              {query.isFetchingNextPage && (
-                <div className="text-muted-foreground p-2 text-center text-xs">
-                  Loading...
-                </div>
-              )}
-            </div>
-          </>
-        )}
+        <PoolContent
+          isPending={query.isPending}
+          items={items}
+          hasFilters={hasFilters}
+          readOnly={readOnly}
+          selectedDivisionId={selectedDivisionId}
+          sentinelRef={sentinelRef}
+          isFetchingNextPage={query.isFetchingNextPage}
+        />
       </div>
     </div>
   );
+}
+
+interface PoolContentProps {
+  isPending: boolean;
+  items: Array<TournamentAthleteData>;
+  hasFilters: boolean;
+  readOnly: boolean;
+  selectedDivisionId: string | null;
+  sentinelRef: React.RefObject<HTMLDivElement | null>;
+  isFetchingNextPage: boolean;
+}
+
+type PoolView = 'pending' | 'noMatches' | 'noAthletes' | 'list';
+type PoolListProps = Omit<PoolContentProps, 'isPending' | 'hasFilters'>;
+
+function poolView({
+  isPending,
+  itemCount,
+  hasFilters,
+}: Pick<PoolContentProps, 'isPending' | 'hasFilters'> & {
+  itemCount: number;
+}): PoolView {
+  if (isPending) return 'pending';
+  if (itemCount > 0) return 'list';
+  if (hasFilters) return 'noMatches';
+  return 'noAthletes';
+}
+
+function PoolPending() {
+  return (
+    <div className="flex flex-col gap-2 p-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <Skeleton key={i} className="h-12 w-full" />
+      ))}
+    </div>
+  );
+}
+
+function PoolNoMatches() {
+  return (
+    <Empty className="border-none p-6">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <SearchX />
+        </EmptyMedia>
+        <EmptyTitle>No matches</EmptyTitle>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+function AddFromLibraryTrigger() {
+  return (
+    <EmptyContent>
+      <SheetTrigger data-slot="button" data-variant="default" asChild>
+        <Button size="sm">
+          <UserPlus data-icon="inline-start" aria-hidden="true" />
+          Add from library
+        </Button>
+      </SheetTrigger>
+    </EmptyContent>
+  );
+}
+
+function PoolNoAthletes({ children }: { children?: React.ReactNode }) {
+  return (
+    <Empty className="border-none p-6">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <UserPlus />
+        </EmptyMedia>
+        <EmptyTitle>No unassigned athletes</EmptyTitle>
+      </EmptyHeader>
+      {children}
+    </Empty>
+  );
+}
+
+function PoolList({
+  items,
+  selectedDivisionId,
+  readOnly,
+  sentinelRef,
+  isFetchingNextPage,
+}: PoolListProps) {
+  return (
+    <>
+      <div className="divide-y">
+        {items.map((athlete) => (
+          <AthletePoolRow
+            key={athlete.id}
+            athlete={athlete}
+            selectedDivisionId={selectedDivisionId}
+            readOnly={readOnly}
+          />
+        ))}
+      </div>
+      <div ref={sentinelRef} className="h-6">
+        {isFetchingNextPage ? (
+          <div className="text-muted-foreground p-2 text-center text-xs">
+            Loading...
+          </div>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
+function PoolContent({
+  isPending,
+  hasFilters,
+  ...listProps
+}: PoolContentProps) {
+  const view = poolView({
+    isPending,
+    itemCount: listProps.items.length,
+    hasFilters,
+  });
+
+  return {
+    pending: <PoolPending />,
+    noMatches: <PoolNoMatches />,
+    noAthletes: (
+      <PoolNoAthletes>
+        {!listProps.readOnly && <AddFromLibraryTrigger />}
+      </PoolNoAthletes>
+    ),
+    list: <PoolList {...listProps} />,
+  }[view];
 }

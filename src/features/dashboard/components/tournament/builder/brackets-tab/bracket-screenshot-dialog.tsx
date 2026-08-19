@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTournamentBracket } from '@/features/dashboard/contexts/tournament-bracket/use-tournament-bracket';
@@ -19,6 +19,38 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Spinner } from '@/components/ui/spinner';
+import { Empty, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+
+function previewView(isCapturing: boolean, previewUrl: string | null) {
+  if (isCapturing) return 'capturing';
+  if (previewUrl) return 'image';
+  return 'empty';
+}
+
+function ScreenshotCapturing() {
+  return (
+    <div className="flex min-h-49 items-center justify-center gap-2 p-8">
+      <Spinner className="text-muted" />
+      <span className="text-muted-foreground text-sm">Capturing bracket…</span>
+    </div>
+  );
+}
+
+function ScreenshotImage({ src }: { src: string }) {
+  return (
+    <img src={src} alt="Bracket preview" className="mx-auto block max-w-full" />
+  );
+}
+
+function ScreenshotEmpty() {
+  return (
+    <Empty className="min-h-48 border-none">
+      <EmptyHeader>
+        <EmptyTitle>No bracket to preview</EmptyTitle>
+      </EmptyHeader>
+    </Empty>
+  );
+}
 
 export function BracketScreenshotDialog() {
   const { screenshotOpen, setScreenshotOpen, captureTarget } =
@@ -81,6 +113,12 @@ export function BracketScreenshotDialog() {
 
   const actionsDisabled = isCapturing || !blob;
 
+  const preview = {
+    capturing: <ScreenshotCapturing />,
+    image: <ScreenshotImage src={previewUrl ?? ''} />,
+    empty: <ScreenshotEmpty />,
+  }[previewView(isCapturing, previewUrl)];
+
   const handleSave = () => {
     if (!blob) return;
     const url = URL.createObjectURL(blob);
@@ -103,24 +141,7 @@ export function BracketScreenshotDialog() {
         </DialogHeader>
 
         <div className="border-border max-h-[70vh] overflow-auto rounded-lg border bg-white">
-          {isCapturing ? (
-            <div className="flex min-h-49 items-center justify-center gap-2 p-8">
-              <Spinner className="text-muted size-5" />
-              <span className="text-muted-foreground text-sm">
-                Capturing bracket…
-              </span>
-            </div>
-          ) : previewUrl ? (
-            <img
-              src={previewUrl}
-              alt="Bracket preview"
-              className="mx-auto block max-w-full"
-            />
-          ) : (
-            <div className="text-muted-foreground flex min-h-48 items-center justify-center p-8 text-sm">
-              No bracket to preview
-            </div>
-          )}
+          {preview}
         </div>
 
         <DialogFooter>

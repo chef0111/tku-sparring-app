@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';

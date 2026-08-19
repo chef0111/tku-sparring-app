@@ -15,7 +15,7 @@ import {
   useQueryState,
   useQueryStates,
 } from 'nuqs';
-import * as React from 'react';
+import React from 'react';
 import type {
   ColumnFiltersState,
   PaginationState,

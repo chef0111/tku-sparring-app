@@ -12,6 +12,12 @@ import { cn } from '@/lib/utils';
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { SheetTrigger } from '@/components/ui/sheet';
 
+function rosterView(showSkeleton: boolean, total: number) {
+  if (showSkeleton) return 'skeleton';
+  if (total === 0) return 'empty';
+  return 'table';
+}
+
 export interface DivisionRosterTableProps {
   division: DivisionData | null;
   tournamentId: string;
@@ -27,15 +33,7 @@ export function DivisionRosterTable({
   readOnly,
   prepareSettingsDivision,
 }: DivisionRosterTableProps) {
-  if (!division) {
-    return (
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <DivisionRosterEmptyState variant="no-division-selected" />
-      </div>
-    );
-  }
-
-  return (
+  return division ? (
     <DivisionRosterActive
       division={division}
       tournamentId={tournamentId}
@@ -43,6 +41,10 @@ export function DivisionRosterTable({
       readOnly={readOnly}
       prepareSettingsDivision={prepareSettingsDivision}
     />
+  ) : (
+    <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <DivisionRosterEmptyState variant="no-division-selected" />
+    </div>
   );
 }
 
@@ -66,6 +68,32 @@ function DivisionRosterActive({
     divisions,
     readOnly,
   });
+
+  const rosterBody = {
+    skeleton: (
+      <DataTableSkeleton
+        columnCount={roster.columns.length}
+        withViewOptions={false}
+        withPagination={false}
+        rowCount={10}
+      />
+    ),
+    empty: (
+      <DivisionRosterEmptyState
+        variant="no-athletes"
+        division={division}
+        tournamentId={tournamentId}
+        readOnly={readOnly}
+      />
+    ),
+    table: (
+      <DataTable
+        table={roster.table}
+        state={roster.tableState}
+        selectedRows={false}
+      />
+    ),
+  }[rosterView(roster.showRosterSkeleton, roster.total)];
 
   return (
     <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -125,27 +153,7 @@ function DivisionRosterActive({
           roster.isOver && 'bg-primary/5'
         )}
       >
-        {roster.showRosterSkeleton ? (
-          <DataTableSkeleton
-            columnCount={roster.columns.length}
-            withViewOptions={false}
-            withPagination={false}
-            rowCount={10}
-          />
-        ) : roster.total === 0 ? (
-          <DivisionRosterEmptyState
-            variant="no-athletes"
-            division={division}
-            tournamentId={tournamentId}
-            readOnly={readOnly}
-          />
-        ) : (
-          <DataTable
-            table={roster.table}
-            state={roster.tableState}
-            selectedRows={false}
-          />
-        )}
+        {rosterBody}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BracketContext } from './context';
 import type { BracketContextValue } from './context';
 

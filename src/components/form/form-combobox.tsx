@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IconChevronDown } from '@tabler/icons-react';
 
 import { FormBase } from './form-base';

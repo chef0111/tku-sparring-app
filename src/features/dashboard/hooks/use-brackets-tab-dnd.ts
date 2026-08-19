@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { toast } from 'sonner';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { Lock, LockOpen } from 'lucide-react';
 import type { MatchData } from '@/contracts/tournament/match';

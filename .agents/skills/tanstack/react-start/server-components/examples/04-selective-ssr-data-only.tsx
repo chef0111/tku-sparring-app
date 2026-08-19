@@ -2,7 +2,7 @@
 // but the route component renders on the client because it needs browser APIs.
 // @ts-nocheck
 
-import * as React from 'react';
+import React from 'react';
 import type { ReactNode } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';

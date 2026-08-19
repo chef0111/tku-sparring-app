@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { EdgeReveal } from './edge-reveal';
 import { useBracketChrome } from '@/features/dashboard/contexts/bracket-chrome';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';

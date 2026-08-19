@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { FormBase } from './form-base';
 import { useFieldContext } from './hooks';
 import type { FormControlProps } from './form-base';

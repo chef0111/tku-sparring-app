@@ -9,6 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
+import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createFileRoute('/')({ component: App });
 
@@ -31,6 +32,8 @@ function App() {
           </EmptyDescription>
         </Empty>
       </div>
+
+      <Toaster richColors closeButton theme="dark" />
     </div>
   );
 }

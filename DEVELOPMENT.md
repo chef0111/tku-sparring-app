@@ -43,7 +43,7 @@ Create a `.env` file at the repo root. Required keys:
 | `BETTER_AUTH_URL`     | App origin (e.g. `https://tss.localhost`)      |
 | `BETTER_AUTH_SECRET`  | Auth encryption secret                         |
 
-For **tournament realtime**, configure the realtime block in `.env` (see step 5).
+For **tournament realtime**, configure the realtime block in `.env.local` (see step 5).
 
 ### 5. Tournament realtime service
 
@@ -58,12 +58,14 @@ bun install
 cp .env.example .env.local
 ```
 
-Edit [realtime/.env.local](realtime/.env.local). `INTERNAL_BROADCAST_SECRET` and `TOURNAMENT_SOCKET_JWT_SECRET` must match the main app ([.env](.env)):
+Edit [realtime/.env.local](realtime/.env.local). `INTERNAL_BROADCAST_SECRET` and `TOURNAMENT_SOCKET_JWT_SECRET` must match the main app ([.env.local](.env.local)):
 
-| Main app (`.env`)                    | Realtime (`realtime/.env.local`) |
+| Main app (`.env.local`)              | Realtime (`realtime/.env.local`) |
 | ------------------------------------ | -------------------------------- |
 | `REALTIME_INTERNAL_BROADCAST_SECRET` | `INTERNAL_BROADCAST_SECRET`      |
 | `TOURNAMENT_SOCKET_JWT_SECRET`       | `TOURNAMENT_SOCKET_JWT_SECRET`   |
+
+`REALTIME_INTERNAL_BROADCAST_URL` is a **Node** fetch from the main app. On Windows, Node cannot resolve `*.localhost` (browsers can). Use `http://127.0.0.1:3331/internal/broadcast`, not `https://ws.tss.localhost`. `VITE_REALTIME_URL` is the **browser** socket origin: `https://ws.tss.localhost` under Portless.
 
 Fill in the rest from [.env.example](.env.example) (main app) and [realtime/.env.example](realtime/.env.example). Generate secrets **ONCE** and paste the same value into both files for each pair in the table:
 
@@ -81,7 +83,7 @@ On Windows without `openssl` (PowerShell):
 [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 ```
 
-Run that twice for the two secrets. Ensure `CORS_ORIGINS` in `realtime/.env` includes the browser origin you use (e.g. `https://tss.localhost` with Portless).
+Run that twice for the two secrets. Ensure `CORS_ORIGINS` in `realtime/.env.local` includes the browser origin you use (e.g. `https://tss.localhost` with Portless).
 
 #### Run
 
@@ -97,7 +99,7 @@ curl http://localhost:3331/health
 # → {"ok":true}
 ```
 
-Restart `bun run dev` on the main app after changing any `VITE_*` variable.
+Restart `bun run dev` on the main app after changing any `VITE_*` or `REALTIME_*` variable.
 
 More detail: [docs/tournament-realtime.md](docs/tournament-realtime.md).
 

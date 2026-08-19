@@ -159,9 +159,13 @@ export function AthletePool({
                   No unassigned athletes
                 </p>
                 {!readOnly && (
-                  <SheetTrigger asChild>
+                  <SheetTrigger
+                    data-slot="button"
+                    data-variant="default"
+                    asChild
+                  >
                     <Button size="sm">
-                      <UserPlus data-icon="inline-start" aria-hidden="true" />
+                      <UserPlus aria-hidden="true" />
                       Add from library
                     </Button>
                   </SheetTrigger>

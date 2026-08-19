@@ -52,7 +52,7 @@
     "@orpc/client": "^1.14.12",
     "@orpc/json-schema": "^1.14.12",
     "@orpc/openapi": "^1.14.12",
-    "@orpc/server": "^1.14.12",
+    "@orpc/server": "^1.15.0",
     "@orpc/tanstack-query": "^1.14.12",
     "@orpc/zod": "^1.14.12",
     "@prisma/adapter-neon": "^7.9.1",

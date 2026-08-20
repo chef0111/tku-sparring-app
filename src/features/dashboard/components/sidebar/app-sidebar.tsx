@@ -25,10 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link to="/dashboard">
                 <LogoIcon className="size-8!" />
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">TKU Sparring</span>
-                  <span className="truncate text-xs">Tournament Manager</span>
-                </div>
+                <span className="truncate text-2xl font-semibold">Kyorbit</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

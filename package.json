@@ -1,10 +1,10 @@
 {
-  "name": "tku-sparring",
-  "version": "2.5.2",
+  "name": "kyorbit",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "A modern, user-friendly web application for managing Taekwondo sparring matches.",
-  "homepage": "https://tku-sparring.vercel.app",
+  "homepage": "https://kyorbit.vercel.app",
   "license": "MIT",
   "author": {
     "name": "Le Tran Gia Bao",
@@ -13,13 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chef0111/tku-sparring.git"
+    "url": "git+https://github.com/kyorbit/platform.git"
   },
   "scripts": {
-    "dev": "portless tss vite dev --port 3000",
-    "preview": "portless tss vite preview",
+    "dev": "portless kyorbit vite dev --port 3000",
+    "preview": "portless kyorbit vite preview",
     "build": "bun run db:generate && vite build",
-    "start": "bun run build && portless tss vite preview",
+    "start": "bun run build && portless kyorbit vite preview",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -92,7 +92,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.2.8",
     "react-day-picker": "9",
-    "react-dom": "^19.2.7",
+    "react-dom": "^19.2.8",
     "react-hotkeys-hook": "^5.3.2",
     "recharts": "^3.8.1",
     "rough-notation": "^0.5.1",
@@ -132,7 +132,6 @@
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "lint-staged": "^17.3.0",
-    "mongodb": "^6.16.0",
     "pg": "^8.22.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",

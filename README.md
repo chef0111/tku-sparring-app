@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="100%" alt="banner" src="https://github.com/user-attachments/assets/101ccebc-d5b7-41ee-9a94-5fbf09e92a27" />
+  <img width="100%" alt="banner" src="https://res.cloudinary.com/chef0111/image/upload/v1787220441/kyorbit/platform-banner.webp" />
 </div>
 
 <div align="center">
@@ -14,7 +14,7 @@
 </div>
 
 <p align="center">
-  <a href="https://tku-sparring.vercel.app/"><strong>Live demo</strong></a>
+  <a href="https://kyorbit.vercel.app/"><strong>Get started</strong></a>
   &nbsp;•&nbsp;
   <a href="./DEVELOPMENT.md"><strong>Local setup</strong></a>
   &nbsp;•&nbsp;
@@ -25,7 +25,7 @@
 
 ## Overview
 
-TKU Sparring is a tournament operations platform for Taekwondo UIT. It combines an admin CRM for managing tournaments, athletes, divisions, and brackets with an arena client for live match scoring on the floor.
+Kyorbit is a tournament operations platform for Taekwondo UIT. It combines an admin CRM for managing tournaments, athletes, divisions, and brackets with an arena client for live match scoring on the floor.
 
 ---
 
@@ -33,7 +33,7 @@ TKU Sparring is a tournament operations platform for Taekwondo UIT. It combines 
 
 ### Option 1: Direct access (limited)
 
-Open [TKU Sparring App](https://tku-sparring.vercel.app/) in a browser. Production account creation is disabled for now — apologies for the inconvenience.
+Open [Kyorbit](https://kyorbit.vercel.app/) in a browser. Production account creation is disabled for now — apologies for the inconvenience.
 
 ### Option 2: Run locally (recommended)
 

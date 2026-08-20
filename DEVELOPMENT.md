@@ -14,8 +14,8 @@ This guide outlines the steps required to set up and run the project in a local 
 ### 1. Clone the repository:
 
 ```bash
-git clone https://github.com/chef0111/tku-sparring.git
-cd tku-sparring
+git clone https://github.com/kyorbit/platform.git kyorbit
+cd kyorbit
 ```
 
 ### 2. Install Portless
@@ -40,19 +40,19 @@ Create a `.env` file at the repo root. Required keys:
 | --------------------- | ---------------------------------------------- |
 | `DATABASE_URL`        | Neon **pooled** connection string              |
 | `DIRECT_DATABASE_URL` | Neon **direct** connection (Prisma migrations) |
-| `BETTER_AUTH_URL`     | App origin (e.g. `https://tss.localhost`)      |
+| `BETTER_AUTH_URL`     | App origin (e.g. `https://kyorbit.localhost`)  |
 | `BETTER_AUTH_SECRET`  | Auth encryption secret                         |
 
 For **tournament realtime**, configure the realtime block in `.env.local` (see step 5).
 
 ### 5. Tournament realtime service
 
-Run the [realtime](https://github.com/chef0111/tss-realtime) service alongside the main app — without it, some realtime features (cross-device refresh) are unavailable. See [tournament-realtime.md](docs/tournament-realtime.md) for how it works.
+Run the [realtime](https://github.com/kyorbit/realtime) service alongside the main app — without it, some realtime features (cross-device refresh) are unavailable. See [tournament-realtime.md](docs/tournament-realtime.md) for how it works.
 
 #### Install and configure
 
 ```bash
-git clone https://github.com/chef0111/tss-realtime.git realtime
+git clone https://github.com/kyorbit/realtime.git realtime
 cd realtime
 bun install
 cp .env.example .env.local
@@ -65,7 +65,7 @@ Edit [realtime/.env.local](realtime/.env.local). `INTERNAL_BROADCAST_SECRET` and
 | `REALTIME_INTERNAL_BROADCAST_SECRET` | `INTERNAL_BROADCAST_SECRET`      |
 | `TOURNAMENT_SOCKET_JWT_SECRET`       | `TOURNAMENT_SOCKET_JWT_SECRET`   |
 
-`REALTIME_INTERNAL_BROADCAST_URL` is a **Node** fetch from the main app. On Windows, Node cannot resolve `*.localhost` (browsers can). Use `http://127.0.0.1:3331/internal/broadcast`, not `https://ws.tss.localhost`. `VITE_REALTIME_URL` is the **browser** socket origin: `https://ws.tss.localhost` under Portless.
+`REALTIME_INTERNAL_BROADCAST_URL` is a **Node** fetch from the main app. On Windows, Node cannot resolve `*.localhost` (browsers can). Use `http://127.0.0.1:3331/internal/broadcast`, not `https://ws.kyorbit.localhost`. `VITE_REALTIME_URL` is the **browser** socket origin: `https://ws.kyorbit.localhost` under Portless.
 
 Fill in the rest from [.env.example](.env.example) (main app) and [realtime/.env.example](realtime/.env.example). Generate secrets **ONCE** and paste the same value into both files for each pair in the table:
 
@@ -83,7 +83,7 @@ On Windows without `openssl` (PowerShell):
 [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 ```
 
-Run that twice for the two secrets. Ensure `CORS_ORIGINS` in `realtime/.env.local` includes the browser origin you use (e.g. `https://tss.localhost` with Portless).
+Run that twice for the two secrets. Ensure `CORS_ORIGINS` in `realtime/.env.local` includes the browser origin you use (e.g. `https://kyorbit.localhost` with Portless).
 
 #### Run
 
@@ -118,7 +118,7 @@ Keep the realtime process from step 5 running, then in **another terminal** from
 bun run dev
 ```
 
-The application should now be available at `https://tss.localhost`.
+The application should now be available at `https://kyorbit.localhost`.
 
 ## Dev accounts (no sign-up UI)
 
@@ -127,7 +127,7 @@ The product is **sign-in only** — there is no registration page in the app (se
 ### Create an account
 
 1. Start the dev server (`bun run dev`).
-2. Open the auth reference UI (same host as the app): [https://tss.localhost/api/auth/reference](https://tss.localhost/api/auth/reference)
+2. Open the auth reference UI (same host as the app): [https://kyorbit.localhost/api/auth/reference](https://kyorbit.localhost/api/auth/reference)
 3. In the Scalar UI, open the **Default** group → `**POST /sign-up/email`\*\* (the username plugin extends this endpoint; do not look for a separate sign-up route).
 4. Click **Test request** and send a body like:
 
@@ -147,12 +147,12 @@ The product is **sign-in only** — there is no registration page in the app (se
 | `username` | Used on the login form. Rules: 3–30 chars, `[a-zA-Z0-9_.-]+`, at least one letter (`UsernameSchema`).          |
 | `password` | Must satisfy `PasswordSchema`: ≥8 chars, upper, lower, digit, special character.                               |
 
-5. On success, sign in at `https://tss.localhost/login` with that **username** and **password**.
+5. On success, sign in at `https://kyorbit.localhost/login` with that **username** and **password**.
 
 ### Optional: `curl`
 
 ```bash
-curl -X POST "https://tss.localhost/api/auth/sign-up/email" \
+curl -X POST "https://kyorbit.localhost/api/auth/sign-up/email" \
   -H "Content-Type: application/json" \
   -d '{"email":"dev@example.com","name":"Dev Admin","username":"dev.admin","password":"DevPass1!"}'
 ```

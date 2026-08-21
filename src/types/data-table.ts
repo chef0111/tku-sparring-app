@@ -1,22 +1,7 @@
 import type { ColumnSort, Row, RowData } from '@tanstack/react-table';
 import type { DataTableConfig } from '@/config/data-table';
 import type { FilterItemSchema } from '@/lib/data-table/parsers';
-
-declare module '@tanstack/react-table' {
-  interface TableMeta<TData extends RowData> {
-    queryKeys?: QueryKeys;
-  }
-
-  interface ColumnMeta<TData extends RowData, TValue> {
-    label?: string;
-    placeholder?: string;
-    variant?: FilterVariant;
-    options?: Array<Option>;
-    range?: [number, number];
-    unit?: string;
-    icon?: React.FC<React.SVGProps<SVGSVGElement>>;
-  }
-}
+import type { DataTableFeatures } from '@/lib/data-table/features';
 
 export interface QueryKeys {
   page: string;
@@ -37,6 +22,20 @@ export type FilterOperator = DataTableConfig['operators'][number];
 export type FilterVariant = DataTableConfig['filterVariants'][number];
 export type JoinOperator = DataTableConfig['joinOperators'][number];
 
+export interface DataTableColumnMeta {
+  label?: string;
+  placeholder?: string;
+  variant?: FilterVariant;
+  options?: Array<Option>;
+  range?: [number, number];
+  unit?: string;
+  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+}
+
+export interface DataTableTableMeta {
+  queryKeys?: QueryKeys;
+}
+
 export interface ExtendedColumnSort<TData> extends Omit<ColumnSort, 'id'> {
   id: Extract<keyof TData, string>;
 }
@@ -45,7 +44,7 @@ export interface ExtendedColumnFilter<TData> extends FilterItemSchema {
   id: Extract<keyof TData, string>;
 }
 
-export interface DataTableRowAction<TData> {
-  row: Row<TData>;
+export interface DataTableRowAction<TData extends RowData> {
+  row: Row<DataTableFeatures, TData>;
   variant: 'update' | 'delete';
 }

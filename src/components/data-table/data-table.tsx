@@ -1,10 +1,10 @@
 import { flexRender } from '@tanstack/react-table';
 import { PlusIcon } from 'lucide-react';
 import React from 'react';
-import type { RowData, Table as TanstackTable } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableInstance } from '@/lib/data-table/features';
 import { DataTablePagination } from '@/components/data-table/data-table-pagination';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 interface DataTableProps<
   TData extends RowData,
 > extends React.ComponentProps<'div'> {
-  table: TanstackTable<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
   actionBar?: React.ReactNode;
   addRow?: {

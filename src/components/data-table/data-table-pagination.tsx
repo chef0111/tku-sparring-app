@@ -4,10 +4,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
-import type { RowData, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableInstance } from '@/lib/data-table/features';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 interface DataTablePaginationProps<
   TData extends RowData,
 > extends React.ComponentProps<'div'> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
   pageSizeOptions?: Array<number>;
   selectedRows?: boolean;

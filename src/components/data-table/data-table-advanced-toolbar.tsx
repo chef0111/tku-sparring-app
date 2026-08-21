@@ -1,15 +1,15 @@
-import type { RowData, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 import type * as React from 'react';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableInstance } from '@/lib/data-table/features';
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
 import { cn } from '@/lib/utils';
 
 interface DataTableAdvancedToolbarProps<
   TData extends RowData,
 > extends React.ComponentProps<'div'> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
 }
 

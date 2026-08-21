@@ -16,6 +16,15 @@ import {
   rowSortingFeature,
   tableFeatures,
 } from '@tanstack/react-table';
+import type {
+  Column,
+  ColumnDef,
+  Row,
+  RowData,
+  Table,
+  TableOptions,
+  TableState,
+} from '@tanstack/react-table';
 
 import type {
   DataTableColumnMeta,
@@ -42,3 +51,28 @@ export const dataTableFeatures = tableFeatures({
 });
 
 export type DataTableFeatures = typeof dataTableFeatures;
+
+export type DataTableInstance<TData extends RowData> = Table<
+  DataTableFeatures,
+  TData
+>;
+export type DataTableColumn<TData extends RowData, TValue = unknown> = Column<
+  DataTableFeatures,
+  TData,
+  TValue
+>;
+export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
+export type DataTableColumnDef<
+  TData extends RowData,
+  TValue = unknown,
+> = ColumnDef<DataTableFeatures, TData, TValue>;
+export type DataTableState = TableState<DataTableFeatures>;
+export type DataTableOptions<TData extends RowData> = TableOptions<
+  DataTableFeatures,
+  TData
+>;
+
+export interface DataTableRowAction<TData extends RowData> {
+  row: DataTableRow<TData>;
+  variant: 'update' | 'delete';
+}

@@ -1,9 +1,12 @@
 import { X } from 'lucide-react';
 import React from 'react';
-import type { Column, RowData, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type {
+  DataTableColumn,
+  DataTableInstance,
+} from '@/lib/data-table/features';
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
 import { DataTableSliderFilter } from '@/components/data-table/data-table-slider-filter';
@@ -15,7 +18,7 @@ import { cn } from '@/lib/utils';
 interface DataTableToolbarProps<
   TData extends RowData,
 > extends React.ComponentProps<'div'> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
 }
 
@@ -76,9 +79,9 @@ export function DataTableToolbar<TData extends RowData>({
   );
 }
 interface DataTableToolbarFilterProps<TData extends RowData> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
 }
 
 function DataTableToolbarFilter<TData extends RowData>({
@@ -150,9 +153,9 @@ function DataTableToolbarFilter<TData extends RowData>({
 }
 
 interface DataTableTextFilterProps<TData extends RowData> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
   placeholder?: string;
   type?: 'text' | 'number';
   unit?: string;

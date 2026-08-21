@@ -3,10 +3,10 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { TournamentsActionMenu } from '../tournaments-table/tournaments-action-menu';
 import { TournamentStatusPill } from '../../tournament-status-pill';
-import type { Row } from '@tanstack/react-table';
+
 import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableRow } from '@/lib/data-table/features';
 import {
   Card,
   CardContent,
@@ -23,8 +23,8 @@ interface TournamentCardProps {
 
 function adaptToRow(
   tournament: TournamentListItem
-): Row<DataTableFeatures, TournamentListItem> {
-  return { original: tournament } as Row<DataTableFeatures, TournamentListItem>;
+): DataTableRow<TournamentListItem> {
+  return { original: tournament } as DataTableRow<TournamentListItem>;
 }
 
 export function TournamentCard({

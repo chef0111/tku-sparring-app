@@ -1,10 +1,13 @@
 import { Check, Settings2 } from 'lucide-react';
 import { useMemo } from 'react';
 import type { ComponentProps } from 'react';
-import type { Column, RowData, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type {
+  DataTableColumn,
+  DataTableInstance,
+} from '@/lib/data-table/features';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Combobox,
@@ -21,7 +24,7 @@ interface DataTableViewOptionsProps<TData extends RowData> extends Omit<
   ComponentProps<typeof ComboboxContent>,
   'children'
 > {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
   disabled?: boolean;
 }
@@ -40,19 +43,17 @@ export function DataTableViewOptions<TData extends RowData>({
     .filter(
       (column) =>
         typeof column.accessorFn !== 'undefined' && column.getCanHide()
-    ) as Array<Column<DataTableFeatures, TData>>;
+    ) as Array<DataTableColumn<TData>>;
 
   const items = useMemo(() => columns, [columns]);
 
   return (
     <Combobox
       disabled={disabled}
-      itemToStringLabel={(column: Column<DataTableFeatures, TData>) =>
+      itemToStringLabel={(column: DataTableColumn<TData>) =>
         column.columnDef.meta?.label ?? column.id
       }
-      itemToStringValue={(column: Column<DataTableFeatures, TData>) =>
-        column.id
-      }
+      itemToStringValue={(column: DataTableColumn<TData>) => column.id}
       items={items}
     >
       <ComboboxTrigger
@@ -71,7 +72,7 @@ export function DataTableViewOptions<TData extends RowData>({
         <ComboboxInput showTrigger={false} placeholder="Search columns..." />
         <ComboboxEmpty>No columns found.</ComboboxEmpty>
         <ComboboxList>
-          {(column: Column<DataTableFeatures, TData>) => {
+          {(column: DataTableColumn<TData>) => {
             const isVisible =
               columnVisibility[column.id] ?? column.getIsVisible();
 

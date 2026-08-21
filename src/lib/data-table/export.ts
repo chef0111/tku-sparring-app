@@ -1,5 +1,5 @@
-import type { RowData, Table } from '@tanstack/react-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { RowData } from '@tanstack/react-table';
+import type { DataTableInstance } from '@/lib/data-table/features';
 
 interface ExportOptions<TData extends RowData> {
   filename?: string;
@@ -9,7 +9,7 @@ interface ExportOptions<TData extends RowData> {
 }
 
 export function exportTableToCSV<TData extends RowData>(
-  table: Table<DataTableFeatures, TData>,
+  table: DataTableInstance<TData>,
   opts: ExportOptions<TData> = {}
 ): void {
   const {

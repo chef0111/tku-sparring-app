@@ -1,11 +1,11 @@
 import { MoreHorizontal } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
-import type { ColumnDef } from '@tanstack/react-table';
+
 import type {
   DivisionData,
   TournamentAthleteData,
 } from '@/contracts/tournament/division';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumnDef } from '@/lib/data-table/features';
 import { AthleteAvatar } from '@/features/dashboard/components/athlete/athlete-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -76,7 +76,7 @@ export function getDivisionRosterColumns({
   onUnassign,
   onMove,
 }: GetDivisionRosterColumnsArgs): Array<
-  ColumnDef<DataTableFeatures, TournamentAthleteData>
+  DataTableColumnDef<TournamentAthleteData>
 > {
   return [
     {

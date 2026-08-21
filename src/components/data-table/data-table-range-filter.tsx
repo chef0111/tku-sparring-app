@@ -1,8 +1,8 @@
 import React from 'react';
-import type { Column, RowData } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { ExtendedColumnFilter } from '@/types/data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import { NumberInput } from '@/components/input/number-input';
 import { cn } from '@/lib/utils';
 
@@ -10,7 +10,7 @@ interface DataTableRangeFilterProps<
   TData extends RowData,
 > extends React.ComponentProps<'div'> {
   filter: ExtendedColumnFilter<TData>;
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
   inputId: string;
   onFilterUpdate: (
     filterId: string,

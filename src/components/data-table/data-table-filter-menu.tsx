@@ -1,14 +1,17 @@
 import { BadgeCheck, CalendarIcon, ListFilter, Text, X } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 import React from 'react';
-import type { Column, RowData, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type {
   ExtendedColumnFilter,
   FilterOperator,
   Option,
 } from '@/types/data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type {
+  DataTableColumn,
+  DataTableInstance,
+} from '@/lib/data-table/features';
 import { DataTableRangeFilter } from '@/components/data-table/data-table-range-filter';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -60,7 +63,7 @@ const REMOVE_FILTER_SHORTCUTS = ['backspace', 'delete'];
 interface DataTableFilterMenuProps<
   TData extends RowData,
 > extends React.ComponentProps<typeof PopoverContent> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   debounceMs?: number;
   throttleMs?: number;
   shallow?: boolean;
@@ -84,10 +87,8 @@ export function DataTableFilterMenu<TData extends RowData>({
   }, [table]);
 
   const [open, setOpen] = React.useState(false);
-  const [selectedColumn, setSelectedColumn] = React.useState<Column<
-    DataTableFeatures,
-    TData
-  > | null>(null);
+  const [selectedColumn, setSelectedColumn] =
+    React.useState<DataTableColumn<TData> | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -130,7 +131,7 @@ export function DataTableFilterMenu<TData extends RowData>({
   const debouncedSetFilters = useDebouncedCallback(setFilters, debounceMs);
 
   const onFilterAdd = React.useCallback(
-    (column: Column<DataTableFeatures, TData>, value: string) => {
+    (column: DataTableColumn<TData>, value: string) => {
       if (!value.trim() && column.columnDef.meta?.variant !== 'boolean') {
         return;
       }
@@ -361,7 +362,7 @@ export function DataTableFilterMenu<TData extends RowData>({
 interface DataTableFilterItemProps<TData extends RowData> {
   filter: ExtendedColumnFilter<TData>;
   filterItemId: string;
-  columns: Array<Column<DataTableFeatures, TData>>;
+  columns: Array<DataTableColumn<TData>>;
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>
@@ -429,10 +430,10 @@ function DataTableFilterItem<TData extends RowData>({
       >
         <Combobox
           isItemEqualToValue={(a, b) => a.id === b.id}
-          itemToStringLabel={(col: Column<DataTableFeatures, TData>) =>
+          itemToStringLabel={(col: DataTableColumn<TData>) =>
             col.columnDef.meta?.label ?? col.id
           }
-          itemToStringValue={(col: Column<DataTableFeatures, TData>) => col.id}
+          itemToStringValue={(col: DataTableColumn<TData>) => col.id}
           items={columns}
           onOpenChange={setShowFieldSelector}
           onValueChange={(col) => {
@@ -466,7 +467,7 @@ function DataTableFilterItem<TData extends RowData>({
             <ComboboxInput placeholder="Search fields..." showTrigger={false} />
             <ComboboxEmpty>No fields found.</ComboboxEmpty>
             <ComboboxList>
-              {(col: Column<DataTableFeatures, TData>) => (
+              {(col: DataTableColumn<TData>) => (
                 <ComboboxItem key={col.id} value={col}>
                   {col.columnDef.meta?.icon && <col.columnDef.meta.icon />}
                   <span className="truncate">
@@ -532,7 +533,7 @@ function DataTableFilterItem<TData extends RowData>({
 }
 
 interface FilterValueSelectorProps<TData extends RowData> {
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
   value: string;
   onSelect: (value: string) => void;
 }
@@ -628,7 +629,7 @@ function onFilterInputRender<TData extends RowData>({
   setShowValueSelector,
 }: {
   filter: ExtendedColumnFilter<TData>;
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
   inputId: string;
   onFilterUpdate: (
     filterId: string,

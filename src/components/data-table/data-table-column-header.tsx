@@ -5,10 +5,10 @@ import {
   EyeOff,
   X,
 } from 'lucide-react';
-import type { Column, RowData } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -22,7 +22,7 @@ interface DataTableColumnHeaderProps<
   TData extends RowData,
   TValue,
 > extends React.ComponentProps<typeof DropdownMenuTrigger> {
-  column: Column<DataTableFeatures, TData, TValue>;
+  column: DataTableColumn<TData, TValue>;
   state?: DataTableControlledState;
   label: string;
 }

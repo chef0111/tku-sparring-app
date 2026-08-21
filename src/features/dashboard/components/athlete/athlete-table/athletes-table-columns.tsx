@@ -2,8 +2,8 @@ import { AthleteAvatar } from '../athlete-avatar';
 import AthletesActionMenu from './athletes-action-menu';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { ColumnOptions } from '@/features/dashboard/lib/athlete/column-options';
-import type { DataTableFeatures } from '@/lib/data-table/features';
-import type { ColumnDef } from '@tanstack/react-table';
+import type { DataTableColumnDef } from '@/lib/data-table/features';
+
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 
 export function getAthletesTableColumns(
   options: ColumnOptions
-): Array<ColumnDef<DataTableFeatures, AthleteProfileData>> {
+): Array<DataTableColumnDef<AthleteProfileData>> {
   const nameFilterQueryKey = options.nameFilterQueryKey ?? 'query';
 
   return [

@@ -1,14 +1,9 @@
 import { ArrowDownUp, GripVertical, Trash2 } from 'lucide-react';
 import React from 'react';
-import type {
-  ColumnSort,
-  RowData,
-  SortDirection,
-  Table,
-} from '@tanstack/react-table';
+import type { ColumnSort, RowData, SortDirection } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableInstance } from '@/lib/data-table/features';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -48,7 +43,7 @@ const REMOVE_SORT_SHORTCUTS = ['backspace', 'delete'];
 interface DataTableSortListProps<
   TData extends RowData,
 > extends React.ComponentProps<typeof PopoverContent> {
-  table: Table<DataTableFeatures, TData>;
+  table: DataTableInstance<TData>;
   state?: DataTableControlledState;
   disabled?: boolean;
 }

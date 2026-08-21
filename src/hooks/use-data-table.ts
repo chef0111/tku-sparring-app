@@ -11,20 +11,21 @@ import type {
   ColumnFiltersState,
   ColumnVisibilityState,
   PaginationState,
-  Row,
   RowData,
   RowSelectionState,
   SortingState,
-  TableOptions,
-  TableState,
   Updater,
 } from '@tanstack/react-table';
 import type { SingleParser, UseQueryStateOptions } from 'nuqs';
 
 import type { ExtendedColumnSort, QueryKeys } from '@/types/data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
-import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import type {
+  DataTableOptions,
+  DataTableRow,
+  DataTableState,
+} from '@/lib/data-table/features';
 import { dataTableFeatures } from '@/lib/data-table/features';
+import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
 import { getSortingStateParser } from '@/lib/data-table/parsers';
 
 const PAGE_KEY = 'page';
@@ -39,7 +40,7 @@ const THROTTLE_MS = 50;
 interface UseDataTableProps<TData extends RowData>
   extends
     Omit<
-      TableOptions<DataTableFeatures, TData>,
+      DataTableOptions<TData>,
       | 'state'
       | 'pageCount'
       | 'features'
@@ -47,9 +48,9 @@ interface UseDataTableProps<TData extends RowData>
       | 'manualPagination'
       | 'manualSorting'
     >,
-    Required<Pick<TableOptions<DataTableFeatures, TData>, 'pageCount'>> {
+    Required<Pick<DataTableOptions<TData>, 'pageCount'>> {
   filteredRowCount?: number;
-  initialState?: Omit<Partial<TableState<DataTableFeatures>>, 'sorting'> & {
+  initialState?: Omit<Partial<DataTableState>, 'sorting'> & {
     sorting?: Array<ExtendedColumnSort<TData>>;
   };
   queryKeys?: Partial<QueryKeys>;
@@ -373,7 +374,7 @@ export function useDataTable<TData extends RowData>(
   );
 
   const getRowId = React.useCallback(
-    (row: TData, index: number, parent?: Row<DataTableFeatures, TData>) => {
+    (row: TData, index: number, parent?: DataTableRow<TData>) => {
       if (tableProps.getRowId) return tableProps.getRowId(row, index, parent);
 
       const rowWithId = row as { id?: string | number };
@@ -398,7 +399,7 @@ export function useDataTable<TData extends RowData>(
     });
   }, [tableProps.data, getRowId]);
 
-  const table = useTable<DataTableFeatures, TData>({
+  const table = useTable({
     ...tableProps,
     features: dataTableFeatures,
     columns,

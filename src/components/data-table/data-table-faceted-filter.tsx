@@ -1,10 +1,10 @@
 import { PlusCircle, XCircle, XIcon } from 'lucide-react';
 import React from 'react';
-import type { Column, RowData } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { Option } from '@/types/data-table';
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,7 +22,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 interface DataTableFacetedFilterProps<TData extends RowData, TValue> {
-  column?: Column<DataTableFeatures, TData, TValue>;
+  column?: DataTableColumn<TData, TValue>;
   state?: DataTableControlledState;
   title?: string;
   options: Array<Option>;

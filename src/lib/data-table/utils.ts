@@ -1,6 +1,6 @@
-import type { Column, RowData } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 import type { FilterOperator, FilterVariant } from '@/types/data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import type { FilterItemSchema } from '@/lib/data-table/parsers';
 import { dataTableConfig } from '@/config/data-table';
 
@@ -8,16 +8,16 @@ export function getColumnPinningStyle<TData extends RowData>({
   column,
   withBorder = false,
 }: {
-  column: Column<DataTableFeatures, TData>;
+  column: DataTableColumn<TData>;
   withBorder?: boolean;
 }): React.CSSProperties {
   const isPinned = column.getIsPinned();
   const isLastStartPinnedColumn =
     isPinned === 'start' &&
-    column.getPinnedIndex() ===
-      column.table.getStartVisibleLeafColumns().length - 1;
+    column.table.getStartVisibleLeafColumns().at(-1)?.id === column.id;
   const isFirstEndPinnedColumn =
-    isPinned === 'end' && column.getPinnedIndex() === 0;
+    isPinned === 'end' &&
+    column.table.getEndVisibleLeafColumns()[0]?.id === column.id;
 
   return {
     boxShadow: withBorder

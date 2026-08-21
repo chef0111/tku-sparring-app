@@ -4,9 +4,9 @@ import { Download, Upload } from 'lucide-react';
 import { BulkAddAthletesDialog } from '../dialogs/bulk-add-athletes-dialog';
 import { BulkDeleteAthletesDialog } from '../dialogs/bulk-delete-athletes-dialog';
 import { AthletesActionBar } from './athletes-action-bar';
-import type { ColumnDef } from '@tanstack/react-table';
+
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumnDef } from '@/lib/data-table/features';
 import type { AthleteProfilesDTO } from '@/orpc/athlete-profiles/dto';
 import { exportAthletesTableToCSV } from '@/features/dashboard/lib/athlete/export-athletes-csv';
 import { useAthleteTableQuery } from '@/features/dashboard/hooks/use-athlete-manager-query';
@@ -28,7 +28,7 @@ import { DataTableAdvancedToolbar } from '@/components/data-table/data-table-adv
 const ATHLETE_TABLE_COLUMN_COUNT = 8;
 
 interface AthleteTableProps {
-  columns: Array<ColumnDef<DataTableFeatures, AthleteProfileData>>;
+  columns: Array<DataTableColumnDef<AthleteProfileData>>;
   className?: string;
   onAdd: () => void;
   onImport: () => void;

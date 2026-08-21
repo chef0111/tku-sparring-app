@@ -1,9 +1,9 @@
 import { CalendarIcon, XCircle } from 'lucide-react';
 import React from 'react';
-import type { Column, RowData } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 import type { DateRange } from 'react-day-picker';
 
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -50,7 +50,7 @@ function parseColumnFilterValue(value: unknown) {
 }
 
 interface DataTableDateFilterProps<TData extends RowData> {
-  column: Column<DataTableFeatures, TData, unknown>;
+  column: DataTableColumn<TData, unknown>;
   title?: string;
   multiple?: boolean;
 }

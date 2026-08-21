@@ -5,10 +5,10 @@ import {
   IconUserPlus,
   IconX,
 } from '@tabler/icons-react';
-import type { Table } from '@tanstack/react-table';
+
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { DataTableControlledState } from '@/hooks/use-data-table';
-import type { DataTableFeatures } from '@/lib/data-table/features';
+import type { DataTableInstance } from '@/lib/data-table/features';
 import { exportAthletesTableToCSV } from '@/features/dashboard/lib/athlete/export-athletes-csv';
 import {
   ActionBar,
@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/action-bar';
 
 interface AthletesActionBarProps {
-  table: Table<DataTableFeatures, AthleteProfileData>;
+  table: DataTableInstance<AthleteProfileData>;
   state: DataTableControlledState;
   onBulkAdd: () => void;
   onBulkEdit?: () => void;

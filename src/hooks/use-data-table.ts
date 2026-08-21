@@ -1,13 +1,4 @@
-import {
-  getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { useTable } from '@tanstack/react-table';
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -18,19 +9,22 @@ import {
 import React from 'react';
 import type {
   ColumnFiltersState,
+  ColumnVisibilityState,
   PaginationState,
   Row,
+  RowData,
   RowSelectionState,
   SortingState,
   TableOptions,
   TableState,
   Updater,
-  VisibilityState,
 } from '@tanstack/react-table';
 import type { SingleParser, UseQueryStateOptions } from 'nuqs';
 
 import type { ExtendedColumnSort, QueryKeys } from '@/types/data-table';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback';
+import { dataTableFeatures } from '@/lib/data-table/features';
 import { getSortingStateParser } from '@/lib/data-table/parsers';
 
 const PAGE_KEY = 'page';
@@ -42,20 +36,20 @@ const ARRAY_SEPARATOR = ',';
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
 
-interface UseDataTableProps<TData>
+interface UseDataTableProps<TData extends RowData>
   extends
     Omit<
-      TableOptions<TData>,
+      TableOptions<DataTableFeatures, TData>,
       | 'state'
       | 'pageCount'
-      | 'getCoreRowModel'
+      | 'features'
       | 'manualFiltering'
       | 'manualPagination'
       | 'manualSorting'
     >,
-    Required<Pick<TableOptions<TData>, 'pageCount'>> {
+    Required<Pick<TableOptions<DataTableFeatures, TData>, 'pageCount'>> {
   filteredRowCount?: number;
-  initialState?: Omit<Partial<TableState>, 'sorting'> & {
+  initialState?: Omit<Partial<TableState<DataTableFeatures>>, 'sorting'> & {
     sorting?: Array<ExtendedColumnSort<TData>>;
   };
   queryKeys?: Partial<QueryKeys>;
@@ -73,13 +67,15 @@ interface UseDataTableProps<TData>
 export interface DataTableControlledState {
   pagination: PaginationState;
   sorting: SortingState;
-  columnVisibility: VisibilityState;
+  columnVisibility: ColumnVisibilityState;
   rowSelection: RowSelectionState;
   columnFilters: ColumnFiltersState;
   filteredRowCount?: number;
 }
 
-export function useDataTable<TData>(props: UseDataTableProps<TData>) {
+export function useDataTable<TData extends RowData>(
+  props: UseDataTableProps<TData>
+) {
   const {
     columns,
     pageCount = -1,
@@ -130,7 +126,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     initialState?.rowSelection ?? {}
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(initialState?.columnVisibility ?? {});
+    React.useState<ColumnVisibilityState>(initialState?.columnVisibility ?? {});
 
   const [page, setPage] = useQueryState(
     pageKey,
@@ -332,7 +328,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   );
 
   const onColumnVisibilityChange = React.useCallback(
-    (updaterOrValue: Updater<VisibilityState>) => {
+    (updaterOrValue: Updater<ColumnVisibilityState>) => {
       setColumnVisibility((prev) => {
         const next =
           typeof updaterOrValue === 'function'
@@ -377,7 +373,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   );
 
   const getRowId = React.useCallback(
-    (row: TData, index: number, parent?: Row<TData>) => {
+    (row: TData, index: number, parent?: Row<DataTableFeatures, TData>) => {
       if (tableProps.getRowId) return tableProps.getRowId(row, index, parent);
 
       const rowWithId = row as { id?: string | number };
@@ -402,8 +398,9 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     });
   }, [tableProps.data, getRowId]);
 
-  const table = useReactTable({
+  const table = useTable<DataTableFeatures, TData>({
     ...tableProps,
+    features: dataTableFeatures,
     columns,
     initialState,
     pageCount,
@@ -428,13 +425,6 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     onSortingChange: onSortingChangeWithLog,
     onColumnFiltersChange,
     onColumnVisibilityChange,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,

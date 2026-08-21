@@ -1,14 +1,14 @@
 import React from 'react';
-import {
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
+import { useTable } from '@tanstack/react-table';
+import type {
+  ColumnVisibilityState,
+  SortingState,
 } from '@tanstack/react-table';
-import type { SortingState, VisibilityState } from '@tanstack/react-table';
 import type { DataTableControlledState } from '@/hooks/use-data-table';
 import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
 import { getTournamentsTableColumns } from '@/features/dashboard/components/tournament/overview/tournaments-table/tournaments-table-columns';
+import { dataTableFeatures } from '@/lib/data-table/features';
 
 export function useRecentTournamentsTable(
   tournaments: Array<TournamentListItem>,
@@ -17,7 +17,7 @@ export function useRecentTournamentsTable(
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'createdAt', desc: true },
   ]);
-  const [columnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility] = React.useState<ColumnVisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const tournamentById = React.useMemo(
@@ -49,20 +49,19 @@ export function useRecentTournamentsTable(
     [pageSize, sorting, columnVisibility, rowSelection, tournaments.length]
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: tournaments,
     columns,
     state: {
       ...tableState,
-      columnPinning: { right: ['actions'] },
+      columnPinning: { start: [], end: ['actions'] },
     },
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     getRowId: (row) => row.id,
     enableRowSelection: false,
   });
 
-  return { table, tableState: table.getState() };
+  return { table, tableState };
 }

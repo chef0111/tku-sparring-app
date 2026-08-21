@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useTable } from '@tanstack/react-table';
 import { toast } from 'sonner';
 import type { PaginationState, SortingState } from '@tanstack/react-table';
 import type { DivisionData } from '@/contracts/tournament/division';
@@ -9,6 +9,7 @@ import { getDivisionRosterColumns } from '@/features/dashboard/components/tourna
 import { getViolations } from '@/features/dashboard/components/tournament/builder/divisions-tab/division-violation-badge';
 import { useTournamentAthletes } from '@/queries/tournament-athlete';
 import { useAssignAthlete, useUnassignAthlete } from '@/queries/division';
+import { dataTableFeatures } from '@/lib/data-table/features';
 
 export interface UseDivisionRosterTableArgs {
   division: DivisionData;
@@ -119,7 +120,8 @@ export function useDivisionRosterTable({
     [pagination, sorting, total]
   );
 
-  const table = useReactTable({
+  const table = useTable({
+    features: dataTableFeatures,
     data: items,
     columns,
     rowCount: total,
@@ -129,7 +131,6 @@ export function useDivisionRosterTable({
     state: tableState,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
   });
 
   const violationCount = items.filter(

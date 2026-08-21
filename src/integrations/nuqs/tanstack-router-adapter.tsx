@@ -9,6 +9,10 @@
  * 3) Primitive arrays (`status`, `gender`, …) must be one comma-joined value — `parseAsArrayOf`
  *    uses `.get()`, not `.getAll()`.
  *
+ * `updateUrl` writes `href` (path + query), not `to`. `to` is decoded as a path,
+ * and TanStack percent-encodes `{` `}` there. Pair with `stringifySearch` in
+ * `getRouter` so the router does not re-encode braces via `URLSearchParams`.
+ *
  * @see https://github.com/47ng/nuqs/issues (upstream fix when available)
  */
 import { startTransition, useCallback, useMemo } from 'react';
@@ -64,6 +68,7 @@ export function searchRecordToURLSearchParams(
 
 function useNuqsTanstackRouterAdapter(watchKeys: Array<string>) {
   const pathname = useLocation({ select: (state) => state.pathname });
+  const hash = useLocation({ select: (state) => state.hash });
   const search = useLocation({
     select: (state) =>
       Object.fromEntries(
@@ -86,16 +91,14 @@ function useNuqsTanstackRouterAdapter(watchKeys: Array<string>) {
       ) => {
         startTransition(() => {
           navigate({
-            from: '/',
-            to: pathname + renderQueryString(nextSearch),
+            href: `${pathname}${renderQueryString(nextSearch)}${hash ? `#${hash}` : ''}`,
             replace: options.history === 'replace',
             resetScroll: options.scroll,
-            hash: (prevHash) => prevHash ?? '',
             state: (state) => state,
           });
         });
       },
-      [navigate, pathname]
+      [hash, navigate, pathname]
     ),
     rateLimitFactor: 1,
   };

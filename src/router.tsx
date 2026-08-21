@@ -1,6 +1,7 @@
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { routeTree } from './routeTree.gen';
+import { stringifySearch } from './integrations/nuqs/stringify-search';
 import {
   Provider as QueryProvider,
   getContext as getQueryContext,
@@ -12,6 +13,7 @@ export function getRouter() {
   const router = createRouter({
     routeTree,
     context,
+    stringifySearch,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
     defaultPendingMs: 0,

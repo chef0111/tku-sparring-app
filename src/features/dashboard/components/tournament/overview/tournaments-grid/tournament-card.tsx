@@ -6,6 +6,7 @@ import { TournamentStatusPill } from '../../tournament-status-pill';
 import type { Row } from '@tanstack/react-table';
 import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import {
   Card,
   CardContent,
@@ -20,8 +21,10 @@ interface TournamentCardProps {
   onRowAction?: TournamentRowActionOptions['onRowAction'];
 }
 
-function adaptToRow(tournament: TournamentListItem): Row<TournamentListItem> {
-  return { original: tournament } as Row<TournamentListItem>;
+function adaptToRow(
+  tournament: TournamentListItem
+): Row<DataTableFeatures, TournamentListItem> {
+  return { original: tournament } as Row<DataTableFeatures, TournamentListItem>;
 }
 
 export function TournamentCard({

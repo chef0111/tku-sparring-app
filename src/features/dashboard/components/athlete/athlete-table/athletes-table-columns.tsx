@@ -2,6 +2,7 @@ import { AthleteAvatar } from '../athlete-avatar';
 import AthletesActionMenu from './athletes-action-menu';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { ColumnOptions } from '@/features/dashboard/lib/athlete/column-options';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import type { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +17,7 @@ import { cn } from '@/lib/utils';
 
 export function getAthletesTableColumns(
   options: ColumnOptions
-): Array<ColumnDef<AthleteProfileData>> {
+): Array<ColumnDef<DataTableFeatures, AthleteProfileData>> {
   const nameFilterQueryKey = options.nameFilterQueryKey ?? 'query';
 
   return [
@@ -51,7 +52,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Athlete ID"
         />
       ),
@@ -72,7 +73,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Name"
         />
       ),
@@ -99,7 +100,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Gender"
         />
       ),
@@ -136,7 +137,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Belt level"
         />
       ),
@@ -159,7 +160,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Weight"
         />
       ),
@@ -180,7 +181,7 @@ export function getAthletesTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Affiliation"
         />
       ),

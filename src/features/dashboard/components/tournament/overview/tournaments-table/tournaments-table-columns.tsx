@@ -6,6 +6,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 
 import type { TournamentListItem } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 
 function resolveRowData(
@@ -17,7 +18,7 @@ function resolveRowData(
 
 export function getTournamentsTableColumns(
   options: TournamentRowActionOptions
-): Array<ColumnDef<TournamentListItem>> {
+): Array<ColumnDef<DataTableFeatures, TournamentListItem>> {
   return [
     {
       id: 'name',
@@ -25,7 +26,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Tournament"
         />
       ),
@@ -56,7 +57,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Status"
         />
       ),
@@ -76,7 +77,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Divisions"
         />
       ),
@@ -93,7 +94,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Athletes"
         />
       ),
@@ -112,7 +113,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Matches"
         />
       ),
@@ -129,7 +130,7 @@ export function getTournamentsTableColumns(
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Created"
         />
       ),

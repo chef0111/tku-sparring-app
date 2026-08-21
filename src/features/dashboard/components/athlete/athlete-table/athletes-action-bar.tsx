@@ -8,6 +8,7 @@ import {
 import type { Table } from '@tanstack/react-table';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { DataTableControlledState } from '@/hooks/use-data-table';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import { exportAthletesTableToCSV } from '@/features/dashboard/lib/athlete/export-athletes-csv';
 import {
   ActionBar,
@@ -19,7 +20,7 @@ import {
 } from '@/components/ui/action-bar';
 
 interface AthletesActionBarProps {
-  table: Table<AthleteProfileData>;
+  table: Table<DataTableFeatures, AthleteProfileData>;
   state: DataTableControlledState;
   onBulkAdd: () => void;
   onBulkEdit?: () => void;

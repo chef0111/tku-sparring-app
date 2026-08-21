@@ -15,6 +15,7 @@ import type {
   TournamentStatus,
 } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import {
   TOURNAMENT_STATUS_LABEL,
   forceSetTournamentStatus,
@@ -40,7 +41,7 @@ import { useSetTournamentStatus } from '@/queries/tournament';
 
 interface TournamentsActionMenuProps {
   options: TournamentRowActionOptions;
-  row: Row<TournamentListItem>;
+  row: Row<DataTableFeatures, TournamentListItem>;
   tournament: TournamentListItem;
 }
 

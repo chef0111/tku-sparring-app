@@ -1,9 +1,10 @@
 import { Check, Settings2 } from 'lucide-react';
 import { useMemo } from 'react';
 import type { ComponentProps } from 'react';
-import type { Column, Table } from '@tanstack/react-table';
+import type { Column, RowData, Table } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
+import type { DataTableFeatures } from '@/lib/data-table/features';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Combobox,
@@ -16,16 +17,16 @@ import {
 } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
 
-interface DataTableViewOptionsProps<TData> extends Omit<
+interface DataTableViewOptionsProps<TData extends RowData> extends Omit<
   ComponentProps<typeof ComboboxContent>,
   'children'
 > {
-  table: Table<TData>;
+  table: Table<DataTableFeatures, TData>;
   state: DataTableControlledState;
   disabled?: boolean;
 }
 
-export function DataTableViewOptions<TData>({
+export function DataTableViewOptions<TData extends RowData>({
   table,
   state,
   disabled,
@@ -39,17 +40,19 @@ export function DataTableViewOptions<TData>({
     .filter(
       (column) =>
         typeof column.accessorFn !== 'undefined' && column.getCanHide()
-    ) as Array<Column<TData>>;
+    ) as Array<Column<DataTableFeatures, TData>>;
 
   const items = useMemo(() => columns, [columns]);
 
   return (
     <Combobox
       disabled={disabled}
-      itemToStringLabel={(column: Column<TData>) =>
+      itemToStringLabel={(column: Column<DataTableFeatures, TData>) =>
         column.columnDef.meta?.label ?? column.id
       }
-      itemToStringValue={(column: Column<TData>) => column.id}
+      itemToStringValue={(column: Column<DataTableFeatures, TData>) =>
+        column.id
+      }
       items={items}
     >
       <ComboboxTrigger
@@ -68,7 +71,7 @@ export function DataTableViewOptions<TData>({
         <ComboboxInput showTrigger={false} placeholder="Search columns..." />
         <ComboboxEmpty>No columns found.</ComboboxEmpty>
         <ComboboxList>
-          {(column: Column<TData>) => {
+          {(column: Column<DataTableFeatures, TData>) => {
             const isVisible =
               columnVisibility[column.id] ?? column.getIsVisible();
 

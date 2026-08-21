@@ -19,7 +19,7 @@ export function LoginPage() {
           strokeWidth={2}
           padding={0}
         >
-          tku.ss
+          Kyorbit
         </Highlighter>
       </FieldLegend>
       <FieldDescription className="text-muted-foreground w-full text-center text-base!">

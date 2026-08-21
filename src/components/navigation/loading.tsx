@@ -14,7 +14,7 @@ export default function LoadingScreen({
       <div className="flex flex-col items-center justify-center gap-4">
         <div className="flex items-center justify-center gap-2">
           <LogoIcon className="size-28" />
-          <span className="font-esbuild text-8xl font-bold">tku.ss</span>
+          <span className="font-esbuild text-8xl font-bold">Kyorbit</span>
         </div>
         <div className="flex flex-col items-center justify-center gap-2 pt-8">
           <h1 className="text-3xl font-bold">{title}</h1>

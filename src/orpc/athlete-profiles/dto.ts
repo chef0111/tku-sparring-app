@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ATHLETE_PROFILE_SORT_IDS } from '@/contracts/athlete/profile';
 import { dataTableConfig } from '@/config/data-table';
 import { filterItemSchema } from '@/lib/data-table/parsers';
 import { flagConfig } from '@/config/flag';
@@ -68,7 +69,7 @@ export const AthleteProfilesSchema = z.object({
   sorting: z
     .array(
       z.object({
-        id: z.enum(['name', 'beltLevel', 'weight', 'affiliation', 'createdAt']),
+        id: z.enum(ATHLETE_PROFILE_SORT_IDS),
         desc: z.boolean(),
       })
     )

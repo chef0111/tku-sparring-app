@@ -163,7 +163,11 @@ export function useDataTable<TData extends RowData>(
 
   const columnIds = React.useMemo(() => {
     return new Set(
-      columns.map((column) => column.id).filter(Boolean) as Array<string>
+      columns
+        .filter(
+          (column) => Boolean(column.id) && column.enableSorting !== false
+        )
+        .map((column) => column.id as string)
     );
   }, [columns]);
 

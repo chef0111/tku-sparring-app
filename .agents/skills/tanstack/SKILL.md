@@ -1,6 +1,6 @@
 ---
 name: tanstack
-description: 'Select and load the correct TanStack skill for tku-sparring tasks. Use when users ask about TanStack Router, React Start, Start server functions or middleware, SSR, search params, path params, navigation, loaders, or TanStack Query best practices.'
+description: 'Select and load the correct TanStack skill for kyorbit tasks. Use when users ask about TanStack Router, React Start, Start server functions or middleware, SSR, search params, path params, navigation, loaders, TanStack Query, or TanStack Table (useTable, tableFeatures, column defs, pinning, data-table).'
 argument-hint: 'Describe the TanStack task to route to the right skill'
 ---
 
@@ -11,7 +11,7 @@ Route TanStack-related requests to the right specialized skill before implementi
 ## When To Use
 
 - User asks a TanStack question and the right skill is unclear
-- Task mentions Router, Start, React Start, server functions, middleware, SSR, route params, or query caching
+- Task mentions Router, Start, React Start, server functions, middleware, SSR, route params, query caching, or Table
 - You need to choose one primary TanStack skill and optional secondary skills
 
 ## Workflow
@@ -39,6 +39,8 @@ Route TanStack-related requests to the right specialized skill before implementi
 | Deployment adapters, selective SSR, prerendering | `@tanstack/start-client-core#start-core/deployment` | `tanstack-start-best-practices` local skill |
 | Query keys, stale time, cache invalidation, optimistic updates, SSR dehydration | `tanstack-query-best-practices` local skill | `@tanstack/router-core#router-core/data-loading` when route loaders and query cache interact |
 | Full-stack TanStack Start governance (security, auth, SSR, API routes, file separation) | `tanstack-start-best-practices` local skill | `@tanstack/start-client-core#start-core` |
+| `useTable`, `tableFeatures`, column defs, pinning, data-table UI | `@tanstack/react-table#getting-started` | `@tanstack/table-core#table-features` |
+| Table v8 to v9 migration | `@tanstack/react-table#migrate-v8-to-v9` | `@tanstack/table-core#migrate-v8-to-v9` |
 
 ## Loading Commands
 

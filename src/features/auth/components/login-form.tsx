@@ -60,7 +60,7 @@ const LoginForm = () => {
               label="Username"
               description="At least 3 characters"
               descPosition="after-field"
-              placeholder="tku.ss"
+              placeholder="kyorbit"
             />
           )}
         </form.AppField>

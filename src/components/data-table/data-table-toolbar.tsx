@@ -1,8 +1,12 @@
 import { X } from 'lucide-react';
 import React from 'react';
-import type { Column, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { DataTableControlledState } from '@/hooks/use-data-table';
+import type {
+  DataTableColumn,
+  DataTableInstance,
+} from '@/lib/data-table/features';
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
 import { DataTableSliderFilter } from '@/components/data-table/data-table-slider-filter';
@@ -11,12 +15,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
-  table: Table<TData>;
+interface DataTableToolbarProps<
+  TData extends RowData,
+> extends React.ComponentProps<'div'> {
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends RowData>({
   table,
   state,
   children,
@@ -72,13 +78,13 @@ export function DataTableToolbar<TData>({
     </div>
   );
 }
-interface DataTableToolbarFilterProps<TData> {
-  table: Table<TData>;
+interface DataTableToolbarFilterProps<TData extends RowData> {
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
-  column: Column<TData>;
+  column: DataTableColumn<TData>;
 }
 
-function DataTableToolbarFilter<TData>({
+function DataTableToolbarFilter<TData extends RowData>({
   table,
   state,
   column,
@@ -146,16 +152,16 @@ function DataTableToolbarFilter<TData>({
   }
 }
 
-interface DataTableTextFilterProps<TData> {
-  table: Table<TData>;
+interface DataTableTextFilterProps<TData extends RowData> {
+  table: DataTableInstance<TData>;
   state: DataTableControlledState;
-  column: Column<TData>;
+  column: DataTableColumn<TData>;
   placeholder?: string;
   type?: 'text' | 'number';
   unit?: string;
 }
 
-function DataTableTextFilter<TData>({
+function DataTableTextFilter<TData extends RowData>({
   table,
   state,
   column,

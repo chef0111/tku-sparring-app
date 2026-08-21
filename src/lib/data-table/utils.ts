@@ -1,31 +1,36 @@
-import type { Column } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 import type { FilterOperator, FilterVariant } from '@/types/data-table';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import type { FilterItemSchema } from '@/lib/data-table/parsers';
 import { dataTableConfig } from '@/config/data-table';
 
-export function getColumnPinningStyle<TData>({
+export function getColumnPinningStyle<TData extends RowData>({
   column,
   withBorder = false,
 }: {
-  column: Column<TData>;
+  column: DataTableColumn<TData>;
   withBorder?: boolean;
 }): React.CSSProperties {
   const isPinned = column.getIsPinned();
-  const isLastLeftPinnedColumn =
-    isPinned === 'left' && column.getIsLastColumn('left');
-  const isFirstRightPinnedColumn =
-    isPinned === 'right' && column.getIsFirstColumn('right');
+  const isLastStartPinnedColumn =
+    isPinned === 'start' &&
+    column.table.getStartVisibleLeafColumns().at(-1)?.id === column.id;
+  const isFirstEndPinnedColumn =
+    isPinned === 'end' &&
+    column.table.getEndVisibleLeafColumns()[0]?.id === column.id;
 
   return {
     boxShadow: withBorder
-      ? isLastLeftPinnedColumn
+      ? isLastStartPinnedColumn
         ? '-4px 0 4px -4px var(--border) inset'
-        : isFirstRightPinnedColumn
+        : isFirstEndPinnedColumn
           ? '4px 0 4px -4px var(--border) inset'
           : undefined
       : undefined,
-    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+    insetInlineStart:
+      isPinned === 'start' ? `${column.getStart('start')}px` : undefined,
+    insetInlineEnd:
+      isPinned === 'end' ? `${column.getAfter('end')}px` : undefined,
     opacity: isPinned ? 0.97 : 1,
     position: isPinned ? 'sticky' : 'relative',
     background: isPinned ? 'var(--background)' : 'var(--background)',

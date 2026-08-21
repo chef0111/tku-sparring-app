@@ -58,6 +58,19 @@ export const filterItemSchema = z.object({
 
 export type FilterItemSchema = z.infer<typeof filterItemSchema>;
 
+function filterValuesEqual(
+  left: FilterItemSchema['value'],
+  right: FilterItemSchema['value']
+) {
+  if (Array.isArray(left) && Array.isArray(right)) {
+    return (
+      left.length === right.length &&
+      left.every((value, index) => value === right[index])
+    );
+  }
+  return left === right;
+}
+
 export const getFiltersStateParser = <TData>(
   columnIds?: Array<string> | Set<string>
 ) => {
@@ -87,12 +100,15 @@ export const getFiltersStateParser = <TData>(
     serialize: (value) => JSON.stringify(value),
     eq: (a, b) =>
       a.length === b.length &&
-      a.every(
-        (filter, index) =>
-          filter.id === b[index]?.id &&
-          filter.value === b[index]?.value &&
-          filter.variant === b[index]?.variant &&
-          filter.operator === b[index]?.operator
-      ),
+      a.every((filter, index) => {
+        const other = b[index];
+        return (
+          other != null &&
+          filter.id === other.id &&
+          filter.variant === other.variant &&
+          filter.operator === other.operator &&
+          filterValuesEqual(filter.value, other.value)
+        );
+      }),
   });
 };

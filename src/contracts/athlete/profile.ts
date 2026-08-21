@@ -1,3 +1,14 @@
+export const ATHLETE_PROFILE_SORT_IDS = [
+  'name',
+  'athleteCode',
+  'beltLevel',
+  'weight',
+  'affiliation',
+  'createdAt',
+] as const;
+
+export type AthleteProfileSortId = (typeof ATHLETE_PROFILE_SORT_IDS)[number];
+
 export interface AthleteProfileData {
   id: string;
   athleteCode: string;

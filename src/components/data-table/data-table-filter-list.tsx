@@ -1,13 +1,18 @@
 import { CalendarIcon, GripVertical, ListFilter, Trash2 } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
 import React from 'react';
-import type { Column, ColumnMeta, Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type {
+  DataTableColumnMeta,
   ExtendedColumnFilter,
   FilterOperator,
   JoinOperator,
 } from '@/types/data-table';
+import type {
+  DataTableColumn,
+  DataTableInstance,
+} from '@/lib/data-table/features';
 import { DataTableRangeFilter } from '@/components/data-table/data-table-range-filter';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -68,17 +73,17 @@ const THROTTLE_MS = 50;
 const FILTER_SHORTCUT_KEY = 'f';
 const REMOVE_FILTER_SHORTCUTS = ['backspace', 'delete'];
 
-interface DataTableFilterListProps<TData> extends React.ComponentProps<
-  typeof PopoverContent
-> {
-  table: Table<TData>;
+interface DataTableFilterListProps<
+  TData extends RowData,
+> extends React.ComponentProps<typeof PopoverContent> {
+  table: DataTableInstance<TData>;
   debounceMs?: number;
   throttleMs?: number;
   shallow?: boolean;
   disabled?: boolean;
 }
 
-export function DataTableFilterList<TData>({
+export function DataTableFilterList<TData extends RowData>({
   table,
   debounceMs = DEBOUNCE_MS,
   throttleMs = THROTTLE_MS,
@@ -318,13 +323,13 @@ export function DataTableFilterList<TData>({
   );
 }
 
-interface DataTableFilterItemProps<TData> {
+interface DataTableFilterItemProps<TData extends RowData> {
   filter: ExtendedColumnFilter<TData>;
   index: number;
   filterItemId: string;
   joinOperator: JoinOperator;
   setJoinOperator: (value: JoinOperator) => void;
-  columns: Array<Column<TData>>;
+  columns: Array<DataTableColumn<TData>>;
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>
@@ -332,7 +337,7 @@ interface DataTableFilterItemProps<TData> {
   onFilterRemove: (filterId: string) => void;
 }
 
-function DataTableFilterItem<TData>({
+function DataTableFilterItem<TData extends RowData>({
   filter,
   index,
   filterItemId,
@@ -430,10 +435,10 @@ function DataTableFilterItem<TData>({
         </div>
         <Combobox
           isItemEqualToValue={(a, b) => a.id === b.id}
-          itemToStringLabel={(col: Column<TData>) =>
+          itemToStringLabel={(col: DataTableColumn<TData>) =>
             col.columnDef.meta?.label ?? col.id
           }
-          itemToStringValue={(col: Column<TData>) => col.id}
+          itemToStringValue={(col: DataTableColumn<TData>) => col.id}
           items={columns}
           onOpenChange={setShowFieldSelector}
           onValueChange={(col) => {
@@ -472,7 +477,7 @@ function DataTableFilterItem<TData>({
             <ComboboxInput placeholder="Search fields..." showTrigger={false} />
             <ComboboxEmpty>No fields found.</ComboboxEmpty>
             <ComboboxList>
-              {(col: Column<TData>) => (
+              {(col: DataTableColumn<TData>) => (
                 <ComboboxItem key={col.id} value={col}>
                   {col.columnDef.meta?.icon && <col.columnDef.meta.icon />}
                   <span className="truncate">
@@ -548,7 +553,7 @@ function DataTableFilterItem<TData>({
   );
 }
 
-function onFilterInputRender<TData>({
+function onFilterInputRender<TData extends RowData>({
   filter,
   inputId,
   column,
@@ -559,8 +564,8 @@ function onFilterInputRender<TData>({
 }: {
   filter: ExtendedColumnFilter<TData>;
   inputId: string;
-  column: Column<TData>;
-  columnMeta?: ColumnMeta<TData, unknown>;
+  column: DataTableColumn<TData>;
+  columnMeta?: DataTableColumnMeta;
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>

@@ -1,5 +1,5 @@
-import type { Table } from '@tanstack/react-table';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
+import type { DataTableInstance } from '@/lib/data-table/features';
 
 function csvCell(value: unknown): string {
   if (value === null || value === undefined) return '';
@@ -11,7 +11,7 @@ function csvCell(value: unknown): string {
 }
 
 export function exportAthletesTableToCSV(
-  table: Table<AthleteProfileData>,
+  table: DataTableInstance<AthleteProfileData>,
   opts: { filename?: string; onlySelected?: boolean } = {}
 ): void {
   const { filename = 'athletes', onlySelected = false } = opts;

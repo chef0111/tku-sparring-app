@@ -1,10 +1,11 @@
 import type { TournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
-import type { ColumnDef } from '@tanstack/react-table';
+
 import type {
   TournamentListItem,
   TournamentSortField,
   TournamentStatus,
 } from '@/contracts/tournament/list';
+import type { DataTableColumnDef } from '@/lib/data-table/features';
 import { useTournamentList } from '@/queries/tournament';
 import { useDataTable } from '@/hooks/use-data-table';
 import { cn } from '@/lib/utils';
@@ -15,7 +16,7 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 const TOURNAMENT_TABLE_COLUMN_COUNT = 7;
 
 interface TournamentsTableProps {
-  columns: Array<ColumnDef<TournamentListItem>>;
+  columns: Array<DataTableColumnDef<TournamentListItem>>;
   query: TournamentsManagerQuery;
   className?: string;
 }
@@ -46,7 +47,7 @@ export function TournamentsTable({
     filteredRowCount: data?.total ?? 0,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
-      columnPinning: { right: ['actions'] },
+      columnPinning: { start: [], end: ['actions'] },
     },
     shallow: true,
     clearOnDefault: true,

@@ -7,6 +7,7 @@ import {
 } from 'nuqs/server';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { AthleteProfilesDTO } from '@/orpc/athlete-profiles/dto';
+import { ATHLETE_PROFILE_SORT_IDS } from '@/contracts/athlete/profile';
 import { searchRecordToURLSearchParams } from '@/integrations/nuqs/tanstack-router-adapter';
 import {
   getFiltersStateParser,
@@ -18,13 +19,7 @@ import { flagConfig } from '@/config/flag';
 
 const ARRAY_SEPARATOR = ',';
 
-const SORTABLE_COLUMN_IDS = new Set([
-  'name',
-  'beltLevel',
-  'weight',
-  'affiliation',
-  'createdAt',
-]);
+const SORTABLE_COLUMN_IDS = new Set<string>(ATHLETE_PROFILE_SORT_IDS);
 
 const FILTER_FLAG_VALUES = new Set(
   flagConfig.featureFlags.map((flag) => flag.value)

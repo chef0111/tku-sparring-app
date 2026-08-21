@@ -37,7 +37,7 @@ function AuthLayout() {
         <div className="to-background absolute inset-0 bg-linear-to-b from-transparent via-transparent" />
         <div className="flex size-fit items-center justify-center gap-1">
           <LogoIcon className="mr-auto h-5" />
-          <span className="font-esbuild text-2xl font-bold">tku.ss</span>
+          <span className="font-esbuild text-2xl font-bold">kyorbit</span>
         </div>
 
         <div className="z-10 mt-auto">
@@ -74,7 +74,7 @@ function AuthLayout() {
         <div className="mx-auto space-y-4 sm:w-sm">
           <div className="flex size-fit items-center justify-center gap-1 lg:hidden">
             <LogoIcon className="mr-auto h-5" />
-            <span className="font-esbuild text-2xl font-bold">tku.ss</span>
+            <span className="font-esbuild text-2xl font-bold">kyorbit</span>
           </div>
           <Outlet />
           <p className="text-muted-foreground mt-8 text-center text-sm">

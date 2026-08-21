@@ -1,13 +1,17 @@
 import React from 'react';
-import type { Column } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
 
 import type { ExtendedColumnFilter } from '@/types/data-table';
+import type { DataTableColumn } from '@/lib/data-table/features';
 import { NumberInput } from '@/components/input/number-input';
+import { nextRangeFilterValue } from '@/lib/data-table/range-filter-value';
 import { cn } from '@/lib/utils';
 
-interface DataTableRangeFilterProps<TData> extends React.ComponentProps<'div'> {
+interface DataTableRangeFilterProps<
+  TData extends RowData,
+> extends React.ComponentProps<'div'> {
   filter: ExtendedColumnFilter<TData>;
-  column: Column<TData>;
+  column: DataTableColumn<TData>;
   inputId: string;
   onFilterUpdate: (
     filterId: string,
@@ -15,7 +19,7 @@ interface DataTableRangeFilterProps<TData> extends React.ComponentProps<'div'> {
   ) => void;
 }
 
-export function DataTableRangeFilter<TData>({
+export function DataTableRangeFilter<TData extends RowData>({
   filter,
   column,
   inputId,
@@ -53,29 +57,25 @@ export function DataTableRangeFilter<TData>({
     return [formatValue(filter.value), ''];
   }, [filter.value, formatValue]);
 
+  const rangeDraftRef = React.useRef(filter.value);
+  React.useEffect(() => {
+    rangeDraftRef.current = filter.value;
+  }, [filter.value]);
+
   const onRangeValueChange = React.useCallback(
     (val: string, isMin?: boolean) => {
-      const numValue = Number(value);
-      const currentValues = Array.isArray(filter.value)
-        ? filter.value
-        : ['', ''];
-      const otherValue = isMin
-        ? (currentValues[1] ?? '')
-        : (currentValues[0] ?? '');
-
-      if (
-        val === '' ||
-        (!Number.isNaN(numValue) &&
-          (isMin
-            ? numValue >= min && numValue <= (Number(otherValue) || max)
-            : numValue <= max && numValue >= (Number(otherValue) || min)))
-      ) {
-        onFilterUpdate(filter.filterId, {
-          value: isMin ? [val, otherValue] : [otherValue, val],
-        });
-      }
+      const nextValue = nextRangeFilterValue(
+        rangeDraftRef.current,
+        val,
+        isMin ?? false,
+        min,
+        max
+      );
+      if (!nextValue) return;
+      rangeDraftRef.current = nextValue;
+      onFilterUpdate(filter.filterId, { value: nextValue });
     },
-    [filter.filterId, filter.value, min, max, onFilterUpdate]
+    [filter.filterId, min, max, onFilterUpdate]
   );
 
   return (

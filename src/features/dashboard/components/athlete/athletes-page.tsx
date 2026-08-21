@@ -5,7 +5,7 @@ import type {
   AthleteProfileData,
   AthleteRow,
 } from '@/contracts/athlete/profile';
-import type { DataTableRowAction } from '@/types/data-table';
+import type { DataTableRowAction } from '@/lib/data-table/features';
 import { FeatureFlagsProvider } from '@/contexts/feature-flags';
 import { AthleteDrawer } from '@/features/dashboard/components/athlete/athlete-drawer';
 import { AthleteTable } from '@/features/dashboard/components/athlete/athlete-table';

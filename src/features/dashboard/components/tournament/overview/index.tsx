@@ -10,7 +10,7 @@ import { getTournamentsTableColumns } from './tournaments-table/tournaments-tabl
 import { RenameTournamentDialog } from './dialogs/rename-tournament-dialog';
 import { DeleteTournamentDialog } from './dialogs/delete-tournament-dialog';
 import type { TournamentListItem } from '@/contracts/tournament/list';
-import type { DataTableRowAction } from '@/types/data-table';
+import type { DataTableRowAction } from '@/lib/data-table/features';
 import { useTournamentsManagerQuery } from '@/features/dashboard/hooks/use-tournaments-manager-query';
 import { SiteHeader } from '@/features/dashboard/components/sidebar/site-header';
 import { ErrorBoundary } from '@/components/error-boundary';

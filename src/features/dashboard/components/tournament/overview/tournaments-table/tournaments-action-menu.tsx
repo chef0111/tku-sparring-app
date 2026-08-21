@@ -8,13 +8,13 @@ import {
   Trash2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Row } from '@tanstack/react-table';
 
 import type {
   TournamentListItem,
   TournamentStatus,
 } from '@/contracts/tournament/list';
 import type { TournamentRowActionOptions } from '@/features/dashboard/lib/tournament/row-action-options';
+import type { DataTableRow } from '@/lib/data-table/features';
 import {
   TOURNAMENT_STATUS_LABEL,
   forceSetTournamentStatus,
@@ -40,7 +40,7 @@ import { useSetTournamentStatus } from '@/queries/tournament';
 
 interface TournamentsActionMenuProps {
   options: TournamentRowActionOptions;
-  row: Row<TournamentListItem>;
+  row: DataTableRow<TournamentListItem>;
   tournament: TournamentListItem;
 }
 

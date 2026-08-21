@@ -8,9 +8,10 @@ import {
   Trophy,
 } from 'lucide-react';
 import React from 'react';
-import type { Row } from '@tanstack/react-table';
+
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
 import type { ColumnOptions } from '@/features/dashboard/lib/athlete/column-options';
+import type { DataTableRow } from '@/lib/data-table/features';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,7 +37,7 @@ import { useUpdateAthleteProfile } from '@/queries/athlete-profile';
 
 interface AthletesActionMenuProps {
   options: ColumnOptions;
-  row: Row<AthleteProfileData>;
+  row: DataTableRow<AthleteProfileData>;
 }
 
 type GenderValue = (typeof GENDER_OPTIONS)[number]['value'];

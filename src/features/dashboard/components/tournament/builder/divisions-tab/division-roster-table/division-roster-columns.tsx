@@ -1,10 +1,11 @@
 import { MoreHorizontal } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
-import type { ColumnDef } from '@tanstack/react-table';
+
 import type {
   DivisionData,
   TournamentAthleteData,
 } from '@/contracts/tournament/division';
+import type { DataTableColumnDef } from '@/lib/data-table/features';
 import { AthleteAvatar } from '@/features/dashboard/components/athlete/athlete-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -74,7 +75,9 @@ export function getDivisionRosterColumns({
   otherDivisions,
   onUnassign,
   onMove,
-}: GetDivisionRosterColumnsArgs): Array<ColumnDef<TournamentAthleteData>> {
+}: GetDivisionRosterColumnsArgs): Array<
+  DataTableColumnDef<TournamentAthleteData>
+> {
   return [
     {
       id: 'name',
@@ -82,7 +85,7 @@ export function getDivisionRosterColumns({
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Name"
         />
       ),
@@ -104,7 +107,7 @@ export function getDivisionRosterColumns({
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Gender"
         />
       ),
@@ -133,7 +136,7 @@ export function getDivisionRosterColumns({
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Belt"
         />
       ),
@@ -153,7 +156,7 @@ export function getDivisionRosterColumns({
       header: ({ column, table }) => (
         <DataTableColumnHeader
           column={column}
-          state={table.getState()}
+          state={table.store.state}
           label="Weight"
         />
       ),

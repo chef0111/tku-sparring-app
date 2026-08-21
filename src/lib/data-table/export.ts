@@ -1,14 +1,15 @@
-import type { Table } from '@tanstack/react-table';
+import type { RowData } from '@tanstack/react-table';
+import type { DataTableInstance } from '@/lib/data-table/features';
 
-interface ExportOptions<TData> {
+interface ExportOptions<TData extends RowData> {
   filename?: string;
   excludeColumns?: Array<keyof TData | 'select' | 'actions'>;
   onlySelected?: boolean;
   headers?: Record<string, string>;
 }
 
-export function exportTableToCSV<TData>(
-  table: Table<TData>,
+export function exportTableToCSV<TData extends RowData>(
+  table: DataTableInstance<TData>,
   opts: ExportOptions<TData> = {}
 ): void {
   const {

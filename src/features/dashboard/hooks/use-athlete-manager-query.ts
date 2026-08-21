@@ -6,6 +6,7 @@ import {
   useQueryState,
 } from 'nuqs';
 import type { AthleteProfileData } from '@/contracts/athlete/profile';
+import { ATHLETE_PROFILE_SORT_IDS } from '@/contracts/athlete/profile';
 import {
   getFiltersStateParser,
   getSortingStateParser,
@@ -25,13 +26,7 @@ function parseBeltLevelsFromQuery(
   return nums.length > 0 ? [...new Set(nums)] : undefined;
 }
 
-const SORTABLE_COLUMN_IDS = new Set([
-  'name',
-  'beltLevel',
-  'weight',
-  'affiliation',
-  'createdAt',
-]);
+const SORTABLE_COLUMN_IDS = new Set<string>(ATHLETE_PROFILE_SORT_IDS);
 
 export function useAthleteTableQuery() {
   const [page] = useQueryState('page', parseAsInteger.withDefault(1));

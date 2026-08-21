@@ -246,6 +246,17 @@ describe('AthleteProfilesSchema', () => {
     const result = AthleteProfilesSchema.safeParse({ beltLevels: [8, 11] });
     expect(result.success).toBe(false);
   });
+
+  it('accepts athleteCode as a list sort id', () => {
+    const result = AthleteProfilesSchema.safeParse({
+      sorting: [
+        { id: 'beltLevel', desc: true },
+        { id: 'name', desc: false },
+        { id: 'athleteCode', desc: false },
+      ],
+    });
+    expect(result.success).toBe(true);
+  });
 });
 
 describe('CheckDuplicateSchema', () => {

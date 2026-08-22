@@ -9,12 +9,12 @@
 [![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-000000.svg?logo=shadcnui&logoColor=white&variant=branded)](https://ui.shadcn.com#gh-light-mode-only)
 [![shadcn/ui](https://shieldcn.dev/badge/shadcn%2Fui-ffffff.svg?logo=shadcnui&logoColor=black&variant=branded)](https://ui.shadcn.com#gh-dark-mode-only)
 [![PostgreSQL](https://shieldcn.dev/badge/PostgreSQL-316192.svg?logo=postgresql&logoColor=white&variant=branded)](https://www.postgresql.org)
-[![MIT License](https://shieldcn.dev/github/license/chef0111/tku-sparring-app.svg?variant=secondary)](./LICENSE)
+[![AGPL-3.0 License](https://shieldcn.dev/github/license/kyorbit/platform.svg?variant=secondary)](./LICENSE)
 
 </div>
 
 <p align="center">
-  <a href="https://kyorbit.vercel.app/"><strong>Get started</strong></a>
+  <a href="https://kyorbit.tku.io.vn"><strong>Get started</strong></a>
   &nbsp;•&nbsp;
   <a href="./DEVELOPMENT.md"><strong>Local setup</strong></a>
   &nbsp;•&nbsp;
@@ -33,7 +33,7 @@ Kyorbit is a tournament operations platform for Taekwondo UIT. It combines an ad
 
 ### Option 1: Direct access (limited)
 
-Open [Kyorbit](https://kyorbit.vercel.app/) in a browser. Production account creation is disabled for now — apologies for the inconvenience.
+Open [Kyorbit](https://kyorbit.tku.io.vn) in a browser. Production account creation is disabled for now — apologies for the inconvenience.
 
 ### Option 2: Run locally (recommended)
 
@@ -86,12 +86,15 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for full setup. Local installs support ac
 
 ---
 
-## Stats
+## Community
 
-![Repo stats](https://repobeats.axiom.co/api/embed/bab8fc528b5de608bc6d757a16fbef110695eead.svg 'Repobeats analytics image')
+Kyorbit is built around the people who train, compete, officiate, and organize Taekwondo UIT events.
+
+- Join us on [Facebook](https://www.facebook.com/uittaekwondo) to explore our daily activities.
+- Follow us on [GitHub](https://github.com/kyorbit) to get updated, share feedback, and help improve the tools that support the sport.
 
 ---
 
 ## License
 
-Licensed under the [MIT License](./LICENSE).
+Licensed under the [AGPL-3.0 License](./LICENSE).

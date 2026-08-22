@@ -86,7 +86,7 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for full setup. Local installs support ac
 
 ---
 
-## Community
+## 💗 Community
 
 Kyorbit is built around the people who train, compete, officiate, and organize Taekwondo UIT events.
 

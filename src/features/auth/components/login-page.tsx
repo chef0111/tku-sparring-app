@@ -10,12 +10,12 @@ import { Highlighter } from '@/components/ui/highlighter';
 export function LoginPage() {
   return (
     <FieldSet className="flex flex-col space-y-4 text-center">
-      <FieldLegend className="text-2xl! font-bold tracking-wide">
-        Sign In to{' '}
+      <FieldLegend className="text-2xl! font-semibold tracking-wide">
+        Sign in to{' '}
         <Highlighter
           action="underline"
           color="#1685f5"
-          className="font-esbuild!"
+          className="font-esbuild font-medium"
           strokeWidth={2}
           padding={0}
         >

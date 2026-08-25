@@ -1,4 +1,4 @@
-import { LogoIcon } from '@/components/ui/logo';
+import { BrandIcon } from '@/components/ui/brand';
 
 interface LoadingScreenProps {
   title?: string;
@@ -13,7 +13,7 @@ export default function LoadingScreen({
     <section className="flex h-dvh w-screen items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
         <div className="flex items-center justify-center gap-2">
-          <LogoIcon className="size-28" />
+          <BrandIcon className="size-28" />
           <span className="font-esbuild text-8xl font-bold">Kyorbit</span>
         </div>
         <div className="flex flex-col items-center justify-center gap-2 pt-8">

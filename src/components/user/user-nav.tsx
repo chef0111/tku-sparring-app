@@ -118,7 +118,7 @@ export function UserNav() {
                 rel="noopener noreferrer"
               >
                 <GithubIcon className="size-4" />
-                GitHub
+                Source available
               </a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

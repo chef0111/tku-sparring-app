@@ -3,7 +3,7 @@ import type { User } from '@/lib/auth';
 import { TournamentStatusPill } from '@/features/dashboard/components/tournament/tournament-status-pill';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { UserDropdown } from '@/components/user/user-dropdown';
-import { LogoIcon } from '@/components/ui/logo';
+import { BrandIcon } from '@/components/ui/brand';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ButtonGroupSeparator } from '@/components/ui/button-group';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ export function BuilderHeader({
   return (
     <header className="bg-sidebar/70 supports-backdrop-filter:bg-sidebar/50 sticky top-0 z-10 flex h-14 items-center gap-2 border-b px-4">
       <div className="flex items-center gap-2">
-        <LogoIcon className="size-8" />
+        <BrandIcon className="size-8" />
         <h1 className="text-lg font-semibold">{tournament.name}</h1>
         <TournamentStatusPill status={tournament.status} className="ml-1" />
       </div>

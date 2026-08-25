@@ -9,7 +9,7 @@ on:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       DIRECT_DATABASE_URL: postgresql://ci:ci@localhost:7749/ci
       DATABASE_URL: postgresql://ci:ci@localhost:7749/ci

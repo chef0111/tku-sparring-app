@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { NavSecondary } from './nav-secondary';
 import { NavDocuments } from './nav-documents';
 import { NavMain } from './nav-main';
-import { LogoIcon } from '@/components/ui/logo';
+import { BrandIcon } from '@/components/ui/brand';
 import { UserNav } from '@/components/user/user-nav';
 import {
   Sidebar,
@@ -24,7 +24,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/dashboard">
-                <LogoIcon className="size-8!" />
+                <BrandIcon className="size-8!" />
                 <span className="truncate text-2xl font-semibold">Kyorbit</span>
               </Link>
             </SidebarMenuButton>

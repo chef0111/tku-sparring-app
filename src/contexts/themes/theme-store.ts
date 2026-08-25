@@ -5,12 +5,17 @@ export type ResolvedTheme = 'light' | 'dark';
 let storageKey = 'start-theme';
 let defaultTheme: Theme = 'dark';
 let theme: Theme = defaultTheme;
+let forcedTheme: Theme | undefined;
 let resolved: ResolvedTheme = 'dark';
 
 const listeners = new Set<() => void>();
 
 function notify() {
   listeners.forEach((listener) => listener());
+}
+
+function applyResolved() {
+  resolved = resolveTheme(forcedTheme ?? theme);
 }
 
 export function resolveTheme(value: Theme): ResolvedTheme {
@@ -25,20 +30,20 @@ export function resolveTheme(value: Theme): ResolvedTheme {
     : value;
 }
 
-export function initThemeStore(key: string, fallback: Theme) {
+export function initThemeStore(key: string, fallback: Theme, forced?: Theme) {
   storageKey = key;
   defaultTheme = fallback;
+  forcedTheme = forced;
   theme = fallback;
-  resolved = resolveTheme(fallback);
 
-  if (typeof window === 'undefined') return;
-
-  const stored = localStorage.getItem(key);
-  if (stored === 'light' || stored === 'dark' || stored === 'system') {
-    theme = stored;
-    resolved = resolveTheme(stored);
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem(key);
+    if (stored === 'light' || stored === 'dark' || stored === 'system') {
+      theme = stored;
+    }
   }
 
+  applyResolved();
   notify();
 }
 
@@ -52,12 +57,17 @@ export function getResolvedTheme() {
 
 export function setTheme(next: Theme) {
   theme = next;
-  resolved = resolveTheme(next);
 
   if (typeof window !== 'undefined') {
     localStorage.setItem(storageKey, next);
   }
 
+  applyResolved();
+  notify();
+}
+
+export function syncTheme() {
+  applyResolved();
   notify();
 }
 
@@ -66,9 +76,10 @@ export function subscribeTheme(listener: () => void) {
   return () => listeners.delete(listener);
 }
 
-export function getThemeScript(key: string, fallback: Theme) {
+export function getThemeScript(key: string, fallback: Theme, forced?: Theme) {
   const storage = JSON.stringify(key);
   const defaultValue = JSON.stringify(fallback);
+  const forcedValue = forced === undefined ? 'null' : JSON.stringify(forced);
 
-  return `(function(){try{var t=localStorage.getItem(${storage});if(t!=='light'&&t!=='dark'&&t!=='system'){t=${defaultValue}}var d=matchMedia('(prefers-color-scheme: dark)').matches;var r=t==='system'?(d?'dark':'light'):t;var els=[document.documentElement,document.body];for(var i=0;i<els.length;i++){var e=els[i];if(!e)continue;e.classList.remove('light','dark');e.classList.add(r);e.style.colorScheme=r}}catch(e){}})();`;
+  return `(function(){try{var f=${forcedValue};var t=f||localStorage.getItem(${storage});if(t!=='light'&&t!=='dark'&&t!=='system'){t=f||${defaultValue}}var d=matchMedia('(prefers-color-scheme: dark)').matches;var r=t==='system'?(d?'dark':'light'):t;var els=[document.documentElement,document.body];for(var i=0;i<els.length;i++){var e=els[i];if(!e)continue;e.classList.remove('light','dark');e.classList.add(r);e.style.colorScheme=r}}catch(e){}})();`;
 }

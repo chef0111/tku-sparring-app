@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { GithubIcon } from '@/components/icons/github';
 
 interface UserDropdownProps {
   user: User;
@@ -48,12 +49,22 @@ export function UserDropdown({ user, className }: UserDropdownProps) {
             {user.name}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link to="/dashboard" target="_blank">
-            <DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/dashboard" target="_blank">
               <LayoutDashboard />
               Dashboard
-            </DropdownMenuItem>
-          </Link>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <a
+              href="https://github.com/kyorbit"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubIcon />
+              Open source
+            </a>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <SignOutItem />
         </DropdownMenuContent>

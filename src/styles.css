@@ -207,7 +207,7 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
   html {
-    @apply font-sans;
+    @apply font-sans autofill:bg-transparent;
   }
   button,
   [role='button'] {

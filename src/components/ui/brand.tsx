@@ -1,4 +1,4 @@
-export const LogoIcon = (props: React.ComponentProps<'svg'>) => (
+export const BrandIcon = (props: React.ComponentProps<'svg'>) => (
   <svg
     fill="currentColor"
     viewBox="0 0 48 48"
@@ -16,7 +16,7 @@ export const LogoIcon = (props: React.ComponentProps<'svg'>) => (
   </svg>
 );
 
-export const Logo = (props: React.ComponentProps<'svg'>) => (
+export const Brand = (props: React.ComponentProps<'svg'>) => (
   <svg
     fill="currentColor"
     viewBox="0 0 90 24"

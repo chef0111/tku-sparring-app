@@ -4,6 +4,7 @@ export type Theme = 'dark' | 'light' | 'system';
 
 type ThemeProviderState = {
   theme: Theme;
+  forcedTheme?: Theme;
   setTheme: (theme: Theme) => void;
 };
 

@@ -6,6 +6,7 @@ import { PlayerAvatar } from './player-avatar';
 import { usePlayerStore } from '@/features/app/stores/player-store';
 import { useDeclareWinner } from '@/features/app/hooks/use-winner';
 import { isCriticalHit } from '@/features/app/lib/scoreboard/hit-types';
+import { assetUrl } from '@/config/assets';
 import { cn } from '@/lib/utils';
 
 export const AppHUD = ({ className }: { className?: string }) => {
@@ -64,7 +65,9 @@ const PlayerHUD = ({ player }: PlayerHUDProps) => {
   );
 
   const defaultAvatar =
-    player === 'red' ? 'assets/CapybaraTKU1.webp' : 'assets/CapybaraTKU2.webp';
+    player === 'red'
+      ? assetUrl('CapybaraTKU1.webp')
+      : assetUrl('CapybaraTKU2.webp');
   const avatarSrc = avatar ?? defaultAvatar;
 
   const playerHud =

@@ -1,3 +1,5 @@
+import { assetUrl } from '@/config/assets';
+
 export type HitType =
   | 'headCrit' // 6 points - 30 damage
   | 'trunkCrit' // 4 points - 20 damage
@@ -26,7 +28,7 @@ export const getHitIconPath = (player: Player, hitType: HitType): string => {
     punch: `${player}Punch`,
   };
 
-  return `/assets/${iconMap[hitType]}.webp`;
+  return assetUrl(`${iconMap[hitType]}.webp`);
 };
 
 // Button icons
@@ -39,7 +41,7 @@ export const getButtonIconPath = (player: Player, hitType: HitType): string => {
     punch: `${player}PunchButton`,
   };
 
-  return `/assets/${iconMap[hitType]}.webp`;
+  return assetUrl(`${iconMap[hitType]}.webp`);
 };
 
 export const keyboardMappings: Record<Player, Record<string, HitType>> = {

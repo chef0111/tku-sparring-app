@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { assetUrl } from '@/config/assets';
 
 export const avatarGroup = [
   {
@@ -6,14 +7,14 @@ export const avatarGroup = [
     name: 'redPlayerAvatar' as const,
     playerName: 'Red Player',
     className: 'bg-red-player  relative size-25 rounded-xl!',
-    fallback: 'assets/CapybaraTKU1.webp',
+    fallback: assetUrl('CapybaraTKU1.webp'),
   },
   {
     label: 'PLAYER 2 AVATAR',
     name: 'bluePlayerAvatar' as const,
     playerName: 'Blue Player',
     className: 'bg-blue-player  relative size-25 rounded-xl!',
-    fallback: 'assets/CapybaraTKU2.webp',
+    fallback: assetUrl('CapybaraTKU2.webp'),
   },
 ];
 
@@ -48,7 +49,7 @@ export const advancePlayerGroup = [
     namePlayer: 'redPlayerName' as const,
     playerName: 'PLAYER A',
     className: 'bg-red-player  relative size-25 rounded-xl!',
-    fallback: 'assets/CapybaraTKU1.webp',
+    fallback: assetUrl('CapybaraTKU1.webp'),
   },
   {
     label: 'BLUE ATHLETE',
@@ -56,7 +57,7 @@ export const advancePlayerGroup = [
     namePlayer: 'bluePlayerName' as const,
     playerName: 'PLAYER B',
     className: 'bg-blue-player  relative size-25 rounded-xl!',
-    fallback: 'assets/CapybaraTKU2.webp',
+    fallback: assetUrl('CapybaraTKU2.webp'),
   },
 ];
 

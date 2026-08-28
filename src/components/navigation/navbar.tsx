@@ -7,6 +7,7 @@ import { authClient } from '@/lib/auth-client';
 import { useSettings } from '@/features/app/contexts/settings';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AppSettings } from '@/features/app/components/settings';
+import { assetUrl } from '@/config/assets';
 
 export const Navbar = () => {
   const { data, isPending } = authClient.useSession();
@@ -18,13 +19,13 @@ export const Navbar = () => {
     <nav className="bg-backround flex h-20 w-full items-center justify-between">
       <div className="flex w-[13vw] shrink-0 items-center justify-center gap-4">
         <img
-          src="assets/uit.webp"
+          src={assetUrl('uit.webp')}
           loading="eager"
           alt="UIT Logo"
           className="h-12 select-none"
         />
         <img
-          src="assets/tku.webp"
+          src={assetUrl('tku.webp')}
           loading="eager"
           alt="TKU Logo"
           className="h-14 select-none"

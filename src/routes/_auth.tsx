@@ -35,7 +35,7 @@ function AuthLayout() {
       <div className="sticky flex min-h-[40vh] w-full flex-col justify-between overflow-hidden p-8 md:p-12 lg:min-h-dvh lg:w-1/2 lg:p-16">
         <div className="pointer-events-none absolute inset-0 lg:inset-8">
           <img
-            src="https://res.cloudinary.com/chef0111/image/upload/auth.avif"
+            src="https://assets.giabao.dev/auth.avif"
             alt="Abstract blue background"
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="h-full w-full object-cover lg:rounded-2xl"

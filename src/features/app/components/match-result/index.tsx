@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { assetUrl } from '@/config/assets';
 import { cn } from '@/lib/utils';
 import { Ring } from '@/components/ui/ring';
 import { Card } from '@/components/ui/card';
@@ -41,8 +42,8 @@ export const ResultDialog = ({
   const winnerName = winner === 'red' ? redName : blueName;
   const winnerAvatar =
     winner === 'red'
-      ? redAvatar || 'assets/CapybaraTKU1.webp'
-      : blueAvatar || 'assets/CapybaraTKU2.webp';
+      ? redAvatar || assetUrl('CapybaraTKU1.webp')
+      : blueAvatar || assetUrl('CapybaraTKU2.webp');
 
   return (
     <DialogContent
